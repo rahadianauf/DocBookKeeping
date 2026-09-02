@@ -1,0 +1,485 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DocBookKeeping.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720" 
+        MinWidth="1000"
+        MinHeight="600"
+        xmlns:views="using:DocBookKeeping.Views"
+        x:Class="DocBookKeeping.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        xmlns:local="using:DocBookKeeping.Converters"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DOKTER PEKAJANGAN"
+        WindowState="Maximized"
+        CanResize="False">
+
+     <!-- ================================= -->
+    <!-- DATA TEMPLATE UNTUK NAVIGATION -->
+    <!-- ================================= -->
+
+    <Window.DataTemplates>
+
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:IncomeViewModel}">
+            <views:IncomeView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:ExpenseViewModel}">
+            <views:ExpenseView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:UserViewModel}">
+            <views:UserView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:PemasokViewModel}">
+            <views:SuplierView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:KategoriViewModel}">
+            <views:CategoryView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:JasaViewModel}">
+            <views:JasaView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:ReportViewModel}">
+            <views:ReportView />
+        </DataTemplate>
+
+    </Window.DataTemplates>
+    
+        <!-- ================================= -->
+    <!-- MAIN LAYOUT -->
+    <!-- ================================= -->
+
+    <Grid ColumnDefinitions="240,*">
+
+        <!-- ================================= -->
+        <!-- SIDEBAR -->
+        <!-- ================================= -->
+
+        <Border Grid.Column="0"
+                Background="#172033">
+
+            <Grid RowDefinitions="Auto,*,Auto">
+
+                <!-- LOGO -->
+
+                <Border Padding="24,25">
+
+                    <StackPanel Spacing="4">
+
+                        <TextBlock Text="DocBookKeeping"
+                                   FontSize="21"
+                                   FontWeight="Bold"
+                                   Foreground="White" />
+
+                        <TextBlock Text="Financial Management"
+                                   FontSize="11"
+                                   Foreground="#94A3B8" />
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- MENU -->
+
+                <ScrollViewer Grid.Row="1">
+
+                    <StackPanel Margin="12,10"
+                                Spacing="4">
+
+                        <!-- MENU UTAMA -->
+
+                        <TextBlock Text="MENU"
+                                   Margin="12,10,12,8"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="#64748B" />
+
+
+                        <!-- DASHBOARD -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowDashboardCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="#26344D"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="▣"
+                                           FontSize="18"
+                                           Foreground="White" />
+
+                                <TextBlock Text="Dashboard"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+
+
+                        <!-- PEMASUKAN -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowIncomeCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="↗"
+                                           FontSize="18"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Pemasukan"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+
+
+                        <!-- PENGELUARAN -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowExpenseCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="↘"
+                                           FontSize="18"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Pengeluaran"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+
+
+                        <!-- MASTER DATA -->
+
+                        <Button Command="{Binding ToggleMasterCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="12,10,12,8"
+                                Margin="0,20,0,0"
+                                Background="Transparent"
+                                BorderThickness="0">
+
+                            <Grid ColumnDefinitions="*,Auto">
+
+                                <TextBlock Text="MASTER DATA"
+                                        FontSize="11"
+                                        FontWeight="Bold"
+                                        Foreground="#64748B" />
+
+                                <TextBlock Grid.Column="1"
+                                            Text="{Binding IsMasterExpanded, Converter={x:Static local:BoolToChevronConverter.Instance}}"
+                                            FontSize="11"
+                                            Foreground="#64748B" />
+
+                            </Grid>
+
+                        </Button>
+
+                        <StackPanel Spacing="4"
+                            IsVisible="{Binding IsMasterExpanded}">
+                        <!-- PENGGUNA -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowUsersCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="●"
+                                           FontSize="15"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Pengguna"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+
+
+                        <!-- KATEGORI -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowCategoriesCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="◆"
+                                           FontSize="14"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Kategori"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+                        
+                        <!-- PEMASOK -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowPemasoksCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="◆"
+                                           FontSize="14"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Suplier"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+
+                         <!-- JASA -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowJasasCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="◆"
+                                           FontSize="14"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Jasa"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+                    </StackPanel>
+                        <!-- LAPORAN -->
+
+                        <TextBlock Text="LAPORAN"
+                                   Margin="12,20,12,8"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="#64748B" />
+
+
+                        <Button Height="44"
+                                Command="{Binding ShowReportsCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="▤"
+                                           FontSize="17"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Laporan Keuangan"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+
+                    </StackPanel>
+
+                </ScrollViewer>
+
+
+                <!-- ================================= -->
+                <!-- SIDEBAR FOOTER -->
+                <!-- ================================= -->
+
+                <Border Grid.Row="2"
+                        Padding="12,15"
+                        BorderBrush="#26344D"
+                        BorderThickness="0,1,0,0">
+
+                    <Button Height="42"
+                            HorizontalContentAlignment="Left"
+                            Padding="14,0"
+                            Background="Transparent"
+                            BorderThickness="0">
+
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="12">
+
+                            <TextBlock Text="⚙"
+                                       FontSize="17"
+                                       Foreground="#94A3B8" />
+
+                            <TextBlock Text="Pengaturan"
+                                       VerticalAlignment="Center"
+                                       Foreground="#CBD5E1" />
+
+                        </StackPanel>
+
+                    </Button>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- ================================= -->
+        <!-- MAIN AREA -->
+        <!-- ================================= -->
+
+        <Grid Grid.Column="1"
+              RowDefinitions="70,*"
+              Background="#F5F7FA">
+
+
+            <!-- HEADER -->
+
+            <Border Grid.Row="0"
+                    Background="White"
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="0,0,0,1">
+
+                <Grid ColumnDefinitions="*,Auto"
+                      Margin="28,0">
+
+                    <!-- PAGE TITLE -->
+
+                    <StackPanel VerticalAlignment="Center">
+
+                        <TextBlock Text="{Binding PageTitle}"
+                                   FontSize="21"
+                                   FontWeight="SemiBold"
+                                   Foreground="#111827" />
+
+                    </StackPanel>
+
+
+                    <!-- USER PROFILE -->
+
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="12"
+                                VerticalAlignment="Center">
+
+                        <Border Width="38"
+                                Height="38"
+                                CornerRadius="19"
+                                Background="#E0E7FF">
+
+                            <TextBlock Text="A"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Foreground="#3730A3" />
+
+                        </Border>
+
+                        <StackPanel VerticalAlignment="Center">
+
+                            <TextBlock Text="Administrator"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#111827" />
+
+                            <TextBlock Text="Admin"
+                                       FontSize="11"
+                                       Foreground="#6B7280" />
+
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </Grid>
+
+            </Border>
+
+
+            <!-- ================================= -->
+            <!-- DYNAMIC CONTENT -->
+            <!-- HALAMAN BERUBAH DI SINI -->
+            <!-- ================================= -->
+
+            <ScrollViewer Grid.Row="1"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+
+                <ContentControl Content="{Binding CurrentView}"
+                                Margin="28" />
+
+            </ScrollViewer>
+
+        </Grid>
+
+    </Grid>
+</Window>
