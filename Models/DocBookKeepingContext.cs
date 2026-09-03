@@ -95,7 +95,7 @@ public partial class DocBookKeepingContext : DbContext
 
             entity.ToTable("mst_pasien");
 
-            entity.Property(e => e.IdPasien).HasColumnName("id_pasien");
+            entity.Property(e => e.IdPasien).HasColumnName("id_pasien").ValueGeneratedNever();
             entity.Property(e => e.Alamat).HasColumnName("alamat");
             entity.Property(e => e.NamaPasien).HasColumnName("nama_pasien");
             entity.Property(e => e.NoTelepon).HasColumnName("no_telepon");

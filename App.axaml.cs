@@ -36,13 +36,14 @@ public partial class App : Application
         services.AddScoped<PemasokRepository>();
         services.AddScoped<KategoriRepository>();
         services.AddScoped<JasaRepository>();
-
+        services.AddScoped<PasienRepository>();
         // ViewModels
         services.AddTransient<MainViewModel>();
         services.AddTransient<UserViewModel>();
         services.AddTransient<PemasokViewModel>();
         services.AddTransient<KategoriViewModel>();
         services.AddTransient<JasaViewModel>();
+        services.AddTransient<PasienViewModel>();
         // ...tambahkan ViewModel lain di sini seiring berkembang
         services.AddSingleton<ReportRepository>();
         services.AddTransient<ReportViewModel>();

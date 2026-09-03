@@ -213,3 +213,4 @@ C:\Auf\.net project\avalonia\DocBookKeeping\obj\Debug\net10.0\refint\DocBookKeep
 C:\Auf\.net project\avalonia\DocBookKeeping\obj\Debug\net10.0\DocBookKeeping.pdb
 C:\Auf\.net project\avalonia\DocBookKeeping\obj\Debug\net10.0\DocBookKeeping.genruntimeconfig.cache
 C:\Auf\.net project\avalonia\DocBookKeeping\obj\Debug\net10.0\ref\DocBookKeeping.dll
+C:\Auf\.net project\avalonia\DocBookKeeping\obj\Debug\net10.0\DocBookKeeping.sourcelink.json
