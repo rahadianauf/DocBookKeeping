@@ -86,7 +86,7 @@ public partial class MainViewModel : ViewModelBase
         CurrentView = _services.GetRequiredService<JasaViewModel>();
     }
     [RelayCommand]
-    private void ShowPasien()
+    private void ShowPasiens()
     {
         PageTitle = "Pasien";
         CurrentView = _services.GetRequiredService<PasienViewModel>();
