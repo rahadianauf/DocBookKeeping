@@ -348,6 +348,32 @@
                             </StackPanel>
 
                         </Button>
+
+                        <!-- BARANG -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowBarangsCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="◆"
+                                           FontSize="14"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Barang"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
                     </StackPanel>
                         <!-- LAPORAN -->
 

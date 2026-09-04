@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DocBookKeeping.Models;
 
@@ -9,13 +10,14 @@ public partial class MstBarang
 
     public string NamaBarang { get; set; } = null!;
 
-    public int? IdKategori { get; set; }
+    public int IdKategori { get; set; }
 
     public int IdSatuan { get; set; }
 
-    public double? HargaJual { get; set; }
+    public virtual MstKategori? IdKategoriNavigation { get; set; }
 
-    public int? StokMinimum { get; set; }
+    public virtual MstSatuan? IdSatuanNavigation { get; set; }
 
-    public virtual ICollection<TransBarang> TransBarangs { get; set; } = new List<TransBarang>();
+    [NotMapped]
+    public int No { get; set; }
 }

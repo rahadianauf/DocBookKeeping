@@ -43,24 +43,31 @@ public partial class DocBookKeepingContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<MstBarang>(entity =>
-        {
-            entity.HasKey(e => e.IdBarang);
+{
+                entity.HasKey(e => e.IdBarang);
 
-            entity.ToTable("mst_barang");
+                entity.ToTable("mst_barang");
 
-            entity.HasIndex(e => e.NamaBarang, "IX_mst_barang_nama_barang").IsUnique();
+                entity.HasIndex(e => e.NamaBarang, "IX_mst_barang_nama_barang").IsUnique();
 
-            entity.Property(e => e.IdBarang).HasColumnName("id_barang");
-            entity.Property(e => e.HargaJual)
-                .HasDefaultValue(0.0)
-                .HasColumnName("harga_jual");
-            entity.Property(e => e.IdKategori).HasColumnName("id_kategori");
-            entity.Property(e => e.IdSatuan).HasColumnName("id_satuan");
-            entity.Property(e => e.NamaBarang).HasColumnName("nama_barang");
-            entity.Property(e => e.StokMinimum)
-                .HasDefaultValue(0)
-                .HasColumnName("stok_minimum");
-        });
+                entity.Property(e => e.IdBarang)
+                    .HasColumnName("id_barang")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.NamaBarang).HasColumnName("nama_barang");
+                entity.Property(e => e.IdKategori).HasColumnName("id_kategori");
+                entity.Property(e => e.IdSatuan).HasColumnName("id_satuan");
+
+                entity.HasOne(d => d.IdKategoriNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.IdKategori)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.IdSatuanNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.IdSatuan)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
 
         modelBuilder.Entity<MstKategori>(entity =>
         {
@@ -152,10 +159,6 @@ public partial class DocBookKeepingContext : DbContext
                 .HasDefaultValueSql("DATE('now')")
                 .HasColumnName("tanggal_input");
             entity.Property(e => e.TanggalKadaluwarsa).HasColumnName("tanggal_kadaluwarsa");
-
-            entity.HasOne(d => d.IdBarangNavigation).WithMany(p => p.TransBarangs)
-                .HasForeignKey(d => d.IdBarang)
-                .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.IdPemasokNavigation).WithMany(p => p.TransBarangs).HasForeignKey(d => d.IdPemasok);
         });
