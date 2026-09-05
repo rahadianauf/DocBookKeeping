@@ -169,13 +169,29 @@ public partial class DocBookKeepingContext : DbContext
 
             entity.ToTable("trans_jasa");
 
-            entity.Property(e => e.IdTrans).HasColumnName("id_trans");
-            entity.Property(e => e.Harga).HasColumnName("harga");
+            entity.Property(e => e.IdTrans)
+                .HasColumnName("id_trans")
+                .ValueGeneratedNever();
+
+            entity.Property(e => e.IdPasien).HasColumnName("id_pasien");
             entity.Property(e => e.IdJasa).HasColumnName("id_jasa");
+            entity.Property(e => e.Harga).HasColumnName("harga");
             entity.Property(e => e.Keterangan).HasColumnName("keterangan");
+            entity.Property(e => e.Tag).HasColumnName("tag");
             entity.Property(e => e.TanggalInput)
                 .HasDefaultValueSql("DATE('now')")
                 .HasColumnName("tanggal_input");
+
+            entity.HasOne(d => d.IdPasienNavigation)
+                .WithMany()
+                .HasForeignKey(d => d.IdPasien)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
+
+            entity.HasOne(d => d.IdJasaNavigation)
+                .WithMany()
+                .HasForeignKey(d => d.IdJasa)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         OnModelCreatingPartial(modelBuilder);

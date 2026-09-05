@@ -6,24 +6,16 @@ namespace DocBookKeeping.Models;
 
 public partial class MstPasien
 {
-    public string IdTrans { get; set; } = null!;
+    public string IdPasien { get; set; } = null!;
 
-    public string? IdPasien { get; set; }
+    public string NamaPasien { get; set; } = null!;
 
-    public string IdJasa { get; set; } = null!;
+    public string? NoTelepon { get; set; }
 
-    public decimal Harga { get; set; }
+    public string? Alamat { get; set; }
 
-    public string? Keterangan { get; set; }
-
-    public string? Tag { get; set; }
-
-    public string TanggalInput { get; set; } = null!;
-
-    public virtual MstPasien? IdPasienNavigation { get; set; }
-
-    public virtual MstJasa? IdJasaNavigation { get; set; }
-
+    public string? TanggalDaftar { get; set; }
+    
     [NotMapped]
     public int No { get; set; }
 }
