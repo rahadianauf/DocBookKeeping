@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -39,6 +40,7 @@ public partial class App : Application
         services.AddScoped<PasienRepository>();
         services.AddScoped<SatuanRepository>();
         services.AddScoped<BarangRepository>();
+        services.AddScoped<TransJasaRepository>();
         // ViewModels
         services.AddTransient<MainViewModel>();
         services.AddTransient<UserViewModel>();
@@ -47,6 +49,7 @@ public partial class App : Application
         services.AddTransient<JasaViewModel>();
         services.AddTransient<PasienViewModel>();
         services.AddTransient<BarangViewModel>();
+        services.AddTransient<TransJasaViewModel>();
         // ...tambahkan ViewModel lain di sini seiring berkembang
         services.AddSingleton<ReportRepository>();
         services.AddTransient<ReportViewModel>();
@@ -57,6 +60,7 @@ public partial class App : Application
             desktop.MainWindow = new MainWindow
             {
                 DataContext = Services.GetRequiredService<MainViewModel>(),
+                Title = $"DB PATH: {AppPaths.DatabasePath}"
             };
         }
     }

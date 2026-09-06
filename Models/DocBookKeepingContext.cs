@@ -177,7 +177,7 @@ public partial class DocBookKeepingContext : DbContext
             entity.Property(e => e.IdJasa).HasColumnName("id_jasa");
             entity.Property(e => e.Harga).HasColumnName("harga");
             entity.Property(e => e.Keterangan).HasColumnName("keterangan");
-            entity.Property(e => e.Tag).HasColumnName("tag");
+            entity.Property(e => e.Tag).HasColumnName("TAG");
             entity.Property(e => e.TanggalInput)
                 .HasDefaultValueSql("DATE('now')")
                 .HasColumnName("tanggal_input");

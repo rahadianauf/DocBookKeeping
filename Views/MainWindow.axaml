@@ -140,7 +140,7 @@
                         <!-- PEMASUKAN -->
 
                         <Button Height="44"
-                                Command="{Binding ShowIncomeCommand}"
+                                Command="{Binding ShowTransJasasCommand}"
                                 HorizontalContentAlignment="Left"
                                 Padding="14,0"
                                 Background="Transparent"
@@ -154,7 +154,7 @@
                                            FontSize="18"
                                            Foreground="#94A3B8" />
 
-                                <TextBlock Text="Pemasukan"
+                                <TextBlock Text="Pemasukan Jasa"
                                            VerticalAlignment="Center"
                                            Foreground="#CBD5E1"
                                            FontSize="14" />

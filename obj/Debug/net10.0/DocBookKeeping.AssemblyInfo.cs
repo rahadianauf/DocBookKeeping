@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DocBookKeeping")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9729b4f85998043a9e20e0cf625c61ea9ff1914")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e7f3f42c87d7ac42341e776857f4067ccc90962")]
 [assembly: System.Reflection.AssemblyProductAttribute("DocBookKeeping")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DocBookKeeping")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

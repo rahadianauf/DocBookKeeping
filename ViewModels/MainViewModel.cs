@@ -98,6 +98,12 @@ public partial class MainViewModel : ViewModelBase
         CurrentView = _services.GetRequiredService<BarangViewModel>();
     }
     [RelayCommand]
+    private void ShowTransJasas()
+    {
+        PageTitle = "Pemasukan (Transaksi Jasa)";
+        CurrentView = _services.GetRequiredService<TransJasaViewModel>();
+    }
+    [RelayCommand]
     private void ShowReports()
     {
         PageTitle = "Laporan Keuangan";
