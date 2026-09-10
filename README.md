@@ -41,7 +41,7 @@ Follow these steps to get a local copy up and running:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com
+git clone https://github.com/rahadianauf/DocBookKeeping
 cd DocBookKeeping
 ```
 
