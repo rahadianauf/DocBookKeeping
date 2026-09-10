@@ -66,6 +66,8 @@ dotnet run --project DocBookKeeping.csproj
 
 ---
 
+<!-- 
 ## 📄 License
 
 This project is open-source. Feel free to use, modify, and distribute it as needed.
+-- >
