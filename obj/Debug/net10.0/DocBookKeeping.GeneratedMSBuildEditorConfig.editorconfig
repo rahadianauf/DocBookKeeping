@@ -74,6 +74,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Auf/.net project/avalonia/DocBookKeeping/Views/SuplierView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Auf/.net project/avalonia/DocBookKeeping/Views/TransBarangView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Auf/.net project/avalonia/DocBookKeeping/Views/TransJasaView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

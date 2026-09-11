@@ -33,6 +33,14 @@
             <views:ExpenseView />
         </DataTemplate>
 
+         <DataTemplate DataType="{x:Type vm:TransJasaViewModel}">
+            <views:TransJasaView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:TransBarangViewModel}">
+            <views:TransBarangView />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vm:UserViewModel}">
             <views:UserView />
         </DataTemplate>
@@ -155,6 +163,32 @@
                                            Foreground="#94A3B8" />
 
                                 <TextBlock Text="Pemasukan Jasa"
+                                           VerticalAlignment="Center"
+                                           Foreground="#CBD5E1"
+                                           FontSize="14" />
+
+                            </StackPanel>
+
+                        </Button>
+
+                        <!-- PEMASUKAN -->
+
+                        <Button Height="44"
+                                Command="{Binding ShowTransBarangsCommand}"
+                                HorizontalContentAlignment="Left"
+                                Padding="14,0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="7">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12">
+
+                                <TextBlock Text="↗"
+                                           FontSize="18"
+                                           Foreground="#94A3B8" />
+
+                                <TextBlock Text="Pemasukan Barang"
                                            VerticalAlignment="Center"
                                            Foreground="#CBD5E1"
                                            FontSize="14" />

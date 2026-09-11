@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DocBookKeeping.Models;
 
@@ -13,19 +14,22 @@ public partial class TransBarang
 
     public string TanggalInput { get; set; } = null!;
 
-    public string TanggalBeli { get; set; } = null!;
-
-    public string TanggalKadaluwarsa { get; set; } = null!;
+    public string? Tag { get; set; }
 
     public int Jumlah { get; set; }
 
-    public double HargaBeli { get; set; }
+    public decimal HargaSatuan { get; set; }
 
-    public double NilaiBeli { get; set; }
+    public decimal Nilai { get; set; }
+
+    public string? TanggalKadaluwarsa { get; set; }
 
     public string? Keterangan { get; set; }
 
-    public virtual MstBarang IdBarangNavigation { get; set; } = null!;
+    public virtual MstBarang? IdBarangNavigation { get; set; }
 
     public virtual MstPemasok? IdPemasokNavigation { get; set; }
+
+    [NotMapped]
+    public int No { get; set; }
 }

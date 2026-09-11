@@ -147,20 +147,32 @@ public partial class DocBookKeepingContext : DbContext
 
             entity.ToTable("trans_barang");
 
-            entity.Property(e => e.IdTrans).HasColumnName("id_trans");
-            entity.Property(e => e.HargaBeli).HasColumnName("harga_beli");
+            entity.Property(e => e.IdTrans)
+                .HasColumnName("id_trans")
+                .ValueGeneratedNever();
+
             entity.Property(e => e.IdBarang).HasColumnName("id_barang");
             entity.Property(e => e.IdPemasok).HasColumnName("id_pemasok");
-            entity.Property(e => e.Jumlah).HasColumnName("jumlah");
-            entity.Property(e => e.Keterangan).HasColumnName("keterangan");
-            entity.Property(e => e.NilaiBeli).HasColumnName("nilai_beli");
-            entity.Property(e => e.TanggalBeli).HasColumnName("tanggal_beli");
             entity.Property(e => e.TanggalInput)
                 .HasDefaultValueSql("DATE('now')")
                 .HasColumnName("tanggal_input");
+            entity.Property(e => e.Tag).HasColumnName("TAG");
+            entity.Property(e => e.Jumlah).HasColumnName("jumlah");
+            entity.Property(e => e.HargaSatuan).HasColumnName("harga_satuan");
+            entity.Property(e => e.Nilai).HasColumnName("nilai");
             entity.Property(e => e.TanggalKadaluwarsa).HasColumnName("tanggal_kadaluwarsa");
+            entity.Property(e => e.Keterangan).HasColumnName("keterangan");
 
-            entity.HasOne(d => d.IdPemasokNavigation).WithMany(p => p.TransBarangs).HasForeignKey(d => d.IdPemasok);
+            entity.HasOne(d => d.IdBarangNavigation)
+                .WithMany()
+                .HasForeignKey(d => d.IdBarang)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(d => d.IdPemasokNavigation)
+                .WithMany(p => p.TransBarangs)
+                .HasForeignKey(d => d.IdPemasok)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<TransJasa>(entity =>

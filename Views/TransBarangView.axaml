@@ -1,0 +1,100 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             x:Class="DocBookKeeping.Views.TransBarangView"
+             x:DataType="vm:TransBarangViewModel">
+  <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="20">
+
+    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+      <StackPanel Spacing="5">
+        <TextBlock Text="Transaksi Barang" FontSize="28" FontWeight="Bold" Foreground="#111827" />
+        <TextBlock Text="Catat pembelian/stok masuk barang" FontSize="13" Foreground="#6B7280" />
+      </StackPanel>
+      <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadTransCommand}"
+              Padding="18,10" Background="#4F46E5" Foreground="White"
+              BorderThickness="0" CornerRadius="6" HorizontalAlignment="Right"/>
+    </Grid>
+
+    <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+      <StackPanel Spacing="10">
+        <TextBlock Text="{Binding FormModeLabel}" FontWeight="SemiBold" FontSize="13" Foreground="#4F46E5" />
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <ComboBox PlaceholderText="Pilih Barang"
+                    ItemsSource="{Binding BarangOptions}"
+                    SelectedItem="{Binding FormBarang}"
+                    Width="180">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding NamaBarang}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+
+          <ComboBox PlaceholderText="Pilih Pemasok (opsional)"
+                    ItemsSource="{Binding PemasokOptions}"
+                    SelectedItem="{Binding FormPemasok}"
+                    Width="180">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding NamaPemasok}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+
+          <TextBox PlaceholderText="Jumlah" Text="{Binding FormJumlah}" Width="90" />
+          <TextBox PlaceholderText="Harga Satuan" Text="{Binding FormHargaSatuan}" Width="130" />
+          <TextBox PlaceholderText="Nilai (Total)" Text="{Binding FormNilai}" Width="130" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <TextBox PlaceholderText="Tanggal Kadaluwarsa (yyyy-MM-dd, opsional)"
+                    Text="{Binding FormTanggalKadaluwarsa}" Width="220" />
+          <TextBox PlaceholderText="Tag" Text="{Binding FormTag}" Width="120" />
+          <TextBox PlaceholderText="Keterangan" Text="{Binding FormKeterangan}" Width="220" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Button Content="Tambah" Command="{Binding AddTransCommand}"
+                  Background="#16A34A" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6" />
+          <Button Content="Simpan Perubahan" Command="{Binding UpdateTransCommand}"
+                  Background="#4F46E5" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6" />
+          <Button Content="Hapus" Command="{Binding DeleteTransCommand}"
+                  Background="#DC2626" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6" />
+          <Button Content="Batal" Command="{Binding ClearFormCommand}"
+                  Background="Transparent" Foreground="#6B7280" BorderThickness="1" Padding="15,10" CornerRadius="6" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <Border Grid.Row="2" Background="White" Padding="15" CornerRadius="8">
+      <TextBox PlaceholderText="Cari nama barang/pemasok..." Text="{Binding SearchText}" Width="300" HorizontalAlignment="Left" />
+    </Border>
+
+    <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
+
+    <Border Grid.Row="4" Background="White" CornerRadius="8" Padding="15" MinHeight="400">
+      <DataGrid ItemsSource="{Binding TransList}" SelectedItem="{Binding SelectedTrans}"
+                AutoGenerateColumns="False" GridLinesVisibility="Horizontal" IsReadOnly="True" MinHeight="350">
+        <DataGrid.Styles>
+          <Style Selector="DataGridCell TextBlock">
+            <Setter Property="Foreground" Value="#111827" />
+          </Style>
+        </DataGrid.Styles>
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="No" Binding="{Binding No}" Width="Auto" />
+          <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="Auto" />
+          <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="Auto" />
+          <DataGridTextColumn Header="Pemasok"
+                               Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}"
+                               Width="Auto" />
+          <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="Auto" />
+          <DataGridTextColumn Header="Harga Satuan" Binding="{Binding HargaSatuan, StringFormat={}{0:N0}}" Width="Auto" />
+          <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="Auto" />
+          <DataGridTextColumn Header="Kadaluwarsa" Binding="{Binding TanggalKadaluwarsa, TargetNullValue='-'}" Width="Auto" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </Border>
+
+  </Grid>
+</UserControl>
