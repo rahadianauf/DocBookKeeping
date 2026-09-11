@@ -1,0 +1,36 @@
+# Kredensial dan Variabel Lingkungan 
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secret.json
+appsettings.Development.json
+
+# Pengaturan Editor / IDE Lokal
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+
+# Sistem Operasi
+.DS_Store
+Thumbs.db
+
+# --- Avalonia & XAML Previewer Cache ---
+.avalonia/
+.avalonia-previewer/
+
+# --- Package Management ---
+# NuGet Packages
+*.nupkg
+packages/
+.paket/
