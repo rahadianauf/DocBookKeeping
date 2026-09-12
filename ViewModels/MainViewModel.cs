@@ -113,6 +113,6 @@ public partial class MainViewModel : ViewModelBase
     private void ShowReports()
     {
         PageTitle = "Laporan Keuangan";
-        CurrentView = _services.GetRequiredService<ReportViewModel>();
+        CurrentView = _services.GetRequiredService<LaporanViewModel>();
     }
 }

@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             x:Class="DocBookKeeping.Views.LaporanView"
+             x:DataType="vm:LaporanViewModel">
+  <ScrollViewer>
+    <StackPanel Spacing="20">
+
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="5">
+          <TextBlock Text="Laporan Keuangan" FontSize="28" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="Pilih rentang tanggal untuk melihat laporan" FontSize="13" Foreground="#6B7280" />
+        </StackPanel>
+        <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadLaporanCommand}"
+                Padding="18,10" Background="#4F46E5" Foreground="White"
+                BorderThickness="0" CornerRadius="6" HorizontalAlignment="Right"/>
+      </Grid>
+
+      <!-- FILTER TANGGAL -->
+      <Border Background="White" CornerRadius="10" Padding="20">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Spacing="4">
+              <TextBlock Text="Dari Tanggal" FontSize="12" Foreground="#6B7280" />
+              <DatePicker SelectedDate="{Binding StartDate}" Width="160" />
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="Sampai Tanggal" FontSize="12" Foreground="#6B7280" />
+              <DatePicker SelectedDate="{Binding EndDate}" Width="160" />
+            </StackPanel>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="Bulan Ini" Command="{Binding SetRangeBulanIniCommand}"
+                    Padding="12,6" Background="#EEF2FF" Foreground="#4F46E5" BorderThickness="0" CornerRadius="6" />
+            <Button Content="Bulan Lalu" Command="{Binding SetRangeBulanLaluCommand}"
+                    Padding="12,6" Background="#EEF2FF" Foreground="#4F46E5" BorderThickness="0" CornerRadius="6" />
+            <Button Content="Tahun Ini" Command="{Binding SetRangeTahunIniCommand}"
+                    Padding="12,6" Background="#EEF2FF" Foreground="#4F46E5" BorderThickness="0" CornerRadius="6" />
+            <Button Content="Semua Data" Command="{Binding SetRangeSemuaCommand}"
+                    Padding="12,6" Background="#F3F4F6" Foreground="#6B7280" BorderThickness="0" CornerRadius="6" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
+
+      <!-- RINGKASAN -->
+      <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Total Pemasukan" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding TotalPemasukan, StringFormat={}Rp {0:N0}}"
+                       FontSize="22" FontWeight="Bold" Foreground="#16A34A" />
+          </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Total Pengeluaran" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding TotalPengeluaran, StringFormat={}Rp {0:N0}}"
+                       FontSize="22" FontWeight="Bold" Foreground="#DC2626" />
+          </StackPanel>
+        </Border>
+        <Border Grid.Column="2" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Saldo" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding Saldo, StringFormat={}Rp {0:N0}}"
+                       FontSize="22" FontWeight="Bold" Foreground="#4F46E5" />
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- TABEL JASA -->
+      <Border Background="White" CornerRadius="10" Padding="20" MinHeight="250">
+        <StackPanel Spacing="10">
+          <TextBlock Text="Detail Transaksi Jasa" FontWeight="SemiBold" Foreground="#111827" />
+          <DataGrid ItemsSource="{Binding JasaFiltered}"
+                    AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
+                    IsReadOnly="True" MinHeight="200">
+            <DataGrid.Styles>
+              <Style Selector="DataGridCell TextBlock">
+                <Setter Property="Foreground" Value="#111827" />
+              </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="100" />
+              <DataGridTextColumn Header="Pasien" Binding="{Binding IdPasienNavigation.NamaPasien, TargetNullValue='- Umum -'}" Width="160" />
+              <DataGridTextColumn Header="Jasa" Binding="{Binding IdJasaNavigation.NamaJasa}" Width="160" />
+              <DataGridTextColumn Header="Harga" Binding="{Binding Harga, StringFormat={}{0:N0}}" Width="120" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+      </Border>
+
+      <!-- TABEL BARANG -->
+      <Border Background="White" CornerRadius="10" Padding="20" MinHeight="250">
+        <StackPanel Spacing="10">
+          <TextBlock Text="Detail Transaksi Barang" FontWeight="SemiBold" Foreground="#111827" />
+          <DataGrid ItemsSource="{Binding BarangFiltered}"
+                    AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
+                    IsReadOnly="True" MinHeight="200">
+            <DataGrid.Styles>
+              <Style Selector="DataGridCell TextBlock">
+                <Setter Property="Foreground" Value="#111827" />
+              </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="100" />
+              <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="160" />
+              <DataGridTextColumn Header="Pemasok" Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}" Width="150" />
+              <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="60" />
+              <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="120" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -61,8 +61,8 @@
             <views:PasienView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:ReportViewModel}">
-            <views:ReportView />
+        <DataTemplate DataType="{x:Type vm:LaporanViewModel}">
+            <views:LaporanView />
         </DataTemplate>
 
     </Window.DataTemplates>
