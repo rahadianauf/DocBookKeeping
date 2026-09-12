@@ -66,6 +66,9 @@ public partial class TransBarangViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    [ObservableProperty]
+    private bool isFormVisible;
+
     public TransBarangViewModel(
         TransBarangRepository transBarangRepository,
         BarangRepository barangRepository,
@@ -80,6 +83,20 @@ public partial class TransBarangViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void OpenAddForm()
+    {
+        ClearForm();
+        IsFormVisible = true;
+    }
+
+    public string FormModeLabel => SelectedTrans is null
+        ? "Tambah Transaksi Barang Baru"
+        : $"Edit Transaksi — {SelectedTrans.IdTrans}";
+
+
+    public bool IsEditMode => SelectedTrans is not null;   // <-- tambahkan persis di bawah/dekat ini
+
+    [RelayCommand]
     private async Task LoadDropdownOptions()
     {
         var barangs = await _barangRepository.GetAllBarangAsync();
@@ -90,10 +107,6 @@ public partial class TransBarangViewModel : ViewModelBase
         PemasokOptions.Clear();
         foreach (var p in pemasoks) PemasokOptions.Add(p);
     }
-
-    public string FormModeLabel => SelectedTrans is null
-        ? "Tambah Transaksi Barang Baru"
-        : $"Edit Transaksi — {SelectedTrans.IdTrans}";
 
     // ── PERHITUNGAN OTOMATIS ──────────────────────────────
 
@@ -146,9 +159,15 @@ public partial class TransBarangViewModel : ViewModelBase
         FormTanggalKadaluwarsa = value?.TanggalKadaluwarsa ?? string.Empty;
         FormTag = value?.Tag ?? string.Empty;
         FormKeterangan = value?.Keterangan ?? string.Empty;
+
+        if (value is not null)
+        IsFormVisible = true;   // <-- tambahan: auto-buka form saat pilih baris
+
+
         UpdateTransCommand.NotifyCanExecuteChanged();
         DeleteTransCommand.NotifyCanExecuteChanged();
         OnPropertyChanged(nameof(FormModeLabel));
+        OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
@@ -314,5 +333,7 @@ public partial class TransBarangViewModel : ViewModelBase
         FormTanggalKadaluwarsa = string.Empty;
         FormTag = string.Empty;
         FormKeterangan = string.Empty;
+        IsFormVisible = false;   // <-- tambahan: tutup form
+        OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan hide form
     }
 }

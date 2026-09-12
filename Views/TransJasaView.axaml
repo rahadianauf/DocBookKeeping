@@ -5,17 +5,25 @@
              x:DataType="vm:TransJasaViewModel">
   <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="20">
 
-    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+    <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto">
       <StackPanel Spacing="5">
         <TextBlock Text="Transaksi Jasa" FontSize="28" FontWeight="Bold" Foreground="#111827" />
         <TextBlock Text="Catat transaksi layanan/jasa" FontSize="13" Foreground="#6B7280" />
       </StackPanel>
-      <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadTransCommand}"
+
+      <Button Grid.Column="1" Content="+ Tambah Transaksi"
+              Command="{Binding OpenAddFormCommand}"
+              Padding="18,10" Margin="0,0,10,0"
+              Background="#16A34A" Foreground="White"
+              BorderThickness="0" CornerRadius="6" />
+
+      <Button Grid.Column="2" Content="Refresh" Command="{Binding LoadTransCommand}"
               Padding="18,10" Background="#4F46E5" Foreground="White"
               BorderThickness="0" CornerRadius="6" HorizontalAlignment="Right"/>
     </Grid>
 
-    <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+    <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8"
+        IsVisible="{Binding IsFormVisible}">
       <StackPanel Spacing="10">
         <TextBlock Text="{Binding FormModeLabel}" FontWeight="SemiBold" FontSize="13" Foreground="#4F46E5" />
         <WrapPanel>
@@ -51,12 +59,15 @@
         </WrapPanel>
 
         <StackPanel Orientation="Horizontal" Spacing="10">
-          <Button Content="Tambah" Command="{Binding AddTransCommand}"
-                  Background="#16A34A" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6" />
+          <Button Content="Simpan" Command="{Binding AddTransCommand}"
+                  Background="#16A34A" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6"
+                  IsVisible="{Binding !IsEditMode}" />
           <Button Content="Simpan Perubahan" Command="{Binding UpdateTransCommand}"
-                  Background="#4F46E5" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6" />
+                  Background="#4F46E5" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6"
+                  IsVisible="{Binding IsEditMode}" />
           <Button Content="Hapus" Command="{Binding DeleteTransCommand}"
-                  Background="#DC2626" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6" />
+                  Background="#DC2626" Foreground="White" BorderThickness="0" Padding="15,10" CornerRadius="6"
+                  IsVisible="{Binding IsEditMode}" />
           <Button Content="Batal" Command="{Binding ClearFormCommand}"
                   Background="Transparent" Foreground="#6B7280" BorderThickness="1" Padding="15,10" CornerRadius="6" />
         </StackPanel>

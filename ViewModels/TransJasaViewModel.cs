@@ -50,7 +50,8 @@ public partial class TransJasaViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool isLoading;
-
+    [ObservableProperty]
+    private bool isFormVisible;
     public TransJasaViewModel(
         TransJasaRepository transJasaRepository,
         PasienRepository pasienRepository,
@@ -65,6 +66,18 @@ public partial class TransJasaViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void OpenAddForm()
+    {
+        ClearForm();
+        IsFormVisible = true;
+    }
+    public string FormModeLabel => SelectedTrans is null
+        ? "Tambah Transaksi Jasa Baru"
+        : $"Edit Transaksi — {SelectedTrans.IdTrans}";
+
+    public bool IsEditMode => SelectedTrans is not null;   // <-- tambahkan persis di bawah/dekat ini
+    
+    [RelayCommand]
     private async Task LoadDropdownOptions()
     {
         var pasiens = await _pasienRepository.GetAllPasienAsync();
@@ -76,10 +89,6 @@ public partial class TransJasaViewModel : ViewModelBase
         foreach (var j in jasas) JasaOptions.Add(j);
     }
 
-    public string FormModeLabel => SelectedTrans is null
-        ? "Tambah Transaksi Jasa Baru"
-        : $"Edit Transaksi — {SelectedTrans.IdTrans}";
-
     partial void OnSelectedTransChanged(TransJasa? value)
     {
         FormPasien = value?.IdPasienNavigation;
@@ -87,9 +96,14 @@ public partial class TransJasaViewModel : ViewModelBase
         FormHarga = value is null ? string.Empty : value.Harga.ToString("0");
         FormKeterangan = value?.Keterangan ?? string.Empty;
         FormTag = value?.Tag ?? string.Empty;
+
+        if (value is not null)
+            IsFormVisible = true;   // <-- tambahan: auto-buka form saat pilih baris
+
         UpdateTransCommand.NotifyCanExecuteChanged();
         DeleteTransCommand.NotifyCanExecuteChanged();
         OnPropertyChanged(nameof(FormModeLabel));
+        OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
@@ -221,5 +235,7 @@ public partial class TransJasaViewModel : ViewModelBase
         FormHarga = string.Empty;
         FormKeterangan = string.Empty;
         FormTag = string.Empty;
+        IsFormVisible = false;   // <-- tambahan: tutup form
+        OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan
     }
 }
