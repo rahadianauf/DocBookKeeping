@@ -1,9 +1,121 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="DocBookKeeping.Views.DashboardView">
-  <TextBlock Text="Dashboard"
-               FontSize="24"/>
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             x:Class="DocBookKeeping.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+  <ScrollViewer>
+    <StackPanel Spacing="20">
+
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="5">
+          <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="{Binding BulanIniLabel, StringFormat='Ringkasan bulan {0}'}" FontSize="13" Foreground="#6B7280" />
+        </StackPanel>
+        <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadDashboardCommand}"
+                Padding="18,10" Background="#4F46E5" Foreground="White"
+                BorderThickness="0" CornerRadius="6" HorizontalAlignment="Right"/>
+      </Grid>
+
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
+
+      <!-- KARTU RINGKASAN -->
+      <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+
+        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Pemasukan Bulan Ini" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding TotalPemasukanBulanIni, StringFormat={}Rp {0:N0}}"
+                       FontSize="24" FontWeight="Bold" Foreground="#16A34A" />
+            <TextBlock Text="{Binding JumlahTransaksiJasaBulanIni, StringFormat={}{0} transaksi}"
+                       FontSize="12" Foreground="#9CA3AF" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Pengeluaran Bulan Ini" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding TotalPengeluaranBulanIni, StringFormat={}Rp {0:N0}}"
+                       FontSize="24" FontWeight="Bold" Foreground="#DC2626" />
+            <TextBlock Text="{Binding JumlahTransaksiBarangBulanIni, StringFormat={}{0} transaksi}"
+                       FontSize="12" Foreground="#9CA3AF" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Saldo Bulan Ini" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding SaldoBulanIni, StringFormat={}Rp {0:N0}}"
+                       FontSize="24" FontWeight="Bold" Foreground="#4F46E5" />
+            <TextBlock Text="Pemasukan − Pengeluaran" FontSize="12" Foreground="#9CA3AF" />
+          </StackPanel>
+        </Border>
+
+      </Grid>
+
+      <!-- KARTU DATA MASTER -->
+      <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+
+        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Total Pasien" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding JumlahPasien}" FontSize="24" FontWeight="Bold" Foreground="#111827" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Total Barang" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding JumlahBarang}" FontSize="24" FontWeight="Bold" Foreground="#111827" />
+          </StackPanel>
+        </Border>
+
+      </Grid>
+
+      <!-- TRANSAKSI TERBARU -->
+      <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+
+        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="10">
+            <TextBlock Text="Transaksi Jasa Terbaru" FontWeight="SemiBold" Foreground="#111827" />
+            <ItemsControl ItemsSource="{Binding RecentTransJasa}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                    <StackPanel>
+                      <TextBlock Text="{Binding IdJasaNavigation.NamaJasa}" FontSize="13" Foreground="#111827" />
+                      <TextBlock Text="{Binding TanggalInput}" FontSize="11" Foreground="#9CA3AF" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="{Binding Harga, StringFormat={}Rp {0:N0}}"
+                               FontSize="13" Foreground="#16A34A" VerticalAlignment="Center" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="10">
+            <TextBlock Text="Transaksi Barang Terbaru" FontWeight="SemiBold" Foreground="#111827" />
+            <ItemsControl ItemsSource="{Binding RecentTransBarang}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                    <StackPanel>
+                      <TextBlock Text="{Binding IdBarangNavigation.NamaBarang}" FontSize="13" Foreground="#111827" />
+                      <TextBlock Text="{Binding TanggalInput}" FontSize="11" Foreground="#9CA3AF" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="{Binding Nilai, StringFormat={}Rp {0:N0}}"
+                               FontSize="13" Foreground="#DC2626" VerticalAlignment="Center" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+      </Grid>
+
+    </StackPanel>
+  </ScrollViewer>
 </UserControl>

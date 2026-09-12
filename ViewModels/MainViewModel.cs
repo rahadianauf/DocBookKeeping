@@ -28,7 +28,7 @@ public partial class MainViewModel : ViewModelBase
         _userRepository = userRepository;
         _pemasokRepository = pemasokRepository;
         _services = services;
-        CurrentView = new DashboardViewModel();
+        CurrentView = _services.GetRequiredService<DashboardViewModel>();
     }
 
     [RelayCommand]
@@ -41,7 +41,7 @@ public partial class MainViewModel : ViewModelBase
     private void ShowDashboard()
     {
         PageTitle = "Dashboard";
-        CurrentView = new DashboardViewModel();
+        CurrentView = _services.GetRequiredService<DashboardViewModel>();
     }
 
     [RelayCommand]
