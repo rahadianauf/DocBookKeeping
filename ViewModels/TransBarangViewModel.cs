@@ -197,6 +197,11 @@ public partial class TransBarangViewModel : ViewModelBase
         decimal.TryParse(FormHargaSatuan, NumberStyles.Number, CultureInfo.InvariantCulture, out _) &&
         decimal.TryParse(FormNilai, NumberStyles.Number, CultureInfo.InvariantCulture, out _);
 
+    private bool CanUpdateSelected() =>
+        SelectedTrans is not null && SelectedTrans.Tag != "KELUAR";
+    
+    private bool CanDeleteSelected() => SelectedTrans is not null;
+
     [RelayCommand(CanExecute = nameof(CanAddTrans))]
     private async Task AddTrans()
     {
@@ -227,7 +232,7 @@ public partial class TransBarangViewModel : ViewModelBase
 
     private bool CanModifySelected() => SelectedTrans is not null;
 
-    [RelayCommand(CanExecute = nameof(CanModifySelected))]
+    [RelayCommand(CanExecute = nameof(CanUpdateSelected))]
     private async Task UpdateTrans()
     {
         if (SelectedTrans is null || FormBarang is null) return;
@@ -283,7 +288,7 @@ public partial class TransBarangViewModel : ViewModelBase
         return true;
     }
 
-    [RelayCommand(CanExecute = nameof(CanModifySelected))]
+    [RelayCommand(CanExecute = nameof(CanDeleteSelected))]
     private async Task DeleteTrans()
     {
         if (SelectedTrans is null) return;
