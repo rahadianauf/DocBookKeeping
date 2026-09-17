@@ -40,6 +40,12 @@ public partial class DocBookKeepingContext : DbContext
         if (!optionsBuilder.IsConfigured)
             optionsBuilder.UseSqlite(DocBookKeeping.AppPaths.ConnectionString);
     }
+    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        await Database.ExecuteSqlRawAsync("PRAGMA recursive_triggers = ON;", cancellationToken);
+        return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<MstBarang>(entity =>
