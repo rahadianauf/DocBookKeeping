@@ -20,11 +20,18 @@ public partial class TransBarangViewModel : ViewModelBase
     private List<TransBarang> _allTrans = new();
 
     // Flag supaya perubahan HargaSatuan <-> Nilai tidak saling memicu tanpa henti
-    private bool _isCalculating = false;
+    private bool _isCalculating ;
 
     public ObservableCollection<TransBarang> TransList { get; } = new();
     public ObservableCollection<MstBarang> BarangOptions { get; } = new();
     public ObservableCollection<MstPemasok> PemasokOptions { get; } = new();
+
+
+    public ObservableCollection<string> TagOptions { get; } = new() { "MASUK", "KELUAR" };
+    public ObservableCollection<string> SumberOptions { get; } = new() { "BELI", "PRODUKSI" };
+    public ObservableCollection<string> TujuanKeluarOptions { get; } = new()
+        { "JUAL", "PRODUKSI", "PAKAI_SENDIRI", "RUSAK_HILANG" };
+
 
     [ObservableProperty]
     private TransBarang? selectedTrans;
@@ -55,7 +62,13 @@ public partial class TransBarangViewModel : ViewModelBase
     private string formTanggalKadaluwarsa = string.Empty;
 
     [ObservableProperty]
-    private string formTag = string.Empty;
+    private string formTag = "MASUK";
+
+    [ObservableProperty]
+    private string? formSumber = "BELI";
+
+    [ObservableProperty]
+    private string? formTujuanKeluar;
 
     [ObservableProperty]
     private string formKeterangan = string.Empty;
@@ -68,6 +81,19 @@ public partial class TransBarangViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool isFormVisible;
+
+    public bool IsFormTagMasuk => FormTag == "MASUK";
+    public bool IsFormTagKeluar => FormTag == "KELUAR";
+
+    public string FormModeLabel => SelectedTrans is null
+        ? "Tambah Transaksi Barang Baru"
+        : $"Edit Transaksi — {SelectedTrans.IdTrans}";
+
+
+    public bool IsEditMode => SelectedTrans is not null;   // <-- tambahkan persis di bawah/dekat ini
+
+    public bool IsKeluarSelected => SelectedTrans?.Tag == "KELUAR";
+    
 
     public TransBarangViewModel(
         TransBarangRepository transBarangRepository,
@@ -83,20 +109,6 @@ public partial class TransBarangViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void OpenAddForm()
-    {
-        ClearForm();
-        IsFormVisible = true;
-    }
-
-    public string FormModeLabel => SelectedTrans is null
-        ? "Tambah Transaksi Barang Baru"
-        : $"Edit Transaksi — {SelectedTrans.IdTrans}";
-
-
-    public bool IsEditMode => SelectedTrans is not null;   // <-- tambahkan persis di bawah/dekat ini
-
-    [RelayCommand]
     private async Task LoadDropdownOptions()
     {
         var barangs = await _barangRepository.GetAllBarangAsync();
@@ -106,6 +118,25 @@ public partial class TransBarangViewModel : ViewModelBase
         var pemasoks = await _pemasokRepository.GetAllPemasoksAsync();
         PemasokOptions.Clear();
         foreach (var p in pemasoks) PemasokOptions.Add(p);
+    }
+
+    [RelayCommand]
+    private void OpenAddForm()
+    {
+        ClearForm();
+        IsFormVisible = true;
+    }
+
+    partial void OnFormTagChanged(string value)
+    {
+        OnPropertyChanged(nameof(IsFormTagMasuk));
+        OnPropertyChanged(nameof(IsFormTagKeluar));
+
+         // reset field yang tidak relevan
+        if (value == "MASUK")
+            FormTujuanKeluar = null;
+        else
+            FormSumber = null;
     }
 
     // ── PERHITUNGAN OTOMATIS ──────────────────────────────
@@ -153,11 +184,13 @@ public partial class TransBarangViewModel : ViewModelBase
     {
         FormBarang = value?.IdBarangNavigation;
         FormPemasok = value?.IdPemasokNavigation;
+        FormTag = value?.Tag ?? "MASUK";
+        FormSumber = value?.Sumber;
+        FormTujuanKeluar = value?.TujuanKeluar;
         FormJumlah = value?.Jumlah.ToString() ?? string.Empty;
         FormHargaSatuan = value?.HargaSatuan.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
         FormNilai = value?.Nilai.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
         FormTanggalKadaluwarsa = value?.TanggalKadaluwarsa ?? string.Empty;
-        FormTag = value?.Tag ?? string.Empty;
         FormKeterangan = value?.Keterangan ?? string.Empty;
 
         if (value is not null)
@@ -167,7 +200,8 @@ public partial class TransBarangViewModel : ViewModelBase
         UpdateTransCommand.NotifyCanExecuteChanged();
         DeleteTransCommand.NotifyCanExecuteChanged();
         OnPropertyChanged(nameof(FormModeLabel));
-        OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan
+        OnPropertyChanged(nameof(IsEditMode));
+        OnPropertyChanged(nameof(IsKeluarSelected));
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
@@ -211,7 +245,8 @@ public partial class TransBarangViewModel : ViewModelBase
     }
 
     private bool CanAddTrans() =>
-        FormBarang is not null &&
+         FormBarang is not null &&
+        !string.IsNullOrWhiteSpace(FormTag) &&
         int.TryParse(FormJumlah, out var j) && j > 0 &&
         decimal.TryParse(FormHargaSatuan, NumberStyles.Number, CultureInfo.InvariantCulture, out _) &&
         decimal.TryParse(FormNilai, NumberStyles.Number, CultureInfo.InvariantCulture, out _);
@@ -221,6 +256,7 @@ public partial class TransBarangViewModel : ViewModelBase
     
     private bool CanDeleteSelected() => SelectedTrans is not null;
 
+    
     [RelayCommand(CanExecute = nameof(CanAddTrans))]
     private async Task AddTrans()
     {
@@ -234,9 +270,11 @@ public partial class TransBarangViewModel : ViewModelBase
             await _transBarangRepository.AddTransBarangAsync(
                 FormBarang!.IdBarang,
                 FormPemasok?.IdPemasok,
+                FormTag,
+                FormSumber,
+                FormTujuanKeluar,
                 jumlah, harga, nilai,
                 string.IsNullOrWhiteSpace(FormTanggalKadaluwarsa) ? null : FormTanggalKadaluwarsa,
-                FormTag,
                 FormKeterangan);
 
             await LoadTrans();
@@ -244,7 +282,7 @@ public partial class TransBarangViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ErrorMessage = "Gagal menambah transaksi. Cek tanggal kadaluwarsa (harus lebih besar dari tanggal input).";
+            ErrorMessage = TranslateDbError(ex, fallback: "Gagal menambah transaksi.");
             Debug.WriteLine($"[TransBarangViewModel] AddTrans error: {ex}");
         }
     }
@@ -254,7 +292,7 @@ public partial class TransBarangViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(CanUpdateSelected))]
     private async Task UpdateTrans()
     {
-        if (SelectedTrans is null || FormBarang is null) return;
+         if (SelectedTrans is null || FormBarang is null) return;
 
         try
         {
@@ -264,12 +302,9 @@ public partial class TransBarangViewModel : ViewModelBase
                 return;
 
             await _transBarangRepository.UpdateTransBarangAsync(
-                SelectedTrans.IdTrans,
-                FormBarang.IdBarang,
-                FormPemasok?.IdPemasok,
+                SelectedTrans.IdTrans, FormBarang.IdBarang, FormPemasok?.IdPemasok, FormSumber,
                 jumlah, harga, nilai,
                 string.IsNullOrWhiteSpace(FormTanggalKadaluwarsa) ? null : FormTanggalKadaluwarsa,
-                FormTag,
                 FormKeterangan);
 
             await LoadTrans();
@@ -277,7 +312,7 @@ public partial class TransBarangViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ErrorMessage = "Gagal mengubah transaksi.";
+            ErrorMessage = TranslateDbError(ex, fallback: "Gagal mengubah transaksi.");
             Debug.WriteLine($"[TransBarangViewModel] UpdateTrans error: {ex}");
         }
     }
@@ -321,24 +356,44 @@ public partial class TransBarangViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ErrorMessage = "Gagal menghapus transaksi.";
+            ErrorMessage = TranslateDbError(ex, fallback: "Gagal menghapus transaksi.");
             Debug.WriteLine($"[TransBarangViewModel] DeleteTrans error: {ex}");
         }
+    }
+
+     // Terjemahkan pesan RAISE(ABORT, '...') dari trigger jadi lebih ramah
+    private static string TranslateDbError(Exception ex, string fallback)
+    {
+        var msg = ex.InnerException?.Message ?? ex.Message;
+
+        if (msg.Contains("Stok tidak mencukupi"))
+            return "Stok tidak mencukupi untuk barang ini.";
+        if (msg.Contains("Batch sudah pernah dipakai"))
+            return "Transaksi ini tidak bisa dihapus karena stoknya sudah terpakai di transaksi lain.";
+        if (msg.Contains("tidak boleh diedit"))
+            return "Transaksi KELUAR tidak bisa diedit. Hapus transaksi ini lalu buat transaksi baru.";
+        if (msg.Contains("Jumlah baru lebih kecil"))
+            return "Jumlah tidak boleh dikurangi di bawah jumlah yang sudah terpakai.";
+
+        return fallback;
     }
 
     [RelayCommand]
     private void ClearForm()
     {
-        SelectedTrans = null;
+       SelectedTrans = null;
         FormBarang = null;
         FormPemasok = null;
+        FormTag = "MASUK";
+        FormSumber = "BELI";
+        FormTujuanKeluar = null;
         FormJumlah = string.Empty;
         FormHargaSatuan = string.Empty;
         FormNilai = string.Empty;
         FormTanggalKadaluwarsa = string.Empty;
-        FormTag = string.Empty;
         FormKeterangan = string.Empty;
-        IsFormVisible = false;   // <-- tambahan: tutup form
-        OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan hide form
+        IsFormVisible = false;
+        OnPropertyChanged(nameof(IsEditMode));
+        OnPropertyChanged(nameof(IsKeluarSelected));
     }
 }

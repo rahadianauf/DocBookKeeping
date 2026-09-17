@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocBookKeeping.Models;
@@ -163,6 +165,9 @@ public partial class DocBookKeepingContext : DbContext
                 .HasDefaultValueSql("DATE('now')")
                 .HasColumnName("tanggal_input");
             entity.Property(e => e.Tag).HasColumnName("TAG");
+            entity.Property(e => e.Sumber).HasColumnName("sumber");
+            entity.Property(e => e.TujuanKeluar).HasColumnName("tujuan_keluar");
+            entity.Property(e => e.IdTransProduksi).HasColumnName("id_trans_produksi");
             entity.Property(e => e.Jumlah).HasColumnName("jumlah");
             entity.Property(e => e.HargaSatuan).HasColumnName("harga_satuan");
             entity.Property(e => e.Nilai).HasColumnName("nilai");

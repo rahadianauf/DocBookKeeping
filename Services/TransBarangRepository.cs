@@ -47,8 +47,9 @@ public class TransBarangRepository
     }
 
     public async Task AddTransBarangAsync(
-        string idBarang, int? idPemasok, int jumlah, decimal hargaSatuan, decimal nilai,
-        string? tanggalKadaluwarsa, string? tag, string? keterangan)
+        string idBarang, int? idPemasok, string tag, string? sumber, string? tujuanKeluar,
+        int jumlah, decimal hargaSatuan, decimal nilai,
+        string? tanggalKadaluwarsa, string? keterangan)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -59,11 +60,13 @@ public class TransBarangRepository
             IdTrans = newId,
             IdBarang = idBarang,
             IdPemasok = idPemasok,
+            Tag = tag,
+            Sumber = sumber,
+            TujuanKeluar = tujuanKeluar,
             Jumlah = jumlah,
             HargaSatuan = hargaSatuan,
             Nilai = nilai,
             TanggalKadaluwarsa = tanggalKadaluwarsa,
-            Tag = tag,
             Keterangan = keterangan,
             TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")
         });
@@ -72,8 +75,9 @@ public class TransBarangRepository
     }
 
     public async Task UpdateTransBarangAsync(
-        string id, string idBarang, int? idPemasok, int jumlah, decimal hargaSatuan, decimal nilai,
-        string? tanggalKadaluwarsa, string? tag, string? keterangan)
+        string id, string idBarang, int? idPemasok, string? sumber,
+        int jumlah, decimal hargaSatuan, decimal nilai,
+        string? tanggalKadaluwarsa, string? keterangan)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -82,11 +86,11 @@ public class TransBarangRepository
 
         trans.IdBarang = idBarang;
         trans.IdPemasok = idPemasok;
+        trans.Sumber = sumber;
         trans.Jumlah = jumlah;
         trans.HargaSatuan = hargaSatuan;
         trans.Nilai = nilai;
         trans.TanggalKadaluwarsa = tanggalKadaluwarsa;
-        trans.Tag = tag;
         trans.Keterangan = keterangan;
 
         await context.SaveChangesAsync();
