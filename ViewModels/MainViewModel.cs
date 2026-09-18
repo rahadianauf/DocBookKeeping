@@ -58,6 +58,20 @@ public partial class MainViewModel : ViewModelBase
         CurrentView = new ExpenseViewModel();
     }
 
+   [RelayCommand]
+   private void ShowExpense()
+   {
+       PageTitle = "Pengeluaran (Barang Masuk)";
+       CurrentView = _services.GetRequiredService<BarangMasukViewModel>();
+   }
+   
+   [RelayCommand]
+   private void ShowBarangKeluar()
+   {
+       PageTitle = "Barang Keluar";
+       CurrentView = _services.GetRequiredService<BarangKeluarViewModel>();
+   }
+   
     [RelayCommand]
     private void ShowUsers()
     {
