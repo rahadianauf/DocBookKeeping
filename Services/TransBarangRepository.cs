@@ -106,4 +106,25 @@ public class TransBarangRepository
         context.TransBarangs.Remove(trans);
         await context.SaveChangesAsync();
     }
+
+    public async Task<List<PemakaianBatchDto>> GetPemakaianByTransAsync(string idTransKeluar)
+    {
+        await using var context = await _contextFactory.CreateDbContextAsync();
+        return await context.Database.SqlQuery<PemakaianBatchDto>($"""
+            SELECT id_batch AS IdBatch,
+                   jumlah_diambil AS JumlahDiambil,
+                   harga_pokok_satuan AS HargaPokokSatuan,
+                   subtotal_nilai AS SubtotalNilai
+            FROM pemakaian_batch
+            WHERE id_trans_keluar = {idTransKeluar}
+            """).ToListAsync();
+    }
+}
+
+public class PemakaianBatchDto
+{
+    public int IdBatch { get; set; }
+    public int JumlahDiambil { get; set; }
+    public decimal HargaPokokSatuan { get; set; }
+    public decimal SubtotalNilai { get; set; }
 }
