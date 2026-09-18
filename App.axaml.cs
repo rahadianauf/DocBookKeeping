@@ -55,6 +55,8 @@ public partial class App : Application
         services.AddTransient<TransBarangViewModel>();
         services.AddTransient<DashboardViewModel>();
         services.AddTransient<LaporanViewModel>();
+        services.AddTransient<BarangMasukViewModel>();
+        services.AddTransient<BarangKeluarViewModel>();
         // ...tambahkan ViewModel lain di sini seiring berkembang
         services.AddSingleton<ReportRepository>();
         services.AddTransient<ReportViewModel>();
