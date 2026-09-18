@@ -84,9 +84,10 @@
               <TextBox PlaceholderText="Jumlah" Text="{Binding FormJumlah}" Width="90" />
               <TextBox PlaceholderText="Harga Satuan" Text="{Binding FormHargaSatuan}" Width="130" />
               <TextBox PlaceholderText="Nilai (Total)" Text="{Binding FormNilai}" Width="130" />
-              <TextBox PlaceholderText="Tanggal Kadaluwarsa (yyyy-MM-dd, opsional)"
-                        Text="{Binding FormTanggalKadaluwarsa}" Width="220"
-                        IsVisible="{Binding IsFormTagMasuk}" />
+              <StackPanel Spacing="4" IsVisible="{Binding IsFormTagMasuk}">
+                <TextBlock Text="Tanggal Kadaluwarsa (opsional)" FontSize="11" Foreground="#6B7280" />
+                <DatePicker SelectedDate="{Binding FormTanggalKadaluwarsa}" Width="220" />
+              </StackPanel>
               <TextBox PlaceholderText="Keterangan" Text="{Binding FormKeterangan}" Width="200" />
             </StackPanel>
           </WrapPanel>

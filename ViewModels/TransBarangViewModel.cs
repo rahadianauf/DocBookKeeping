@@ -59,7 +59,7 @@ public partial class TransBarangViewModel : ViewModelBase
     private string formNilai = string.Empty;
 
     [ObservableProperty]
-    private string formTanggalKadaluwarsa = string.Empty;
+    private DateTimeOffset? formTanggalKadaluwarsa;
 
     [ObservableProperty]
     private string formTag = "MASUK";
@@ -190,7 +190,10 @@ public partial class TransBarangViewModel : ViewModelBase
         FormJumlah = value?.Jumlah.ToString() ?? string.Empty;
         FormHargaSatuan = value?.HargaSatuan.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
         FormNilai = value?.Nilai.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
-        FormTanggalKadaluwarsa = value?.TanggalKadaluwarsa ?? string.Empty;
+        
+    FormTanggalKadaluwarsa = string.IsNullOrWhiteSpace(value?.TanggalKadaluwarsa)
+        ? null
+        : DateTimeOffset.Parse(value.TanggalKadaluwarsa);
         FormKeterangan = value?.Keterangan ?? string.Empty;
 
         if (value is not null)
@@ -274,7 +277,7 @@ public partial class TransBarangViewModel : ViewModelBase
                 FormSumber,
                 FormTujuanKeluar,
                 jumlah, harga, nilai,
-                string.IsNullOrWhiteSpace(FormTanggalKadaluwarsa) ? null : FormTanggalKadaluwarsa,
+                FormTanggalKadaluwarsa?.ToString("yyyy-MM-dd"),
                 FormKeterangan);
 
             await LoadTrans();
@@ -304,7 +307,7 @@ public partial class TransBarangViewModel : ViewModelBase
             await _transBarangRepository.UpdateTransBarangAsync(
                 SelectedTrans.IdTrans, FormBarang.IdBarang, FormPemasok?.IdPemasok, FormSumber,
                 jumlah, harga, nilai,
-                string.IsNullOrWhiteSpace(FormTanggalKadaluwarsa) ? null : FormTanggalKadaluwarsa,
+                FormTanggalKadaluwarsa?.ToString("yyyy-MM-dd"),
                 FormKeterangan);
 
             await LoadTrans();
@@ -390,7 +393,7 @@ public partial class TransBarangViewModel : ViewModelBase
         FormJumlah = string.Empty;
         FormHargaSatuan = string.Empty;
         FormNilai = string.Empty;
-        FormTanggalKadaluwarsa = string.Empty;
+        FormTanggalKadaluwarsa = null;
         FormKeterangan = string.Empty;
         IsFormVisible = false;
         OnPropertyChanged(nameof(IsEditMode));
