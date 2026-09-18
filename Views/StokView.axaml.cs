@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace DocBookKeeping.Views;
 
-public partial class TransBarangView : UserControl
+public partial class StokView : UserControl
 {
-    public TransBarangView()
+    public StokView()
     {
         InitializeComponent();
     }

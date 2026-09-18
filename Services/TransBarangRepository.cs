@@ -46,10 +46,10 @@ public class TransBarangRepository
         return $"TB{nextNumber:D4}";
     }
 
-    public async Task AddTransBarangAsync(
-        string idBarang, int? idPemasok, string tag, string? sumber, string? tujuanKeluar,
-        int jumlah, decimal hargaSatuan, decimal nilai,
-        string? tanggalKadaluwarsa, string? keterangan)
+    public async Task<string> AddTransBarangAsync(
+    string idBarang, int? idPemasok, string tag, string? sumber, string? tujuanKeluar,
+    int jumlah, decimal hargaSatuan, decimal nilai,
+    string? tanggalKadaluwarsa, string? keterangan)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -72,6 +72,8 @@ public class TransBarangRepository
         });
 
         await context.SaveChangesAsync();
+
+        return newId;   // <-- tambahkan return ini
     }
 
     public async Task UpdateTransBarangAsync(
@@ -119,11 +121,39 @@ public class TransBarangRepository
             WHERE id_trans_keluar = {idTransKeluar}
             """).ToListAsync();
     }
+
+    public async Task<List<HppDetailDto>> GetHppDetailAsync()
+    {
+        await using var context = await _contextFactory.CreateDbContextAsync();
+        return await context.Database.SqlQuery<HppDetailDto>($"""
+            SELECT pb.id_trans_keluar AS IdTransKeluar,
+                tb.tanggal_input AS Tanggal,
+                mb.nama_barang AS NamaBarang,
+                tb.tujuan_keluar AS TujuanKeluar,
+                pb.jumlah_diambil AS JumlahDiambil,
+                pb.harga_pokok_satuan AS HargaPokokSatuan,
+                pb.subtotal_nilai AS SubtotalNilai
+            FROM pemakaian_batch pb
+            JOIN trans_barang tb ON tb.id_trans = pb.id_trans_keluar
+            JOIN mst_barang mb ON mb.id_barang = tb.id_barang
+            ORDER BY tb.tanggal_input DESC
+            """).ToListAsync();
+    }
 }
 
 public class PemakaianBatchDto
 {
     public int IdBatch { get; set; }
+    public int JumlahDiambil { get; set; }
+    public decimal HargaPokokSatuan { get; set; }
+    public decimal SubtotalNilai { get; set; }
+}
+public class HppDetailDto
+{
+    public string IdTransKeluar { get; set; } = null!;
+    public string Tanggal { get; set; } = null!;
+    public string NamaBarang { get; set; } = null!;
+    public string? TujuanKeluar { get; set; }
     public int JumlahDiambil { get; set; }
     public decimal HargaPokokSatuan { get; set; }
     public decimal SubtotalNilai { get; set; }

@@ -46,26 +46,34 @@
       <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
 
       <!-- RINGKASAN -->
-      <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+
+      <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
         <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
           <StackPanel Spacing="8">
             <TextBlock Text="Total Pemasukan" FontSize="13" Foreground="#6B7280" />
             <TextBlock Text="{Binding TotalPemasukan, StringFormat={}Rp {0:N0}}"
-                       FontSize="22" FontWeight="Bold" Foreground="#16A34A" />
+                      FontSize="20" FontWeight="Bold" Foreground="#16A34A" />
           </StackPanel>
         </Border>
         <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
           <StackPanel Spacing="8">
             <TextBlock Text="Total Pengeluaran" FontSize="13" Foreground="#6B7280" />
             <TextBlock Text="{Binding TotalPengeluaran, StringFormat={}Rp {0:N0}}"
-                       FontSize="22" FontWeight="Bold" Foreground="#DC2626" />
+                      FontSize="20" FontWeight="Bold" Foreground="#DC2626" />
           </StackPanel>
         </Border>
         <Border Grid.Column="2" Background="White" CornerRadius="10" Padding="20">
           <StackPanel Spacing="8">
+            <TextBlock Text="Total HPP" FontSize="13" Foreground="#6B7280" />
+            <TextBlock Text="{Binding TotalHpp, StringFormat={}Rp {0:N0}}"
+                      FontSize="20" FontWeight="Bold" Foreground="#D97706" />
+          </StackPanel>
+        </Border>
+        <Border Grid.Column="3" Background="White" CornerRadius="10" Padding="20">
+          <StackPanel Spacing="8">
             <TextBlock Text="Saldo" FontSize="13" Foreground="#6B7280" />
             <TextBlock Text="{Binding Saldo, StringFormat={}Rp {0:N0}}"
-                       FontSize="22" FontWeight="Bold" Foreground="#4F46E5" />
+                      FontSize="20" FontWeight="Bold" Foreground="#4F46E5" />
           </StackPanel>
         </Border>
       </Grid>
@@ -110,6 +118,30 @@
               <DataGridTextColumn Header="Pemasok" Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}" Width="150" />
               <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="60" />
               <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="120" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+      </Border>
+
+      <!-- TABEL RIWAYAT HPP -->
+      <Border Background="White" CornerRadius="10" Padding="20" MinHeight="250">
+        <StackPanel Spacing="10">
+          <TextBlock Text="Riwayat HPP (Harga Pokok Penjualan)" FontWeight="SemiBold" Foreground="#111827" />
+          <DataGrid ItemsSource="{Binding HppFiltered}"
+                    AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
+                    IsReadOnly="True" MinHeight="200">
+            <DataGrid.Styles>
+              <Style Selector="DataGridCell TextBlock">
+                <Setter Property="Foreground" Value="#111827" />
+              </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
+              <DataGridTextColumn Header="Barang" Binding="{Binding NamaBarang}" Width="160" />
+              <DataGridTextColumn Header="Tujuan" Binding="{Binding TujuanKeluar}" Width="110" />
+              <DataGridTextColumn Header="Jml" Binding="{Binding JumlahDiambil}" Width="60" />
+              <DataGridTextColumn Header="HPP/Unit" Binding="{Binding HargaPokokSatuan, StringFormat={}{0:N0}}" Width="100" />
+              <DataGridTextColumn Header="Subtotal HPP" Binding="{Binding SubtotalNilai, StringFormat={}{0:N0}}" Width="120" />
             </DataGrid.Columns>
           </DataGrid>
         </StackPanel>

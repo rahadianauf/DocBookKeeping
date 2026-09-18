@@ -107,6 +107,7 @@ public partial class LaporanViewModel : ViewModelBase
 
             _allTransJasa = await _transJasaRepository.GetAllTransJasaAsync();
             _allTransBarang = await _transBarangRepository.GetAllTransBarangAsync();
+            _allHpp = await _transBarangRepository.GetHppDetailAsync();   // <-- tambahan
 
             ApplyFilter();
         }
@@ -123,7 +124,6 @@ public partial class LaporanViewModel : ViewModelBase
 
     private void ApplyFilter()
     {
-        // Format string tanggal (yyyy-MM-dd) supaya bisa dibandingkan langsung
         string? startStr = StartDate?.ToString("yyyy-MM-dd");
         string? endStr = EndDate?.ToString("yyyy-MM-dd");
 
@@ -135,6 +135,10 @@ public partial class LaporanViewModel : ViewModelBase
             (startStr is null || string.CompareOrdinal(t.TanggalInput, startStr) >= 0) &&
             (endStr is null || string.CompareOrdinal(t.TanggalInput, endStr) <= 0));
 
+        var hppFiltered = _allHpp.Where(h =>
+            (startStr is null || string.CompareOrdinal(h.Tanggal, startStr) >= 0) &&
+            (endStr is null || string.CompareOrdinal(h.Tanggal, endStr) <= 0));
+
         JasaFiltered.Clear();
         foreach (var j in jasaFiltered.OrderByDescending(t => t.TanggalInput))
             JasaFiltered.Add(j);
@@ -143,8 +147,21 @@ public partial class LaporanViewModel : ViewModelBase
         foreach (var b in barangFiltered.OrderByDescending(t => t.TanggalInput))
             BarangFiltered.Add(b);
 
+        HppFiltered.Clear();
+        foreach (var h in hppFiltered.OrderByDescending(x => x.Tanggal))
+            HppFiltered.Add(h);
+
         TotalPemasukan = JasaFiltered.Sum(t => t.Harga);
         TotalPengeluaran = BarangFiltered.Sum(t => t.Nilai);
+        TotalHpp = HppFiltered.Sum(h => h.SubtotalNilai);   // <-- tambahan
         Saldo = TotalPemasukan - TotalPengeluaran;
     }
+
+    private readonly TransBarangRepository _transBarangRepositoryForHpp;   // nama beda kalau sudah ada field serupa; kalau _transBarangRepository sudah ada, pakai itu saja
+    private List<HppDetailDto> _allHpp = new();
+
+    public ObservableCollection<HppDetailDto> HppFiltered { get; } = new();
+
+    [ObservableProperty]
+    private decimal totalHpp;
 }

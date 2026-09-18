@@ -59,7 +59,7 @@ public partial class MainViewModel : ViewModelBase
     }
 
    [RelayCommand]
-   private void ShowExpense()
+   private void ShowBarangMasuk()
    {
        PageTitle = "Pengeluaran (Barang Masuk)";
        CurrentView = _services.GetRequiredService<BarangMasukViewModel>();
@@ -118,15 +118,16 @@ public partial class MainViewModel : ViewModelBase
         CurrentView = _services.GetRequiredService<TransJasaViewModel>();
     }
     [RelayCommand]
-    private void ShowTransBarangs()
-    {
-        PageTitle = "Pengeluaran (Transaksi Barang)";
-        CurrentView = _services.GetRequiredService<TransBarangViewModel>();
-    }
-    [RelayCommand]
     private void ShowReports()
     {
         PageTitle = "Laporan Keuangan";
         CurrentView = _services.GetRequiredService<LaporanViewModel>();
+    }
+
+    [RelayCommand]
+    private void ShowStok()
+    {
+        PageTitle = "Stok Barang";
+        CurrentView = _services.GetRequiredService<StokViewModel>();
     }
 }

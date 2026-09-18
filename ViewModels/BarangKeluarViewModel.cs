@@ -194,13 +194,10 @@ public partial class BarangKeluarViewModel : ViewModelBase
                 return;
             }
 
-            var newId = await _transBarangRepository.GenerateNextIdAsync();
-
-            await _transBarangRepository.AddTransBarangAsync(
+            var newId = await _transBarangRepository.AddTransBarangAsync(   // <-- pakai hasil return ini
                 FormBarang!.IdBarang, null, "KELUAR", null, FormTujuanKeluar,
                 jumlah, harga, nilai, null, FormKeterangan);
 
-            // ambil breakdown HPP FIFO untuk transaksi yang baru saja disimpan
             var pemakaian = await _transBarangRepository.GetPemakaianByTransAsync(newId);
             LastHppBreakdown.Clear();
             foreach (var p in pemakaian) LastHppBreakdown.Add(p);
