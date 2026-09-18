@@ -204,7 +204,15 @@
 
                         </Button>
 
-
+                        <Button Height="44" Command="{Binding ShowBarangMasukCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="Transparent" BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="●" FontSize="15" Foreground="#94A3B8" />
+                                <TextBlock Text="Barang Masuk" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                            </StackPanel>
+                        </Button>
+                        
                         <!-- PENGELUARAN -->
 
                         <Button Height="44"
@@ -230,7 +238,15 @@
                             </StackPanel>
 
                         </Button>
-
+                        
+                        <Button Height="44" Command="{Binding ShowBarangKeluarCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="Transparent" BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="●" FontSize="15" Foreground="#94A3B8" />
+                                <TextBlock Text="Barang Keluar" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                            </StackPanel>
+                        </Button>
 
                         <!-- MASTER DATA -->
 
