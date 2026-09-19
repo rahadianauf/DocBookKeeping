@@ -34,6 +34,7 @@ public partial class DocBookKeepingContext : DbContext
     public virtual DbSet<TransBarang> TransBarangs { get; set; }
 
     public virtual DbSet<TransJasa> TransJasas { get; set; }
+    public virtual DbSet<BiayaTambahanBatch> BiayaTambahanBatches { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -215,6 +216,18 @@ public partial class DocBookKeepingContext : DbContext
                 .WithMany()
                 .HasForeignKey(d => d.IdJasa)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<BiayaTambahanBatch>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("biaya_tambahan_batch");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IdTransMasuk).HasColumnName("id_trans_masuk");
+            entity.Property(e => e.Komponen).HasColumnName("komponen");
+            entity.Property(e => e.Nilai).HasColumnName("nilai");
+            entity.Property(e => e.Keterangan).HasColumnName("keterangan");
         });
 
         OnModelCreatingPartial(modelBuilder);

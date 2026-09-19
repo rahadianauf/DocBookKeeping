@@ -67,7 +67,7 @@ public partial class BarangKeluarViewModel : ViewModelBase
     private decimal lastHppTotal;
 
     public string FormModeLabel => "Tambah Barang Keluar";
-
+    public bool IsRowSelected => SelectedTrans is not null;
     public BarangKeluarViewModel(TransBarangRepository transBarangRepository, BarangRepository barangRepository)
     {
         _transBarangRepository = transBarangRepository;
@@ -225,7 +225,8 @@ public partial class BarangKeluarViewModel : ViewModelBase
             ErrorMessage = string.Empty;
             await _transBarangRepository.DeleteTransBarangAsync(SelectedTrans.IdTrans);
             await LoadTrans();
-            ClearForm();
+            SelectedTrans = null;              
+            OnPropertyChanged(nameof(IsRowSelected));   
         }
         catch (Exception ex)
         {
@@ -245,6 +246,7 @@ public partial class BarangKeluarViewModel : ViewModelBase
     partial void OnSelectedTransChanged(TransBarang? value)
     {
         DeleteTransCommand.NotifyCanExecuteChanged();
+        OnPropertyChanged(nameof(IsRowSelected)); 
     }
 
     [RelayCommand]
@@ -260,6 +262,7 @@ public partial class BarangKeluarViewModel : ViewModelBase
         IsFormVisible = false;
         LastHppBreakdown.Clear();
         LastHppTotal = 0;
+         OnPropertyChanged(nameof(IsRowSelected));
     }
 
     // Setelah simpan sukses, form ditutup tapi breakdown HPP tetap ditampilkan

@@ -4,7 +4,7 @@
              x:Class="DocBookKeeping.Views.BarangKeluarView"
              x:DataType="vm:BarangKeluarViewModel">
   <ScrollViewer>
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="20" Margin="0,0,0,20">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" RowSpacing="20" Margin="0,0,0,20">
 
       <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto">
         <StackPanel Spacing="5">
@@ -72,7 +72,18 @@
                      FontWeight="Bold" Foreground="#4F46E5" FontSize="14" Margin="0,4,0,0" />
         </StackPanel>
       </Border>
-
+      <!-- AKSI UNTUK BARIS TERPILIH -->
+      <Border Grid.Row="2" Background="#FEF2F2" Padding="15" CornerRadius="8"
+              IsVisible="{Binding IsRowSelected}">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Text="{Binding SelectedTrans.IdTrans, StringFormat='Transaksi dipilih: {0}'}"
+                    VerticalAlignment="Center" Foreground="#991B1B" FontSize="13" />
+          <Button Grid.Column="1" Content="Hapus Transaksi Ini"
+                  Command="{Binding DeleteTransCommand}"
+                  Background="#DC2626" Foreground="White" BorderThickness="0"
+                  Padding="15,8" CornerRadius="6" />
+        </Grid>
+      </Border>
       <Border Grid.Row="3" Background="White" Padding="15" CornerRadius="8">
         <TextBox PlaceholderText="Cari nama barang..." Text="{Binding SearchText}" Width="300" HorizontalAlignment="Left" />
       </Border>

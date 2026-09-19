@@ -68,6 +68,25 @@ public partial class BarangMasukViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    private readonly BiayaTambahanRepository _biayaTambahanRepository;
+
+    public ObservableCollection<BiayaTambahanBatch> BiayaList { get; } = new();
+
+    [ObservableProperty]
+    private BiayaTambahanBatch? selectedBiaya;
+
+    [ObservableProperty]
+    private string biayaKomponen = string.Empty;
+
+    [ObservableProperty]
+    private string biayaNilai = string.Empty;
+
+    [ObservableProperty]
+    private string biayaKeterangan = string.Empty;
+
+    [ObservableProperty]
+    private decimal? hargaBeliSaatIni;
+
     public bool IsSumberBeli => FormSumber == "BELI";
 
     public string FormModeLabel => SelectedTrans is null
@@ -79,11 +98,13 @@ public partial class BarangMasukViewModel : ViewModelBase
     public BarangMasukViewModel(
         TransBarangRepository transBarangRepository,
         BarangRepository barangRepository,
-        PemasokRepository pemasokRepository)
+        PemasokRepository pemasokRepository,
+        BiayaTambahanRepository biayaTambahanRepository)
     {
         _transBarangRepository = transBarangRepository;
         _barangRepository = barangRepository;
         _pemasokRepository = pemasokRepository;
+        _biayaTambahanRepository = biayaTambahanRepository; 
 
         LoadTransCommand.Execute(null);
         LoadDropdownOptionsCommand.Execute(null);
@@ -146,24 +167,42 @@ public partial class BarangMasukViewModel : ViewModelBase
 
     partial void OnSelectedTransChanged(TransBarang? value)
     {
-        FormBarang = value?.IdBarangNavigation;
-        FormPemasok = value?.IdPemasokNavigation;
-        FormSumber = value?.Sumber ?? "BELI";
-        FormJumlah = value?.Jumlah.ToString() ?? string.Empty;
-        FormHargaSatuan = value?.HargaSatuan.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
-        FormNilai = value?.Nilai.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
-        FormTanggalKadaluwarsa = string.IsNullOrWhiteSpace(value?.TanggalKadaluwarsa)
-            ? null
-            : DateTimeOffset.Parse(value.TanggalKadaluwarsa);
-        FormKeterangan = value?.Keterangan ?? string.Empty;
+        try
+        {
+            FormBarang = value?.IdBarangNavigation;
+            FormPemasok = value?.IdPemasokNavigation;
+            FormSumber = value?.Sumber ?? "BELI";
+            FormJumlah = value?.Jumlah.ToString() ?? string.Empty;
+            FormHargaSatuan = value?.HargaSatuan.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
+            FormNilai = value?.Nilai.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
 
-        if (value is not null)
-            IsFormVisible = true;
+            FormTanggalKadaluwarsa = DateTimeOffset.TryParse(value?.TanggalKadaluwarsa, out var parsedDate)
+                ? parsedDate
+                : null;
 
-        UpdateTransCommand.NotifyCanExecuteChanged();
-        DeleteTransCommand.NotifyCanExecuteChanged();
-        OnPropertyChanged(nameof(FormModeLabel));
-        OnPropertyChanged(nameof(IsEditMode));
+            FormKeterangan = value?.Keterangan ?? string.Empty;
+
+            if (value is not null)
+            {
+                IsFormVisible = true;
+                LoadBiayaCommand.Execute(null);
+            }
+            else
+            {
+                BiayaList.Clear();
+                HargaBeliSaatIni = null;
+            }
+
+            UpdateTransCommand.NotifyCanExecuteChanged();
+            DeleteTransCommand.NotifyCanExecuteChanged();
+            OnPropertyChanged(nameof(FormModeLabel));
+            OnPropertyChanged(nameof(IsEditMode));
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Gagal memuat detail transaksi.";
+            Debug.WriteLine($"[BarangMasukViewModel] OnSelectedTransChanged error: {ex}");
+        }
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
@@ -341,4 +380,81 @@ public partial class BarangMasukViewModel : ViewModelBase
         IsFormVisible = false;
         OnPropertyChanged(nameof(IsEditMode));
     }
+
+    [RelayCommand]
+    private async Task LoadBiaya()
+    {
+        if (SelectedTrans is null) return;
+
+        try
+        {
+            var biayaList = await _biayaTambahanRepository.GetByTransAsync(SelectedTrans.IdTrans);
+            BiayaList.Clear();
+            foreach (var b in biayaList) BiayaList.Add(b);
+
+            HargaBeliSaatIni = await _biayaTambahanRepository.GetHargaBeliSaatIniAsync(SelectedTrans.IdTrans);
+        }
+        catch (Exception ex)
+        {
+            //ErrorMessage = ex.ToString();
+            ErrorMessage = "Gagal memuat biaya tambahan.";
+            Debug.WriteLine($"[BarangMasukViewModel] LoadBiaya error: {ex}");
+        }
+    }
+
+    private bool CanAddBiaya() =>
+        SelectedTrans is not null &&
+        !string.IsNullOrWhiteSpace(BiayaKomponen) &&
+        decimal.TryParse(BiayaNilai, NumberStyles.Number, CultureInfo.InvariantCulture, out _);
+
+    [RelayCommand(CanExecute = nameof(CanAddBiaya))]
+    private async Task AddBiaya()
+    {
+        if (SelectedTrans is null) return;
+
+        try
+        {
+            if (!decimal.TryParse(BiayaNilai, NumberStyles.Number, CultureInfo.InvariantCulture, out var nilai))
+            {
+                ErrorMessage = "Nilai biaya harus berupa angka.";
+                return;
+            }
+
+            await _biayaTambahanRepository.AddAsync(SelectedTrans.IdTrans, BiayaKomponen, nilai, BiayaKeterangan);
+            await LoadBiaya();
+
+            BiayaKomponen = string.Empty;
+            BiayaNilai = string.Empty;
+            BiayaKeterangan = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Gagal menambah biaya.";
+            Debug.WriteLine($"[BarangMasukViewModel] AddBiaya error: {ex}");
+        }
+    }
+
+    private bool CanDeleteBiaya() => SelectedBiaya is not null;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteBiaya))]
+    private async Task DeleteBiaya()
+    {
+        if (SelectedBiaya is null) return;
+
+        try
+        {
+            await _biayaTambahanRepository.DeleteAsync(SelectedBiaya.Id);
+            await LoadBiaya();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Gagal menghapus biaya.";
+            Debug.WriteLine($"[BarangMasukViewModel] DeleteBiaya error: {ex}");
+        }
+    }
+
+    partial void OnSelectedBiayaChanged(BiayaTambahanBatch? value) => DeleteBiayaCommand.NotifyCanExecuteChanged();
+
+    partial void OnBiayaKomponenChanged(string value) => AddBiayaCommand.NotifyCanExecuteChanged();
+    partial void OnBiayaNilaiChanged(string value) => AddBiayaCommand.NotifyCanExecuteChanged();
 }

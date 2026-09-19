@@ -4,7 +4,7 @@
              x:Class="DocBookKeeping.Views.BarangMasukView"
              x:DataType="vm:BarangMasukViewModel">
   <ScrollViewer>
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="20" Margin="0,0,0,20">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="20" Margin="0,0,0,20">
 
       <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto">
         <StackPanel Spacing="5">
@@ -74,13 +74,52 @@
         </StackPanel>
       </Border>
 
-      <Border Grid.Row="2" Background="White" Padding="15" CornerRadius="8">
+      <!-- BIAYA TAMBAHAN (muncul kalau transaksi MASUK sudah dipilih/tersimpan) -->
+      <Border Grid.Row="2" Background="#FFFBEB" Padding="15" CornerRadius="8"
+              IsVisible="{Binding IsEditMode}">
+        <StackPanel Spacing="10">
+          <TextBlock Text="Biaya Tambahan (Ongkos Kirim, Bea Masuk, dll)"
+                    FontWeight="SemiBold" FontSize="13" Foreground="#D97706" />
+
+          <TextBlock Text="{Binding HargaBeliSaatIni, StringFormat='Harga Pokok per Unit saat ini: Rp {0:N0}'}"
+                    FontSize="12" Foreground="#92400E" />
+
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBox PlaceholderText="Komponen (mis. Ongkos Kirim)" Text="{Binding BiayaKomponen}" Width="180" />
+            <TextBox PlaceholderText="Nilai (Rp)" Text="{Binding BiayaNilai}" Width="120" />
+            <TextBox PlaceholderText="Keterangan" Text="{Binding BiayaKeterangan}" Width="180" />
+            <Button Content="Tambah Biaya" Command="{Binding AddBiayaCommand}"
+                    Background="#D97706" Foreground="White" BorderThickness="0" Padding="12,8" CornerRadius="6" />
+          </StackPanel>
+
+          <DataGrid ItemsSource="{Binding BiayaList}" SelectedItem="{Binding SelectedBiaya}"
+                    AutoGenerateColumns="False" GridLinesVisibility="Horizontal" IsReadOnly="True"
+                    Height="150">
+            <DataGrid.Styles>
+              <Style Selector="DataGridCell TextBlock">
+                <Setter Property="Foreground" Value="#111827" />
+              </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Komponen" Binding="{Binding Komponen}" Width="*" />
+              <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="120" />
+              <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="180" />
+            </DataGrid.Columns>
+          </DataGrid>
+
+          <Button Content="Hapus Biaya Terpilih" Command="{Binding DeleteBiayaCommand}"
+                  Background="#DC2626" Foreground="White" BorderThickness="0" Padding="12,8" CornerRadius="6"
+                  HorizontalAlignment="Left" />
+        </StackPanel>
+      </Border>
+
+      <Border Grid.Row="3" Background="White" Padding="15" CornerRadius="8">
         <TextBox PlaceholderText="Cari nama barang/pemasok..." Text="{Binding SearchText}" Width="300" HorizontalAlignment="Left" />
       </Border>
 
-      <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
+      <TextBlock Grid.Row="4" Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
 
-      <Border Grid.Row="4" Background="White" CornerRadius="8" Padding="15" MinHeight="400">
+      <Border Grid.Row="5" Background="White" CornerRadius="8" Padding="15" MinHeight="400">
         <DataGrid ItemsSource="{Binding TransList}" SelectedItem="{Binding SelectedTrans}"
                   AutoGenerateColumns="False" GridLinesVisibility="Horizontal" IsReadOnly="True" MinHeight="350">
           <DataGrid.Styles>
