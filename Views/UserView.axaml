@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DocBookKeeping.Views.UserView"
+             x:DataType="vm:UserViewModel">
+  <Grid RowDefinitions="Auto,Auto,Auto,Auto,*"
+        RowSpacing="20">
+
+    <!--HEADER-->
+    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+      <StackPanel Spacing="5">
+        <TextBlock Text="Pengguna" FontSize="28" FontWeight="Bold" Foreground="#111827" />
+        <TextBlock Text="Kelola data pengguna aplikasi" FontSize="13" Foreground="#6B7280" />
+      </StackPanel>
+
+      <Button Grid.Column="1"
+              Content="Refresh"
+              Command="{Binding LoadUsersCommand}"
+              Padding="18,10"
+              Background="#4F46E5"
+              Foreground="White"
+              BorderThickness="0"
+              CornerRadius="6"
+              HorizontalAlignment="Right"/>
+    </Grid>
+
+    <!--FORM-->
+    <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+      <StackPanel Spacing="10">
+        <TextBlock Text="{Binding FormModeLabel}"
+               FontWeight="SemiBold"
+               FontSize="13"
+               Foreground="#4F46E5" />
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBox PlaceholderText="Username"
+                    Text="{Binding FormUsername}"
+                    Width="200" />
+
+            <TextBox PlaceholderText="Password"
+                    Text="{Binding FormPassword}"
+                    PasswordChar="•"
+                    Width="260" />
+
+            <Button Content="Tambah"
+                    Command="{Binding AddUserCommand}"
+                    Background="#16A34A" Foreground="White" BorderThickness="0"
+                    Padding="15,10" CornerRadius="6" />
+
+            <Button Content="Simpan Perubahan"
+                    Command="{Binding UpdateUserCommand}"
+                    Background="#4F46E5" Foreground="White" BorderThickness="0"
+                    Padding="15,10" CornerRadius="6" />
+
+            <Button Content="Hapus"
+                    Command="{Binding DeleteUserCommand}"
+                    Background="#DC2626" Foreground="White" BorderThickness="0"
+                    Padding="15,10" CornerRadius="6" />
+
+            <Button Content="Batal"
+                    Command="{Binding ClearFormCommand}"
+                    Background="Transparent" Foreground="#6B7280" BorderThickness="1"
+                    Padding="15,10" CornerRadius="6" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!--SEARCH-->
+    <Border Grid.Row="2" Background="White" Padding="15" CornerRadius="8">
+        <TextBox PlaceholderText="Cari username..."
+                Text="{Binding SearchText}"
+                Width="300"
+                HorizontalAlignment="Left" />
+    </Border>
+
+    <!--ERROR-->
+    <TextBlock Grid.Row="3"
+               Text="{Binding ErrorMessage}"
+               Foreground="Red"
+               TextWrapping="Wrap" />
+
+    <!--TABLE-->
+    <Border Grid.Row="4"
+            Background="White"
+            CornerRadius="8"
+            Padding="15"
+            MinHeight="400">
+    <DataGrid ItemsSource="{Binding Users}"
+                SelectedItem="{Binding SelectedUser}"
+                AutoGenerateColumns="False"
+                GridLinesVisibility="Horizontal"
+                IsReadOnly="True"
+                MinHeight="350">
+    <DataGrid.Styles>
+    <Style Selector="DataGridCell TextBlock">
+      <Setter Property="Foreground" Value="#111827" />
+    </Style>
+   </DataGrid.Styles>
+    <DataGrid.Columns>
+        <DataGridTextColumn Header="No" Binding="{Binding No}" Width="70" />
+        <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" />
+        </DataGrid.Columns>
+    </DataGrid>
+    </Border>
+  </Grid>
+</UserControl>

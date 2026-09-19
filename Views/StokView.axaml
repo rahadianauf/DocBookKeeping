@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             x:Class="DocBookKeeping.Views.StokView"
+             x:DataType="vm:StokViewModel">
+  <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="20">
+
+    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+      <StackPanel Spacing="5">
+        <TextBlock Text="Stok Barang" FontSize="28" FontWeight="Bold" Foreground="#111827" />
+        <TextBlock Text="Sisa stok tiap barang saat ini (berdasarkan FIFO)" FontSize="13" Foreground="#6B7280" />
+      </StackPanel>
+      <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadStokCommand}"
+              Padding="18,10" Background="#4F46E5" Foreground="White"
+              BorderThickness="0" CornerRadius="6" HorizontalAlignment="Right"/>
+    </Grid>
+
+    <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="20">
+      <StackPanel Spacing="8">
+        <TextBlock Text="Total Nilai Persediaan" FontSize="13" Foreground="#6B7280" />
+        <TextBlock Text="{Binding TotalNilaiPersediaan, StringFormat={}Rp {0:N0}}"
+                   FontSize="24" FontWeight="Bold" Foreground="#4F46E5" />
+      </StackPanel>
+    </Border>
+
+    <Border Grid.Row="2" Background="White" Padding="15" CornerRadius="8">
+      <TextBox PlaceholderText="Cari nama barang..." Text="{Binding SearchText}" Width="300" HorizontalAlignment="Left" />
+    </Border>
+
+    <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
+
+    <Border Grid.Row="4" Background="White" CornerRadius="8" Padding="15" MinHeight="400">
+      <DataGrid ItemsSource="{Binding StokList}"
+                AutoGenerateColumns="False" GridLinesVisibility="Horizontal" IsReadOnly="True" MinHeight="350">
+        <DataGrid.Styles>
+          <Style Selector="DataGridCell TextBlock">
+            <Setter Property="Foreground" Value="#111827" />
+          </Style>
+        </DataGrid.Styles>
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Barang" Binding="{Binding NamaBarang}" Width="*" />
+          <DataGridTextColumn Header="Kategori" Binding="{Binding Kategori, TargetNullValue='-'}" Width="150" />
+          <DataGridTextColumn Header="Satuan" Binding="{Binding Satuan, TargetNullValue='-'}" Width="100" />
+          <DataGridTextColumn Header="Stok Saat Ini" Binding="{Binding TotalStok}" Width="120" />
+          <DataGridTextColumn Header="Nilai Persediaan" Binding="{Binding NilaiPersediaan, StringFormat={}{0:N0}}" Width="150" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </Border>
+
+  </Grid>
+</UserControl>
