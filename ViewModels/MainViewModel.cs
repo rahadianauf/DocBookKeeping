@@ -130,4 +130,11 @@ public partial class MainViewModel : ViewModelBase
         PageTitle = "Stok Barang";
         CurrentView = _services.GetRequiredService<StokViewModel>();
     }
+
+    [RelayCommand]
+    private void ShowBiayaOperasional()
+    {
+        PageTitle = "Biaya Operasional";
+        CurrentView = _services.GetRequiredService<BiayaOperasionalViewModel>();
+    }
 }

@@ -152,7 +152,7 @@
         <StackPanel Spacing="10">
           <TextBlock Text="Laba Rugi" FontWeight="SemiBold" Foreground="#111827" FontSize="15" />
 
-          <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
+          <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Pendapatan Jasa" Foreground="#374151" />
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding PendapatanJasa, StringFormat={}Rp {0:N0}}" Foreground="#374151" />
 
@@ -178,6 +178,14 @@
 
             <TextBlock Grid.Row="7" Grid.Column="0" Text="LABA BERSIH" FontWeight="Bold" Foreground="#4F46E5" FontSize="16" Margin="0,8,0,0" />
             <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding LabaBersih, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#4F46E5" FontSize="16" Margin="0,8,0,0" />
+
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="Biaya Operasional (Gaji, Sewa, dll)" Foreground="#DC2626" Margin="0,8,0,0" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding TotalBiayaOperasional, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" Margin="0,8,0,0" />
+
+            <Rectangle Grid.Row="9" Grid.ColumnSpan="2" Height="1" Fill="#E5E7EB" Margin="0,4" />
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="LABA BERSIH FINAL" FontWeight="Bold" Foreground="#059669" FontSize="16" Margin="0,8,0,0" />
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding LabaBersihSetelahOperasional, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#059669" FontSize="16" Margin="0,8,0,0" />
           </Grid>
 
           <TextBlock Text="Catatan: Laba Bersih di sini belum memperhitungkan biaya operasional umum (gaji, sewa, listrik, dll) yang belum dicatat sistem."

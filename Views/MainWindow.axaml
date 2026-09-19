@@ -71,8 +71,10 @@
         <DataTemplate DataType="{x:Type vm:StokViewModel}">
             <views:StokView />
         </DataTemplate>
-
-    </Window.DataTemplates>
+        <DataTemplate DataType="{x:Type vm:BiayaOperasionalViewModel}">
+            <views:BiayaOperasionalView />
+        </DataTemplate>
+            </Window.DataTemplates>
     
         <!-- ================================= -->
     <!-- MAIN LAYOUT -->
@@ -119,11 +121,10 @@
                         <!-- MENU UTAMA -->
 
                         <TextBlock Text="MENU"
-                                   Margin="12,10,12,8"
-                                   FontSize="11"
-                                   FontWeight="Bold"
-                                   Foreground="#64748B" />
-
+                                Margin="12,10,12,8"
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="#64748B" />
 
                         <!-- DASHBOARD -->
 
@@ -134,92 +135,87 @@
                                 Background="#26344D"
                                 BorderThickness="0"
                                 CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="▣"
-                                           FontSize="18"
-                                           Foreground="White" />
-
-                                <TextBlock Text="Dashboard"
-                                           VerticalAlignment="Center"
-                                           Foreground="White"
-                                           FontSize="14" />
-
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="▣" FontSize="18" Foreground="White" />
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center" Foreground="White" FontSize="14" />
                             </StackPanel>
-
                         </Button>
 
+                        <!-- TRANSAKSI -->
 
-                        <!-- PEMASUKAN -->
+                        <TextBlock Text="TRANSAKSI"
+                                Margin="12,20,12,8"
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="#64748B" />
 
-                        <Button Height="44"
-                                Command="{Binding ShowTransJasasCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="↗"
-                                           FontSize="18"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Pemasukan Jasa"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
+                        <Button Height="44" Command="{Binding ShowTransJasasCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="Transparent" BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="↗" FontSize="18" Foreground="#94A3B8" />
+                                <TextBlock Text="Transaksi Jasa" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
                             </StackPanel>
-
                         </Button>
-
 
                         <Button Height="44" Command="{Binding ShowBarangMasukCommand}"
                                 HorizontalContentAlignment="Left" Padding="14,0"
                                 Background="Transparent" BorderThickness="0" CornerRadius="7">
                             <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="●" FontSize="15" Foreground="#94A3B8" />
+                                <TextBlock Text="⬇" FontSize="16" Foreground="#94A3B8" />
                                 <TextBlock Text="Barang Masuk" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
                             </StackPanel>
                         </Button>
-                        
-                        <!-- PENGELUARAN -->
 
-                        <Button Height="44"
-                                Command="{Binding ShowExpenseCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="↘"
-                                           FontSize="18"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Pengeluaran"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
-                            </StackPanel>
-
-                        </Button>
-                        
                         <Button Height="44" Command="{Binding ShowBarangKeluarCommand}"
                                 HorizontalContentAlignment="Left" Padding="14,0"
                                 Background="Transparent" BorderThickness="0" CornerRadius="7">
                             <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="●" FontSize="15" Foreground="#94A3B8" />
+                                <TextBlock Text="⬆" FontSize="16" Foreground="#94A3B8" />
                                 <TextBlock Text="Barang Keluar" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                            </StackPanel>
+                        </Button>
+
+                        <!-- INVENTORI -->
+
+                        <TextBlock Text="INVENTORI"
+                                Margin="12,20,12,8"
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="#64748B" />
+
+                        <Button Height="44" Command="{Binding ShowStokCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="Transparent" BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="▦" FontSize="16" Foreground="#94A3B8" />
+                                <TextBlock Text="Stok Barang" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                            </StackPanel>
+                        </Button>
+
+                        <!-- KEUANGAN -->
+
+                        <TextBlock Text="KEUANGAN"
+                                Margin="12,20,12,8"
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="#64748B" />
+
+                        <Button Height="44" Command="{Binding ShowBiayaOperasionalCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="Transparent" BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="⊖" FontSize="16" Foreground="#94A3B8" />
+                                <TextBlock Text="Biaya Operasional" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Height="44" Command="{Binding ShowReportsCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="Transparent" BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="▤" FontSize="17" Foreground="#94A3B8" />
+                                <TextBlock Text="Laporan Keuangan" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
                             </StackPanel>
                         </Button>
 
@@ -231,224 +227,71 @@
                                 Margin="0,20,0,0"
                                 Background="Transparent"
                                 BorderThickness="0">
-
                             <Grid ColumnDefinitions="*,Auto">
-
-                                <TextBlock Text="MASTER DATA"
-                                        FontSize="11"
-                                        FontWeight="Bold"
-                                        Foreground="#64748B" />
-
+                                <TextBlock Text="MASTER DATA" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
                                 <TextBlock Grid.Column="1"
                                             Text="{Binding IsMasterExpanded, Converter={x:Static local:BoolToChevronConverter.Instance}}"
-                                            FontSize="11"
-                                            Foreground="#64748B" />
-
+                                            FontSize="11" Foreground="#64748B" />
                             </Grid>
-
                         </Button>
 
-                        <StackPanel Spacing="4"
-                            IsVisible="{Binding IsMasterExpanded}">
-                        <!-- PENGGUNA -->
+                        <StackPanel Spacing="4" IsVisible="{Binding IsMasterExpanded}">
 
-                        <Button Height="44"
-                                Command="{Binding ShowUsersCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
+                            <Button Height="44" Command="{Binding ShowUsersCommand}"
+                                    HorizontalContentAlignment="Left" Padding="14,0"
+                                    Background="Transparent" BorderThickness="0" CornerRadius="7">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="◆" FontSize="14" Foreground="#94A3B8" />
+                                    <TextBlock Text="Pengguna" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                                </StackPanel>
+                            </Button>
 
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
+                            <Button Height="44" Command="{Binding ShowCategoriesCommand}"
+                                    HorizontalContentAlignment="Left" Padding="14,0"
+                                    Background="Transparent" BorderThickness="0" CornerRadius="7">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="◆" FontSize="14" Foreground="#94A3B8" />
+                                    <TextBlock Text="Kategori" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                                </StackPanel>
+                            </Button>
 
-                                <TextBlock Text="●"
-                                           FontSize="15"
-                                           Foreground="#94A3B8" />
+                            <Button Height="44" Command="{Binding ShowPemasoksCommand}"
+                                    HorizontalContentAlignment="Left" Padding="14,0"
+                                    Background="Transparent" BorderThickness="0" CornerRadius="7">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="◆" FontSize="14" Foreground="#94A3B8" />
+                                    <TextBlock Text="Suplier" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                                </StackPanel>
+                            </Button>
 
-                                <TextBlock Text="Pengguna"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
+                            <Button Height="44" Command="{Binding ShowJasasCommand}"
+                                    HorizontalContentAlignment="Left" Padding="14,0"
+                                    Background="Transparent" BorderThickness="0" CornerRadius="7">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="◆" FontSize="14" Foreground="#94A3B8" />
+                                    <TextBlock Text="Jasa" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                                </StackPanel>
+                            </Button>
 
-                            </StackPanel>
+                            <Button Height="44" Command="{Binding ShowPasiensCommand}"
+                                    HorizontalContentAlignment="Left" Padding="14,0"
+                                    Background="Transparent" BorderThickness="0" CornerRadius="7">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="◆" FontSize="14" Foreground="#94A3B8" />
+                                    <TextBlock Text="Pasien" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                                </StackPanel>
+                            </Button>
 
-                        </Button>
+                            <Button Height="44" Command="{Binding ShowBarangsCommand}"
+                                    HorizontalContentAlignment="Left" Padding="14,0"
+                                    Background="Transparent" BorderThickness="0" CornerRadius="7">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="◆" FontSize="14" Foreground="#94A3B8" />
+                                    <TextBlock Text="Barang" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
+                                </StackPanel>
+                            </Button>
 
-
-                        <!-- KATEGORI -->
-
-                        <Button Height="44"
-                                Command="{Binding ShowCategoriesCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="◆"
-                                           FontSize="14"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Kategori"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
-                            </StackPanel>
-
-                        </Button>
-                        
-                        <!-- PEMASOK -->
-
-                        <Button Height="44"
-                                Command="{Binding ShowPemasoksCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="◆"
-                                           FontSize="14"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Suplier"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
-                            </StackPanel>
-
-                        </Button>
-
-                         <!-- JASA -->
-
-                        <Button Height="44"
-                                Command="{Binding ShowJasasCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="◆"
-                                           FontSize="14"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Jasa"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
-                            </StackPanel>
-
-                        </Button>
-
-                        <!-- Pasien -->
-
-                        <Button Height="44"
-                                Command="{Binding ShowPasiensCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="◆"
-                                           FontSize="14"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Pasien"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
-                            </StackPanel>
-
-                        </Button>
-
-                        <!-- BARANG -->
-
-                        <Button Height="44"
-                                Command="{Binding ShowBarangsCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="◆"
-                                           FontSize="14"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Barang"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
-                            </StackPanel>
-
-                        </Button>
-
-                        <Button Height="44" Command="{Binding ShowStokCommand}"
-                                HorizontalContentAlignment="Left" Padding="14,0"
-                                Background="Transparent" BorderThickness="0" CornerRadius="7">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="●" FontSize="15" Foreground="#94A3B8" />
-                                <TextBlock Text="Stok Barang" VerticalAlignment="Center" Foreground="#CBD5E1" FontSize="14" />
-                            </StackPanel>
-                        </Button>
-                </StackPanel>
-                        <!-- LAPORAN -->
-
-                        <TextBlock Text="LAPORAN"
-                                   Margin="12,20,12,8"
-                                   FontSize="11"
-                                   FontWeight="Bold"
-                                   Foreground="#64748B" />
-
-
-                        <Button Height="44"
-                                Command="{Binding ShowReportsCommand}"
-                                HorizontalContentAlignment="Left"
-                                Padding="14,0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                CornerRadius="7">
-
-                            <StackPanel Orientation="Horizontal"
-                                        Spacing="12">
-
-                                <TextBlock Text="▤"
-                                           FontSize="17"
-                                           Foreground="#94A3B8" />
-
-                                <TextBlock Text="Laporan Keuangan"
-                                           VerticalAlignment="Center"
-                                           Foreground="#CBD5E1"
-                                           FontSize="14" />
-
-                            </StackPanel>
-
-                        </Button>
-
+                        </StackPanel>
                     </StackPanel>
 
                 </ScrollViewer>

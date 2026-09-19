@@ -36,6 +36,8 @@ public partial class DocBookKeepingContext : DbContext
     public virtual DbSet<TransJasa> TransJasas { get; set; }
     public virtual DbSet<BiayaTambahanBatch> BiayaTambahanBatches { get; set; }
 
+    public virtual DbSet<BiayaOperasional> BiayaOperasionals { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Fallback kalau context dibuat tanpa DI (misal dari EF Core CLI tools).
@@ -227,6 +229,17 @@ public partial class DocBookKeepingContext : DbContext
             entity.Property(e => e.IdTransMasuk).HasColumnName("id_trans_masuk");
             entity.Property(e => e.Komponen).HasColumnName("komponen");
             entity.Property(e => e.Nilai).HasColumnName("nilai");
+            entity.Property(e => e.Keterangan).HasColumnName("keterangan");
+        });
+
+        modelBuilder.Entity<BiayaOperasional>(entity =>
+        {
+            entity.HasKey(e => e.IdBiaya);
+            entity.ToTable("biaya_operasional");
+            entity.Property(e => e.IdBiaya).HasColumnName("id_biaya").ValueGeneratedNever();
+            entity.Property(e => e.Kategori).HasColumnName("kategori");
+            entity.Property(e => e.Nominal).HasColumnName("nominal");
+            entity.Property(e => e.Tanggal).HasColumnName("tanggal");
             entity.Property(e => e.Keterangan).HasColumnName("keterangan");
         });
 

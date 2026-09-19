@@ -70,10 +70,17 @@ public partial class LaporanViewModel : ViewModelBase
     [ObservableProperty]
     private decimal totalPembelianBarang;
 
-    public LaporanViewModel(TransJasaRepository transJasaRepository, TransBarangRepository transBarangRepository)
+    [ObservableProperty]
+    private decimal totalBiayaOperasional;
+
+    [ObservableProperty]
+    private decimal labaBersihSetelahOperasional;
+
+    public LaporanViewModel(TransJasaRepository transJasaRepository, TransBarangRepository transBarangRepository,BiayaOperasionalRepository biayaOperasionalRepository) 
     {
         _transJasaRepository = transJasaRepository;
         _transBarangRepository = transBarangRepository;
+        _biayaOperasionalRepository = biayaOperasionalRepository; 
 
         // default: awal bulan ini sampai hari ini
         var now = DateTime.Now;
@@ -82,6 +89,12 @@ public partial class LaporanViewModel : ViewModelBase
 
         LoadLaporanCommand.Execute(null);
     }
+
+    private readonly BiayaOperasionalRepository _biayaOperasionalRepository;
+    private List<BiayaOperasional> _allBiayaOperasional = new();
+
+    public ObservableCollection<BiayaOperasional> BiayaOperasionalFiltered { get; } = new();
+
 
     [RelayCommand]
     private void SetRangeBulanIni()
@@ -135,6 +148,7 @@ public partial class LaporanViewModel : ViewModelBase
             _allTransJasa = await _transJasaRepository.GetAllTransJasaAsync();
             _allTransBarang = await _transBarangRepository.GetAllTransBarangAsync();
             _allHpp = await _transBarangRepository.GetHppDetailAsync();   // <-- tambahan
+            _allBiayaOperasional = await _biayaOperasionalRepository.GetAllAsync();
 
             ApplyFilter();
         }
@@ -213,6 +227,18 @@ public partial class LaporanViewModel : ViewModelBase
         TotalPengeluaran = TotalPembelianBarang;
         TotalHpp = HppFiltered.Sum(h => h.SubtotalNilai);
         Saldo = TotalPemasukan - TotalPengeluaran;
+
+        //Operasional
+        var biayaOpFiltered = _allBiayaOperasional.Where(b =>
+            (startStr is null || string.CompareOrdinal(b.Tanggal, startStr) >= 0) &&
+            (endStr is null || string.CompareOrdinal(b.Tanggal, endStr) <= 0));
+
+        BiayaOperasionalFiltered.Clear();
+        foreach (var b in biayaOpFiltered.OrderByDescending(x => x.Tanggal))
+            BiayaOperasionalFiltered.Add(b);
+
+        TotalBiayaOperasional = BiayaOperasionalFiltered.Sum(b => b.Nominal);
+        LabaBersihSetelahOperasional = LabaBersih - TotalBiayaOperasional;
     }
     private readonly TransBarangRepository _transBarangRepositoryForHpp;   // nama beda kalau sudah ada field serupa; kalau _transBarangRepository sudah ada, pakai itu saja
     private List<HppDetailDto> _allHpp = new();
