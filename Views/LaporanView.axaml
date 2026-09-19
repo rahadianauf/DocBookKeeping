@@ -147,6 +147,44 @@
         </StackPanel>
       </Border>
 
+      <!-- LABA RUGI -->
+      <Border Background="White" CornerRadius="10" Padding="20">
+        <StackPanel Spacing="10">
+          <TextBlock Text="Laba Rugi" FontWeight="SemiBold" Foreground="#111827" FontSize="15" />
+
+          <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Pendapatan Jasa" Foreground="#374151" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding PendapatanJasa, StringFormat={}Rp {0:N0}}" Foreground="#374151" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Pendapatan Penjualan Barang" Foreground="#374151" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding PendapatanPenjualanBarang, StringFormat={}Rp {0:N0}}" Foreground="#374151" />
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Total Pendapatan" FontWeight="SemiBold" Foreground="#111827" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalPendapatan, StringFormat={}Rp {0:N0}}" FontWeight="SemiBold" Foreground="#111827" />
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="HPP Penjualan Barang" Foreground="#DC2626" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding HppPenjualan, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" />
+
+            <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1" Fill="#E5E7EB" Margin="0,4" />
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="LABA KOTOR" FontWeight="Bold" Foreground="#16A34A" FontSize="14" Margin="0,8,0,0" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding LabaKotor, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#16A34A" FontSize="14" Margin="0,8,0,0" />
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Biaya Pemakaian Sendiri" Foreground="#DC2626" />
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding BiayaPakaiSendiri, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" />
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Kerugian Rusak/Hilang" Foreground="#DC2626" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding KerugianRusakHilang, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" />
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="LABA BERSIH" FontWeight="Bold" Foreground="#4F46E5" FontSize="16" Margin="0,8,0,0" />
+            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding LabaBersih, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#4F46E5" FontSize="16" Margin="0,8,0,0" />
+          </Grid>
+
+          <TextBlock Text="Catatan: Laba Bersih di sini belum memperhitungkan biaya operasional umum (gaji, sewa, listrik, dll) yang belum dicatat sistem."
+                    FontSize="11" Foreground="#9CA3AF" TextWrapping="Wrap" Margin="0,8,0,0" />
+        </StackPanel>
+      </Border>
+
     </StackPanel>
   </ScrollViewer>
 </UserControl>

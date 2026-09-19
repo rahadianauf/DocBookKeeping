@@ -43,6 +43,33 @@ public partial class LaporanViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    [ObservableProperty]
+    private decimal pendapatanJasa;
+
+    [ObservableProperty]
+    private decimal pendapatanPenjualanBarang;
+
+    [ObservableProperty]
+    private decimal totalPendapatan;
+
+    [ObservableProperty]
+    private decimal hppPenjualan;
+
+    [ObservableProperty]
+    private decimal labaKotor;
+
+    [ObservableProperty]
+    private decimal biayaPakaiSendiri;
+
+    [ObservableProperty]
+    private decimal kerugianRusakHilang;
+
+    [ObservableProperty]
+    private decimal labaBersih;
+
+    [ObservableProperty]
+    private decimal totalPembelianBarang;
+
     public LaporanViewModel(TransJasaRepository transJasaRepository, TransBarangRepository transBarangRepository)
     {
         _transJasaRepository = transJasaRepository;
@@ -151,12 +178,42 @@ public partial class LaporanViewModel : ViewModelBase
         foreach (var h in hppFiltered.OrderByDescending(x => x.Tanggal))
             HppFiltered.Add(h);
 
-        TotalPemasukan = JasaFiltered.Sum(t => t.Harga);
-        TotalPengeluaran = BarangFiltered.Sum(t => t.Nilai);
-        TotalHpp = HppFiltered.Sum(h => h.SubtotalNilai);   // <-- tambahan
+        // ── Perhitungan Laba Rugi ──────────────────────────────
+
+        PendapatanJasa = JasaFiltered.Sum(t => t.Harga);
+
+        PendapatanPenjualanBarang = BarangFiltered
+            .Where(t => t.Tag == "KELUAR" && t.TujuanKeluar == "JUAL")
+            .Sum(t => t.Nilai);
+
+        TotalPendapatan = PendapatanJasa + PendapatanPenjualanBarang;
+
+        HppPenjualan = HppFiltered
+            .Where(h => h.TujuanKeluar == "JUAL")
+            .Sum(h => h.SubtotalNilai);
+
+        LabaKotor = TotalPendapatan - HppPenjualan;
+
+        BiayaPakaiSendiri = HppFiltered
+            .Where(h => h.TujuanKeluar == "PAKAI_SENDIRI")
+            .Sum(h => h.SubtotalNilai);
+
+        KerugianRusakHilang = HppFiltered
+            .Where(h => h.TujuanKeluar == "RUSAK_HILANG")
+            .Sum(h => h.SubtotalNilai);
+
+        LabaBersih = LabaKotor - BiayaPakaiSendiri - KerugianRusakHilang;
+
+        TotalPembelianBarang = BarangFiltered
+            .Where(t => t.Tag == "MASUK")
+            .Sum(t => t.Nilai);
+
+        // Angka lama tetap dipertahankan untuk kompatibilitas, tapi maknanya sudah benar sekarang
+        TotalPemasukan = PendapatanJasa;
+        TotalPengeluaran = TotalPembelianBarang;
+        TotalHpp = HppFiltered.Sum(h => h.SubtotalNilai);
         Saldo = TotalPemasukan - TotalPengeluaran;
     }
-
     private readonly TransBarangRepository _transBarangRepositoryForHpp;   // nama beda kalau sudah ada field serupa; kalau _transBarangRepository sudah ada, pakai itu saja
     private List<HppDetailDto> _allHpp = new();
 
