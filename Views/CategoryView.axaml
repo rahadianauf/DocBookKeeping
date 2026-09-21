@@ -94,7 +94,7 @@
     </Style>
    </DataGrid.Styles>
     <DataGrid.Columns>
-        <DataGridTextColumn Header="No" Binding="{Binding No}" Width="70" />
+        <DataGridTextColumn Header="No" Binding="{Binding No}" Width="65" />
         <DataGridTextColumn Header="Nama" Binding="{Binding Kategori}" Width="*" />
         </DataGrid.Columns>
     </DataGrid>

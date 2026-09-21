@@ -21,6 +21,7 @@ public partial class TransJasaViewModel : ViewModelBase
     public ObservableCollection<TransJasa> TransList { get; } = new();
     public ObservableCollection<MstPasien> PasienOptions { get; } = new();
     public ObservableCollection<MstJasa> JasaOptions { get; } = new();
+    
 
     [ObservableProperty]
     private TransJasa? selectedTrans;
@@ -52,6 +53,10 @@ public partial class TransJasaViewModel : ViewModelBase
     private bool isLoading;
     [ObservableProperty]
     private bool isFormVisible;
+
+    public int JumlahTransaksi => TransList.Count;
+    public decimal TotalPendapatan => TransList.Sum(t => t.Harga);
+    
     public TransJasaViewModel(
         TransJasaRepository transJasaRepository,
         PasienRepository pasienRepository,
@@ -123,6 +128,9 @@ public partial class TransJasaViewModel : ViewModelBase
             trans.No = nomor++;
             TransList.Add(trans);
         }
+
+        OnPropertyChanged(nameof(JumlahTransaksi));   // <-- tambahan
+        OnPropertyChanged(nameof(TotalPendapatan));   // <-- tambahan
     }
 
     [RelayCommand]

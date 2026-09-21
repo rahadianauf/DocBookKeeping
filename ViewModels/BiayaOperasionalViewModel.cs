@@ -59,6 +59,8 @@ public partial class BiayaOperasionalViewModel : ViewModelBase
 
     public bool IsEditMode => SelectedBiaya is not null;
 
+    public int JumlahEntri => BiayaList.Count;
+
     public BiayaOperasionalViewModel(BiayaOperasionalRepository repository)
     {
         _repository = repository;
@@ -101,6 +103,7 @@ public partial class BiayaOperasionalViewModel : ViewModelBase
 
         var bulanIni = DateTime.Now.ToString("yyyy-MM");
         TotalBiayaBulanIni = _allBiaya.Where(b => b.Tanggal.StartsWith(bulanIni)).Sum(b => b.Nominal);
+        OnPropertyChanged(nameof(JumlahEntri));   
     }
 
     [RelayCommand]

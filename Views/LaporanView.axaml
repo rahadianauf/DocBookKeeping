@@ -4,28 +4,29 @@
              x:Class="DocBookKeeping.Views.LaporanView"
              x:DataType="vm:LaporanViewModel">
   <ScrollViewer>
-    <StackPanel Spacing="20">
+    <StackPanel Spacing="24" Margin="0,0,0,24">
 
+      <!-- HEADER -->
       <Grid ColumnDefinitions="*,Auto">
-        <StackPanel Spacing="5">
-          <TextBlock Text="Laporan Keuangan" FontSize="28" FontWeight="Bold" Foreground="#111827" />
-          <TextBlock Text="Pilih rentang tanggal untuk melihat laporan" FontSize="13" Foreground="#6B7280" />
+        <StackPanel Spacing="6">
+          <TextBlock Text="Laporan Keuangan" FontSize="30" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="Pendapatan, HPP, dan laba rugi praktek" FontSize="14" Foreground="#6B7280" />
         </StackPanel>
-        <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadLaporanCommand}"
+        <Button Grid.Column="1" Content="⟳  Refresh" Command="{Binding LoadLaporanCommand}"
                 Padding="18,10" Background="#4F46E5" Foreground="White"
-                BorderThickness="0" CornerRadius="6" HorizontalAlignment="Right"/>
+                BorderThickness="0" CornerRadius="8" VerticalAlignment="Center" />
       </Grid>
 
       <!-- FILTER TANGGAL -->
-      <Border Background="White" CornerRadius="10" Padding="20">
+      <Border Background="White" CornerRadius="14" Padding="18">
         <StackPanel Spacing="12">
           <StackPanel Orientation="Horizontal" Spacing="10">
             <StackPanel Spacing="4">
-              <TextBlock Text="Dari Tanggal" FontSize="12" Foreground="#6B7280" />
+              <TextBlock Text="Dari Tanggal" FontSize="11" Foreground="#6B7280" />
               <DatePicker SelectedDate="{Binding StartDate}" Width="160" />
             </StackPanel>
             <StackPanel Spacing="4">
-              <TextBlock Text="Sampai Tanggal" FontSize="12" Foreground="#6B7280" />
+              <TextBlock Text="Sampai Tanggal" FontSize="11" Foreground="#6B7280" />
               <DatePicker SelectedDate="{Binding EndDate}" Width="160" />
             </StackPanel>
           </StackPanel>
@@ -43,52 +44,136 @@
         </StackPanel>
       </Border>
 
-      <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap"
+                 IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
 
-      <!-- RINGKASAN -->
+      <!-- KPI RINGKAS -->
+      <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
 
-      <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
-        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
+        <Border Grid.Column="0" Background="White" CornerRadius="14" Padding="20" BoxShadow="0 1 3 0 #0A000000">
           <StackPanel Spacing="8">
-            <TextBlock Text="Total Pemasukan" FontSize="13" Foreground="#6B7280" />
-            <TextBlock Text="{Binding TotalPemasukan, StringFormat={}Rp {0:N0}}"
-                      FontSize="20" FontWeight="Bold" Foreground="#16A34A" />
+            <Border Width="38" Height="38" CornerRadius="9" Background="#DCFCE7">
+              <TextBlock Text="↗" FontSize="16" Foreground="#16A34A" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Text="Total Pendapatan" FontSize="12.5" Foreground="#6B7280" Margin="0,4,0,0" />
+            <TextBlock Text="{Binding TotalPendapatan, StringFormat={}Rp {0:N0}}"
+                       FontSize="21" FontWeight="Bold" Foreground="#111827" />
           </StackPanel>
         </Border>
-        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
+
+        <Border Grid.Column="1" Background="White" CornerRadius="14" Padding="20" BoxShadow="0 1 3 0 #0A000000">
           <StackPanel Spacing="8">
-            <TextBlock Text="Total Pengeluaran" FontSize="13" Foreground="#6B7280" />
-            <TextBlock Text="{Binding TotalPengeluaran, StringFormat={}Rp {0:N0}}"
-                      FontSize="20" FontWeight="Bold" Foreground="#DC2626" />
-          </StackPanel>
-        </Border>
-        <Border Grid.Column="2" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="8">
-            <TextBlock Text="Total HPP" FontSize="13" Foreground="#6B7280" />
+            <Border Width="38" Height="38" CornerRadius="9" Background="#FEF3C7">
+              <TextBlock Text="⊟" FontSize="16" Foreground="#D97706" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Text="Total HPP" FontSize="12.5" Foreground="#6B7280" Margin="0,4,0,0" />
             <TextBlock Text="{Binding TotalHpp, StringFormat={}Rp {0:N0}}"
-                      FontSize="20" FontWeight="Bold" Foreground="#D97706" />
+                       FontSize="21" FontWeight="Bold" Foreground="#111827" />
           </StackPanel>
         </Border>
-        <Border Grid.Column="3" Background="White" CornerRadius="10" Padding="20">
+
+        <Border Grid.Column="2" Background="#059669" CornerRadius="14" Padding="20">
           <StackPanel Spacing="8">
-            <TextBlock Text="Saldo" FontSize="13" Foreground="#6B7280" />
-            <TextBlock Text="{Binding Saldo, StringFormat={}Rp {0:N0}}"
-                      FontSize="20" FontWeight="Bold" Foreground="#4F46E5" />
+            <Border Width="38" Height="38" CornerRadius="9" Background="#10B981">
+              <TextBlock Text="◈" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Text="Laba Bersih Final" FontSize="12.5" Foreground="#D1FAE5" Margin="0,4,0,0" />
+            <TextBlock Text="{Binding LabaBersihSetelahOperasional, StringFormat={}Rp {0:N0}}"
+                       FontSize="21" FontWeight="Bold" Foreground="White" />
           </StackPanel>
         </Border>
+
       </Grid>
 
-      <!-- TABEL JASA -->
-      <Border Background="White" CornerRadius="10" Padding="20" MinHeight="250">
+      <!-- LAPORAN LABA RUGI -->
+      <Border Background="White" CornerRadius="14" Padding="24" BoxShadow="0 1 3 0 #0A000000">
+        <StackPanel Spacing="4">
+
+          <TextBlock Text="Laporan Laba Rugi" FontSize="17" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="Ringkasan pendapatan dan beban untuk periode terpilih"
+                     FontSize="12.5" Foreground="#9CA3AF" Margin="0,0,0,16" />
+
+          <!-- PENDAPATAN -->
+          <TextBlock Text="PENDAPATAN" FontSize="11" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,6" />
+
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="Pendapatan Jasa" Foreground="#374151" FontSize="13.5" />
+            <TextBlock Grid.Column="1" Text="{Binding PendapatanJasa, StringFormat={}Rp {0:N0}}" Foreground="#374151" FontSize="13.5" />
+          </Grid>
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="Pendapatan Penjualan Barang" Foreground="#374151" FontSize="13.5" />
+            <TextBlock Grid.Column="1" Text="{Binding PendapatanPenjualanBarang, StringFormat={}Rp {0:N0}}" Foreground="#374151" FontSize="13.5" />
+          </Grid>
+
+          <Rectangle Height="1" Fill="#F3F4F6" Margin="0,10" />
+
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="Total Pendapatan" FontWeight="SemiBold" Foreground="#111827" FontSize="14" />
+            <TextBlock Grid.Column="1" Text="{Binding TotalPendapatan, StringFormat={}Rp {0:N0}}" FontWeight="SemiBold" Foreground="#111827" FontSize="14" />
+          </Grid>
+
+          <!-- HPP -->
+          <TextBlock Text="HARGA POKOK PENJUALAN" FontSize="11" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,20,0,6" />
+
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="HPP Penjualan Barang" Foreground="#DC2626" FontSize="13.5" />
+            <TextBlock Grid.Column="1" Text="{Binding HppPenjualan, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" FontSize="13.5" />
+          </Grid>
+
+          <Rectangle Height="1" Fill="#F3F4F6" Margin="0,10" />
+
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="LABA KOTOR" FontWeight="Bold" Foreground="#16A34A" FontSize="15" />
+            <TextBlock Grid.Column="1" Text="{Binding LabaKotor, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#16A34A" FontSize="15" />
+          </Grid>
+
+          <!-- BEBAN LAIN -->
+          <TextBlock Text="BEBAN LAIN" FontSize="11" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,20,0,6" />
+
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="Biaya Pemakaian Sendiri" Foreground="#DC2626" FontSize="13.5" />
+            <TextBlock Grid.Column="1" Text="{Binding BiayaPakaiSendiri, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" FontSize="13.5" />
+          </Grid>
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="Kerugian Rusak/Hilang" Foreground="#DC2626" FontSize="13.5" />
+            <TextBlock Grid.Column="1" Text="{Binding KerugianRusakHilang, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" FontSize="13.5" />
+          </Grid>
+          <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+            <TextBlock Text="Biaya Operasional (Gaji, Sewa, dll)" Foreground="#DC2626" FontSize="13.5" />
+            <TextBlock Grid.Column="1" Text="{Binding TotalBiayaOperasional, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" FontSize="13.5" />
+          </Grid>
+
+          <Rectangle Height="1" Fill="#E5E7EB" Margin="0,12" />
+
+          <Border Background="#ECFDF5" CornerRadius="10" Padding="16,12" Margin="0,4,0,0">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="LABA BERSIH FINAL" FontWeight="Bold" Foreground="#059669" FontSize="16" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="{Binding LabaBersihSetelahOperasional, StringFormat={}Rp {0:N0}}"
+                         FontWeight="Bold" Foreground="#059669" FontSize="18" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+
+          <TextBlock Text="Catatan: sudah memperhitungkan seluruh beban operasional yang tercatat di sistem."
+                     FontSize="11" Foreground="#9CA3AF" TextWrapping="Wrap" Margin="0,12,0,0" />
+        </StackPanel>
+      </Border>
+
+      <!-- DETAIL TRANSAKSI -->
+      <TextBlock Text="Detail Transaksi" FontSize="17" FontWeight="Bold" Foreground="#111827" Margin="0,4,0,0" />
+
+      <!-- Transaksi Jasa -->
+      <Border Background="White" CornerRadius="14" Padding="20" BoxShadow="0 1 3 0 #0A000000">
         <StackPanel Spacing="10">
-          <TextBlock Text="Detail Transaksi Jasa" FontWeight="SemiBold" Foreground="#111827" />
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock Text="↗" FontSize="15" Foreground="#16A34A" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="Transaksi Jasa" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
+          </Grid>
           <DataGrid ItemsSource="{Binding JasaFiltered}"
                     AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
-                    IsReadOnly="True" MinHeight="200">
+                    IsReadOnly="True" MinHeight="180" MaxHeight="320">
             <DataGrid.Styles>
-              <Style Selector="DataGridCell TextBlock">
-                <Setter Property="Foreground" Value="#111827" />
-              </Style>
+              <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
+              <Style Selector="DataGridColumnHeader"><Setter Property="HorizontalContentAlignment" Value="Left" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
               <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="100" />
@@ -100,96 +185,76 @@
         </StackPanel>
       </Border>
 
-      <!-- TABEL BARANG -->
-      <Border Background="White" CornerRadius="10" Padding="20" MinHeight="250">
+      <!-- Transaksi Barang -->
+      <Border Background="White" CornerRadius="14" Padding="20" BoxShadow="0 1 3 0 #0A000000">
         <StackPanel Spacing="10">
-          <TextBlock Text="Detail Transaksi Barang" FontWeight="SemiBold" Foreground="#111827" />
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock Text="⬆" FontSize="13" Foreground="#DC2626" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="Transaksi Barang" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
+          </Grid>
           <DataGrid ItemsSource="{Binding BarangFiltered}"
                     AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
-                    IsReadOnly="True" MinHeight="200">
+                    IsReadOnly="True" MinHeight="180" MaxHeight="320">
             <DataGrid.Styles>
-              <Style Selector="DataGridCell TextBlock">
-                <Setter Property="Foreground" Value="#111827" />
-              </Style>
+              <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
               <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="100" />
-              <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="160" />
-              <DataGridTextColumn Header="Pemasok" Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}" Width="150" />
-              <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="60" />
-              <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="120" />
+              <DataGridTextColumn Header="Tag" Binding="{Binding Tag}" Width="80" />
+              <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="150" />
+              <DataGridTextColumn Header="Pemasok" Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}" Width="130" />
+              <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="50" />
+              <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="110" />
             </DataGrid.Columns>
           </DataGrid>
         </StackPanel>
       </Border>
 
-      <!-- TABEL RIWAYAT HPP -->
-      <Border Background="White" CornerRadius="10" Padding="20" MinHeight="250">
+      <!-- Riwayat HPP -->
+      <Border Background="White" CornerRadius="14" Padding="20" BoxShadow="0 1 3 0 #0A000000">
         <StackPanel Spacing="10">
-          <TextBlock Text="Riwayat HPP (Harga Pokok Penjualan)" FontWeight="SemiBold" Foreground="#111827" />
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock Text="⊟" FontSize="14" Foreground="#D97706" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="Riwayat HPP" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
+          </Grid>
           <DataGrid ItemsSource="{Binding HppFiltered}"
                     AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
-                    IsReadOnly="True" MinHeight="200">
+                    IsReadOnly="True" MinHeight="180" MaxHeight="320">
             <DataGrid.Styles>
-              <Style Selector="DataGridCell TextBlock">
-                <Setter Property="Foreground" Value="#111827" />
-              </Style>
+              <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
               <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
-              <DataGridTextColumn Header="Barang" Binding="{Binding NamaBarang}" Width="160" />
+              <DataGridTextColumn Header="Barang" Binding="{Binding NamaBarang}" Width="150" />
               <DataGridTextColumn Header="Tujuan" Binding="{Binding TujuanKeluar}" Width="110" />
-              <DataGridTextColumn Header="Jml" Binding="{Binding JumlahDiambil}" Width="60" />
+              <DataGridTextColumn Header="Jml" Binding="{Binding JumlahDiambil}" Width="50" />
               <DataGridTextColumn Header="HPP/Unit" Binding="{Binding HargaPokokSatuan, StringFormat={}{0:N0}}" Width="100" />
-              <DataGridTextColumn Header="Subtotal HPP" Binding="{Binding SubtotalNilai, StringFormat={}{0:N0}}" Width="120" />
+              <DataGridTextColumn Header="Subtotal" Binding="{Binding SubtotalNilai, StringFormat={}{0:N0}}" Width="110" />
             </DataGrid.Columns>
           </DataGrid>
         </StackPanel>
       </Border>
 
-      <!-- LABA RUGI -->
-      <Border Background="White" CornerRadius="10" Padding="20">
+      <!-- Biaya Operasional -->
+      <Border Background="White" CornerRadius="14" Padding="20" BoxShadow="0 1 3 0 #0A000000">
         <StackPanel Spacing="10">
-          <TextBlock Text="Laba Rugi" FontWeight="SemiBold" Foreground="#111827" FontSize="15" />
-
-          <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Pendapatan Jasa" Foreground="#374151" />
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding PendapatanJasa, StringFormat={}Rp {0:N0}}" Foreground="#374151" />
-
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Pendapatan Penjualan Barang" Foreground="#374151" />
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding PendapatanPenjualanBarang, StringFormat={}Rp {0:N0}}" Foreground="#374151" />
-
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Total Pendapatan" FontWeight="SemiBold" Foreground="#111827" />
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalPendapatan, StringFormat={}Rp {0:N0}}" FontWeight="SemiBold" Foreground="#111827" />
-
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="HPP Penjualan Barang" Foreground="#DC2626" />
-            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding HppPenjualan, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" />
-
-            <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1" Fill="#E5E7EB" Margin="0,4" />
-
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="LABA KOTOR" FontWeight="Bold" Foreground="#16A34A" FontSize="14" Margin="0,8,0,0" />
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding LabaKotor, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#16A34A" FontSize="14" Margin="0,8,0,0" />
-
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="Biaya Pemakaian Sendiri" Foreground="#DC2626" />
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding BiayaPakaiSendiri, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" />
-
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="Kerugian Rusak/Hilang" Foreground="#DC2626" />
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding KerugianRusakHilang, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" />
-
-            <TextBlock Grid.Row="7" Grid.Column="0" Text="LABA BERSIH" FontWeight="Bold" Foreground="#4F46E5" FontSize="16" Margin="0,8,0,0" />
-            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding LabaBersih, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#4F46E5" FontSize="16" Margin="0,8,0,0" />
-
-            <TextBlock Grid.Row="8" Grid.Column="0" Text="Biaya Operasional (Gaji, Sewa, dll)" Foreground="#DC2626" Margin="0,8,0,0" />
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding TotalBiayaOperasional, StringFormat={}(Rp {0:N0})}" Foreground="#DC2626" Margin="0,8,0,0" />
-
-            <Rectangle Grid.Row="9" Grid.ColumnSpan="2" Height="1" Fill="#E5E7EB" Margin="0,4" />
-
-            <TextBlock Grid.Row="9" Grid.Column="0" Text="LABA BERSIH FINAL" FontWeight="Bold" Foreground="#059669" FontSize="16" Margin="0,8,0,0" />
-            <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding LabaBersihSetelahOperasional, StringFormat={}Rp {0:N0}}" FontWeight="Bold" Foreground="#059669" FontSize="16" Margin="0,8,0,0" />
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock Text="⊖" FontSize="14" Foreground="#DC2626" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="Biaya Operasional" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
           </Grid>
-
-          <TextBlock Text="Catatan: Laba Bersih di sini belum memperhitungkan biaya operasional umum (gaji, sewa, listrik, dll) yang belum dicatat sistem."
-                    FontSize="11" Foreground="#9CA3AF" TextWrapping="Wrap" Margin="0,8,0,0" />
+          <DataGrid ItemsSource="{Binding BiayaOperasionalFiltered}"
+                    AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
+                    IsReadOnly="True" MinHeight="180" MaxHeight="320">
+            <DataGrid.Styles>
+              <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
+              <DataGridTextColumn Header="Kategori" Binding="{Binding Kategori}" Width="150" />
+              <DataGridTextColumn Header="Nominal" Binding="{Binding Nominal, StringFormat={}{0:N0}}" Width="120" />
+              <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="*" />
+            </DataGrid.Columns>
+          </DataGrid>
         </StackPanel>
       </Border>
 

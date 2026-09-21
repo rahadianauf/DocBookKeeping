@@ -1,5 +1,5 @@
 # Kredensial dan Variabel Lingkungan 
-rm -rf .git
+
 .env
 .env.local
 .env.*.local
@@ -11,6 +11,7 @@ Config/gdrive-credentials.json
 Config/gdrive-oauth-client.json
 Config/gdrive-token-store/
 Data/DocBookKeeping.db
+Publish/
 
 # Pengaturan Editor / IDE Lokal
 .vscode/

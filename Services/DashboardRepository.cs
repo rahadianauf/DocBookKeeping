@@ -27,26 +27,33 @@ public class DashboardRepository
         _contextFactory = contextFactory;
     }
 
-    public async Task<DashboardSummary> GetSummaryAsync()
+    public async Task<DashboardSummary> GetSummaryAsync(string? startDate, string? endDate)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
-        var bulanIni = DateTime.Now.ToString("yyyy-MM"); // contoh: "2026-09"
+        var transJasaQuery = context.TransJasas.AsQueryable();
+        var transBarangQuery = context.TransBarangs.AsQueryable();
 
-        var transJasaBulanIni = await context.TransJasas
-            .Where(t => t.TanggalInput.StartsWith(bulanIni))
-            .ToListAsync();
+        if (startDate is not null)
+        {
+            transJasaQuery = transJasaQuery.Where(t => string.Compare(t.TanggalInput, startDate) >= 0);
+            transBarangQuery = transBarangQuery.Where(t => string.Compare(t.TanggalInput, startDate) >= 0);
+        }
+        if (endDate is not null)
+        {
+            transJasaQuery = transJasaQuery.Where(t => string.Compare(t.TanggalInput, endDate) <= 0);
+            transBarangQuery = transBarangQuery.Where(t => string.Compare(t.TanggalInput, endDate) <= 0);
+        }
 
-        var transBarangBulanIni = await context.TransBarangs
-            .Where(t => t.TanggalInput.StartsWith(bulanIni))
-            .ToListAsync();
+        var transJasaFiltered = await transJasaQuery.ToListAsync();
+        var transBarangFiltered = await transBarangQuery.ToListAsync();
 
         return new DashboardSummary
         {
-            TotalPemasukanBulanIni = transJasaBulanIni.Sum(t => t.Harga),
-            TotalPengeluaranBulanIni = transBarangBulanIni.Sum(t => t.Nilai),
-            JumlahTransaksiJasaBulanIni = transJasaBulanIni.Count,
-            JumlahTransaksiBarangBulanIni = transBarangBulanIni.Count,
+            TotalPemasukanBulanIni = transJasaFiltered.Sum(t => t.Harga),
+            TotalPengeluaranBulanIni = transBarangFiltered.Sum(t => t.Nilai),
+            JumlahTransaksiJasaBulanIni = transJasaFiltered.Count,
+            JumlahTransaksiBarangBulanIni = transBarangFiltered.Count,
             JumlahPasien = await context.MstPasiens.CountAsync(),
             JumlahBarang = await context.MstBarangs.CountAsync()
         };

@@ -4,89 +4,161 @@
              x:Class="DocBookKeeping.Views.DashboardView"
              x:DataType="vm:DashboardViewModel">
   <ScrollViewer>
-    <StackPanel Spacing="20">
+    <StackPanel Spacing="24" Margin="0,0,0,24">
 
+      <!-- HEADER -->
       <Grid ColumnDefinitions="*,Auto">
-        <StackPanel Spacing="5">
-          <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold" Foreground="#111827" />
-          <TextBlock Text="{Binding BulanIniLabel, StringFormat='Ringkasan bulan {0}'}" FontSize="13" Foreground="#6B7280" />
+        <StackPanel Spacing="6">
+          <TextBlock Text="Dashboard" FontSize="30" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="Ringkasan" FontSize="14" Foreground="#6B7280" />
         </StackPanel>
-        <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadDashboardCommand}"
+
+        <Button Grid.Column="1" Content="⟳  Refresh" Command="{Binding LoadDashboardCommand}"
                 Padding="18,10" Background="#4F46E5" Foreground="White"
-                BorderThickness="0" CornerRadius="6" HorizontalAlignment="Right"/>
+                BorderThickness="0" CornerRadius="8" VerticalAlignment="Center" />
       </Grid>
 
-      <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" />
+      <!-- FILTER TANGGAL -->
+      <Border Background="White" CornerRadius="14" Padding="18">
+        <StackPanel Spacing="12">
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Spacing="4">
+              <TextBlock Text="Dari Tanggal" FontSize="11" Foreground="#6B7280" />
+              <DatePicker SelectedDate="{Binding StartDate}" Width="160" />
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="Sampai Tanggal" FontSize="11" Foreground="#6B7280" />
+              <DatePicker SelectedDate="{Binding EndDate}" Width="160" />
+            </StackPanel>
+          </StackPanel>
 
-      <!-- KARTU RINGKASAN -->
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="Bulan Ini" Command="{Binding SetRangeBulanIniCommand}"
+                    Padding="12,6" Background="#EEF2FF" Foreground="#4F46E5" BorderThickness="0" CornerRadius="6" />
+            <Button Content="Bulan Lalu" Command="{Binding SetRangeBulanLaluCommand}"
+                    Padding="12,6" Background="#EEF2FF" Foreground="#4F46E5" BorderThickness="0" CornerRadius="6" />
+            <Button Content="Tahun Ini" Command="{Binding SetRangeTahunIniCommand}"
+                    Padding="12,6" Background="#EEF2FF" Foreground="#4F46E5" BorderThickness="0" CornerRadius="6" />
+            <Button Content="Semua Data" Command="{Binding SetRangeSemuaCommand}"
+                    Padding="12,6" Background="#F3F4F6" Foreground="#6B7280" BorderThickness="0" CornerRadius="6" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap"
+                 IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <!-- KPI UTAMA -->
       <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
 
-        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="8">
-            <TextBlock Text="Pemasukan Bulan Ini" FontSize="13" Foreground="#6B7280" />
+        <Border Grid.Column="0" Background="White" CornerRadius="14" Padding="22"
+                BoxShadow="0 1 3 0 #0A000000">
+          <StackPanel Spacing="10">
+            <Grid ColumnDefinitions="Auto,*">
+              <Border Width="40" Height="40" CornerRadius="10" Background="#DCFCE7">
+                <TextBlock Text="↗" FontSize="18" Foreground="#16A34A"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+              <TextBlock Grid.Column="1" Text="{Binding JumlahTransaksiJasaBulanIni, StringFormat='{}{0} transaksi'}"
+                         FontSize="12" Foreground="#9CA3AF"
+                         HorizontalAlignment="Right" VerticalAlignment="Center" />
+            </Grid>
+            <TextBlock Text="Pemasukan Jasa" FontSize="13" Foreground="#6B7280" Margin="0,6,0,0" />
             <TextBlock Text="{Binding TotalPemasukanBulanIni, StringFormat={}Rp {0:N0}}"
-                       FontSize="24" FontWeight="Bold" Foreground="#16A34A" />
-            <TextBlock Text="{Binding JumlahTransaksiJasaBulanIni, StringFormat={}{0} transaksi}"
-                       FontSize="12" Foreground="#9CA3AF" />
+                       FontSize="24" FontWeight="Bold" Foreground="#111827" />
           </StackPanel>
         </Border>
 
-        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="8">
-            <TextBlock Text="Pengeluaran Bulan Ini" FontSize="13" Foreground="#6B7280" />
+        <Border Grid.Column="1" Background="White" CornerRadius="14" Padding="22"
+                BoxShadow="0 1 3 0 #0A000000">
+          <StackPanel Spacing="10">
+            <Grid ColumnDefinitions="Auto,*">
+              <Border Width="40" Height="40" CornerRadius="10" Background="#FEE2E2">
+                <TextBlock Text="⬆" FontSize="16" Foreground="#DC2626"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+              <TextBlock Grid.Column="1" Text="{Binding JumlahTransaksiBarangBulanIni, StringFormat='{}{0} transaksi'}"
+                         FontSize="12" Foreground="#9CA3AF"
+                         HorizontalAlignment="Right" VerticalAlignment="Center" />
+            </Grid>
+            <TextBlock Text="Pengeluaran Barang" FontSize="13" Foreground="#6B7280" Margin="0,6,0,0" />
             <TextBlock Text="{Binding TotalPengeluaranBulanIni, StringFormat={}Rp {0:N0}}"
-                       FontSize="24" FontWeight="Bold" Foreground="#DC2626" />
-            <TextBlock Text="{Binding JumlahTransaksiBarangBulanIni, StringFormat={}{0} transaksi}"
-                       FontSize="12" Foreground="#9CA3AF" />
+                       FontSize="24" FontWeight="Bold" Foreground="#111827" />
           </StackPanel>
         </Border>
 
-        <Border Grid.Column="2" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="8">
-            <TextBlock Text="Saldo Bulan Ini" FontSize="13" Foreground="#6B7280" />
+        <Border Grid.Column="2" Background="#4F46E5" CornerRadius="14" Padding="22">
+          <StackPanel Spacing="10">
+            <Border Width="40" Height="40" CornerRadius="10" Background="#6366F1">
+              <TextBlock Text="◈" FontSize="18" Foreground="White"
+                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Text="Saldo Bulan Ini" FontSize="13" Foreground="#E0E7FF" Margin="0,6,0,0" />
             <TextBlock Text="{Binding SaldoBulanIni, StringFormat={}Rp {0:N0}}"
-                       FontSize="24" FontWeight="Bold" Foreground="#4F46E5" />
-            <TextBlock Text="Pemasukan − Pengeluaran" FontSize="12" Foreground="#9CA3AF" />
+                       FontSize="24" FontWeight="Bold" Foreground="White" />
           </StackPanel>
         </Border>
 
       </Grid>
 
-      <!-- KARTU DATA MASTER -->
+      <!-- RINGKASAN DATA -->
       <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
 
-        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="8">
-            <TextBlock Text="Total Pasien" FontSize="13" Foreground="#6B7280" />
-            <TextBlock Text="{Binding JumlahPasien}" FontSize="24" FontWeight="Bold" Foreground="#111827" />
-          </StackPanel>
+        <Border Grid.Column="0" Background="White" CornerRadius="14" Padding="20">
+          <Grid ColumnDefinitions="Auto,*">
+            <Border Width="44" Height="44" CornerRadius="10" Background="#EEF2FF">
+              <TextBlock Text="◆" FontSize="18" Foreground="#4F46E5"
+                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+              <TextBlock Text="Total Pasien" FontSize="13" Foreground="#6B7280" />
+              <TextBlock Text="{Binding JumlahPasien}" FontSize="22" FontWeight="Bold" Foreground="#111827" />
+            </StackPanel>
+          </Grid>
         </Border>
 
-        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="8">
-            <TextBlock Text="Total Barang" FontSize="13" Foreground="#6B7280" />
-            <TextBlock Text="{Binding JumlahBarang}" FontSize="24" FontWeight="Bold" Foreground="#111827" />
-          </StackPanel>
+        <Border Grid.Column="1" Background="White" CornerRadius="14" Padding="20">
+          <Grid ColumnDefinitions="Auto,*">
+            <Border Width="44" Height="44" CornerRadius="10" Background="#EEF2FF">
+              <TextBlock Text="▦" FontSize="16" Foreground="#4F46E5"
+                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+              <TextBlock Text="Total Barang" FontSize="13" Foreground="#6B7280" />
+              <TextBlock Text="{Binding JumlahBarang}" FontSize="22" FontWeight="Bold" Foreground="#111827" />
+            </StackPanel>
+          </Grid>
         </Border>
 
       </Grid>
 
       <!-- TRANSAKSI TERBARU -->
+      <TextBlock Text="Transaksi Terbaru" FontSize="17" FontWeight="Bold" Foreground="#111827" Margin="0,4,0,0" />
+
       <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
 
-        <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="10">
-            <TextBlock Text="Transaksi Jasa Terbaru" FontWeight="SemiBold" Foreground="#111827" />
+        <!-- JASA -->
+        <Border Grid.Column="0" Background="White" CornerRadius="14" Padding="20">
+          <StackPanel Spacing="4">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock Text="↗" FontSize="16" Foreground="#16A34A" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="Jasa" FontWeight="SemiBold" Foreground="#111827"
+                         Margin="8,0,0,0" VerticalAlignment="Center" />
+            </Grid>
+
+            <Rectangle Height="1" Fill="#F3F4F6" Margin="0,8,0,4" />
+
             <ItemsControl ItemsSource="{Binding RecentTransJasa}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                  <Grid ColumnDefinitions="*,Auto" Margin="0,4">
-                    <StackPanel>
-                      <TextBlock Text="{Binding IdJasaNavigation.NamaJasa}" FontSize="13" Foreground="#111827" />
+                  <Grid ColumnDefinitions="*,Auto" Margin="0,8">
+                    <StackPanel Spacing="2">
+                      <TextBlock Text="{Binding IdJasaNavigation.NamaJasa}" FontSize="13.5" Foreground="#111827" />
                       <TextBlock Text="{Binding TanggalInput}" FontSize="11" Foreground="#9CA3AF" />
                     </StackPanel>
-                    <TextBlock Grid.Column="1" Text="{Binding Harga, StringFormat={}Rp {0:N0}}"
-                               FontSize="13" Foreground="#16A34A" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{Binding Harga, StringFormat={}+Rp {0:N0}}"
+                               FontSize="13.5" FontWeight="SemiBold" Foreground="#16A34A"
+                               VerticalAlignment="Center" />
                   </Grid>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
@@ -94,19 +166,28 @@
           </StackPanel>
         </Border>
 
-        <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="20">
-          <StackPanel Spacing="10">
-            <TextBlock Text="Transaksi Barang Terbaru" FontWeight="SemiBold" Foreground="#111827" />
+        <!-- BARANG -->
+        <Border Grid.Column="1" Background="White" CornerRadius="14" Padding="20">
+          <StackPanel Spacing="4">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock Text="⬆" FontSize="14" Foreground="#DC2626" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="Barang" FontWeight="SemiBold" Foreground="#111827"
+                         Margin="8,0,0,0" VerticalAlignment="Center" />
+            </Grid>
+
+            <Rectangle Height="1" Fill="#F3F4F6" Margin="0,8,0,4" />
+
             <ItemsControl ItemsSource="{Binding RecentTransBarang}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                  <Grid ColumnDefinitions="*,Auto" Margin="0,4">
-                    <StackPanel>
-                      <TextBlock Text="{Binding IdBarangNavigation.NamaBarang}" FontSize="13" Foreground="#111827" />
+                  <Grid ColumnDefinitions="*,Auto" Margin="0,8">
+                    <StackPanel Spacing="2">
+                      <TextBlock Text="{Binding IdBarangNavigation.NamaBarang}" FontSize="13.5" Foreground="#111827" />
                       <TextBlock Text="{Binding TanggalInput}" FontSize="11" Foreground="#9CA3AF" />
                     </StackPanel>
                     <TextBlock Grid.Column="1" Text="{Binding Nilai, StringFormat={}Rp {0:N0}}"
-                               FontSize="13" Foreground="#DC2626" VerticalAlignment="Center" />
+                               FontSize="13.5" FontWeight="SemiBold" Foreground="#DC2626"
+                               VerticalAlignment="Center" />
                   </Grid>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>

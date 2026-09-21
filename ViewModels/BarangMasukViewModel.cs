@@ -88,6 +88,8 @@ public partial class BarangMasukViewModel : ViewModelBase
     private decimal? hargaBeliSaatIni;
 
     public bool IsSumberBeli => FormSumber == "BELI";
+    public int JumlahTransaksi => TransList.Count;
+    public decimal TotalNilai => TransList.Sum(t => t.Nilai);
 
     public string FormModeLabel => SelectedTrans is null
         ? "Tambah Barang Masuk"
@@ -209,11 +211,11 @@ public partial class BarangMasukViewModel : ViewModelBase
 
     private void ApplyFilter()
     {
-        var filtered = string.IsNullOrWhiteSpace(SearchText)
-            ? _allTrans
-            : _allTrans.Where(t =>
-                (t.IdBarangNavigation?.NamaBarang.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                (t.IdPemasokNavigation?.NamaPemasok.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false));
+       var filtered = string.IsNullOrWhiteSpace(SearchText)
+        ? _allTrans
+        : _allTrans.Where(t => 
+            t.IdBarangNavigation != null && 
+            t.IdBarangNavigation.NamaBarang.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
 
         TransList.Clear();
         int nomor = 1;
@@ -222,6 +224,9 @@ public partial class BarangMasukViewModel : ViewModelBase
             trans.No = nomor++;
             TransList.Add(trans);
         }
+
+        OnPropertyChanged(nameof(JumlahTransaksi));   // <-- tambahan
+        OnPropertyChanged(nameof(TotalNilai));         // <-- tambahan
     }
 
     [RelayCommand]

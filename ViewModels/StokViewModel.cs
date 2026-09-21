@@ -29,6 +29,8 @@ public partial class StokViewModel : ViewModelBase
     [ObservableProperty]
     private decimal totalNilaiPersediaan;
 
+    public int JumlahJenisBarang => StokList.Count;
+
     public StokViewModel(StokRepository stokRepository)
     {
         _stokRepository = stokRepository;
@@ -48,6 +50,7 @@ public partial class StokViewModel : ViewModelBase
             StokList.Add(s);
 
         TotalNilaiPersediaan = StokList.Sum(s => s.NilaiPersediaan);
+        OnPropertyChanged(nameof(JumlahJenisBarang));   // <-- tambahan
     }
 
     [RelayCommand]

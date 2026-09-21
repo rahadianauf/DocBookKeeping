@@ -70,7 +70,7 @@
           </Style>
         </DataGrid.Styles>
         <DataGrid.Columns>
-          <DataGridTextColumn Header="No" Binding="{Binding No}" Width="60" />
+          <DataGridTextColumn Header="No" Binding="{Binding No}" Width="65" />
           <DataGridTextColumn Header="Nama Barang" Binding="{Binding NamaBarang}" Width="*" />
           <DataGridTextColumn Header="Kategori" Binding="{Binding IdKategoriNavigation.Kategori}" Width="180" />
           <DataGridTextColumn Header="Satuan" Binding="{Binding IdSatuanNavigation.Satuan}" Width="120" />

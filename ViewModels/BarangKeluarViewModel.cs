@@ -68,6 +68,9 @@ public partial class BarangKeluarViewModel : ViewModelBase
 
     public string FormModeLabel => "Tambah Barang Keluar";
     public bool IsRowSelected => SelectedTrans is not null;
+
+    public int JumlahTransaksi => TransList.Count;
+    public decimal TotalNilai => TransList.Sum(t => t.Nilai);
     public BarangKeluarViewModel(TransBarangRepository transBarangRepository, BarangRepository barangRepository)
     {
         _transBarangRepository = transBarangRepository;
@@ -141,6 +144,9 @@ public partial class BarangKeluarViewModel : ViewModelBase
             trans.No = nomor++;
             TransList.Add(trans);
         }
+
+        OnPropertyChanged(nameof(JumlahTransaksi));
+        OnPropertyChanged(nameof(TotalNilai));
     }
 
     [RelayCommand]
