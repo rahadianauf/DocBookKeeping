@@ -37,6 +37,8 @@ public partial class UserViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool isLoading;
+
+    public int JumlahUser => Users.Count;
     public UserViewModel(UserRepository userRepository)
     {
         _userRepository = userRepository;
@@ -62,6 +64,8 @@ public partial class UserViewModel : ViewModelBase
             user.No = nomor++;
             Users.Add(user);
         }
+
+        OnPropertyChanged(nameof(JumlahUser));
     }
     public string FormModeLabel => SelectedUser is null
         ? "Tambah User Baru"

@@ -1,1 +1,0 @@
-[9/21/2026 7:42:22 AM] Backup berhasil: DocBookKeeping_backup_20260921_074216.db

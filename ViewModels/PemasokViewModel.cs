@@ -39,6 +39,8 @@ public partial class PemasokViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    public int JumlahPemasok => Pemasoks.Count;
+
     //Loading
     public PemasokViewModel(PemasokRepository pemasokRepository)
     {
