@@ -173,7 +173,7 @@
               <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="170" />
               <DataGridTextColumn Header="Sumber" Binding="{Binding Sumber}" Width="90" />
               <DataGridTextColumn Header="Pemasok" Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}" Width="130" />
-              <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="55" />
+              <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="65" />
               <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="110" />
             </DataGrid.Columns>
           </DataGrid>

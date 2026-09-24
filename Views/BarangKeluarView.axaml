@@ -175,11 +175,11 @@
               </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="No" Binding="{Binding No}" Width="45" />
+              <DataGridTextColumn Header="No" Binding="{Binding No}" Width="65" />
               <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="95" />
               <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="160" />
               <DataGridTextColumn Header="Tujuan" Binding="{Binding TujuanKeluar}" Width="120" />
-              <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="55" />
+              <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="65" />
               <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="110" />
             </DataGrid.Columns>
           </DataGrid>

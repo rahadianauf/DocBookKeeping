@@ -82,7 +82,7 @@
               </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="No" Binding="{Binding No}" Width="60" />
+              <DataGridTextColumn Header="No" Binding="{Binding No}" Width="65" />
               <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" />
             </DataGrid.Columns>
           </DataGrid>

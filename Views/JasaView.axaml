@@ -83,7 +83,7 @@
               </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="No" Binding="{Binding No}" Width="55" />
+              <DataGridTextColumn Header="No" Binding="{Binding No}" Width="65" />
               <DataGridTextColumn Header="Nama Jasa" Binding="{Binding NamaJasa}" Width="*" />
               <DataGridTextColumn Header="Kategori" Binding="{Binding IdKategoriNavigation.Kategori}" Width="200" />
             </DataGrid.Columns>
