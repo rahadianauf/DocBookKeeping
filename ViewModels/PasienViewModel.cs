@@ -40,6 +40,8 @@ public partial class PasienViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    public int JumlahPasien => PasienList.Count;
+
     public PasienViewModel(PasienRepository pasienRepository)
     {
         _pasienRepository = pasienRepository;
@@ -75,6 +77,8 @@ public partial class PasienViewModel : ViewModelBase
             pasien.No = nomor++;
             PasienList.Add(pasien);
         }
+
+        OnPropertyChanged(nameof(JumlahPasien));
     }
 
     [RelayCommand]

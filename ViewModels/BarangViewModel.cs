@@ -46,6 +46,8 @@ public partial class BarangViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    public int JumlahBarang => BarangList.Count;
+
     public BarangViewModel(
         BarangRepository barangRepository,
         KategoriRepository kategoriRepository,
@@ -100,6 +102,7 @@ public partial class BarangViewModel : ViewModelBase
             barang.No = nomor++;
             BarangList.Add(barang);
         }
+        OnPropertyChanged(nameof(JumlahBarang));
     }
 
     [RelayCommand]

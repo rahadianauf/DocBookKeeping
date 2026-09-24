@@ -68,6 +68,7 @@ public partial class PemasokViewModel : ViewModelBase
             pemasok.No = nomor++;
             Pemasoks.Add(pemasok);
         }
+        OnPropertyChanged(nameof(JumlahPemasok));
     }
 
     public string FormModeLabel => SelectedPemasok is null

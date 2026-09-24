@@ -40,6 +40,8 @@ public partial class JasaViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    public int JumlahJasa => JasaList.Count;
+
     public JasaViewModel(JasaRepository jasaRepository, KategoriRepository kategoriRepository)
     {
         _jasaRepository = jasaRepository;
@@ -85,6 +87,7 @@ public partial class JasaViewModel : ViewModelBase
             jasa.No = nomor++;
             JasaList.Add(jasa);
         }
+        OnPropertyChanged(nameof(JumlahJasa));
     }
 
     [RelayCommand]

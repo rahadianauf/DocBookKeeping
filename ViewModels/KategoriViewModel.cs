@@ -35,6 +35,8 @@ public partial class KategoriViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    public int JumlahKategori => Kategoris.Count;
+
     //Loading
     public KategoriViewModel(KategoriRepository kategoriRepository)
     {
@@ -62,6 +64,7 @@ public partial class KategoriViewModel : ViewModelBase
             category.No = nomor++;
             Kategoris.Add(category);
         }
+        OnPropertyChanged(nameof(JumlahKategori));
     }
 
     public string FormModeLabel => SelectedKategori is null
