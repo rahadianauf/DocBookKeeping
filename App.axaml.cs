@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -25,6 +26,8 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
+
+        EnsureDatabaseExists(); //New
 
         var services = new ServiceCollection();
 
@@ -108,4 +111,28 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             desktop.Shutdown();
     }
+
+    private static void EnsureDatabaseExists()
+{
+    if (File.Exists(AppPaths.DatabasePath))
+        return;   // sudah ada database (baik dev maupun sudah pernah dipakai), tidak perlu apa-apa
+
+    var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+    using var resourceStream = assembly.GetManifestResourceStream(
+        "DocBookKeeping.Assets.schema.sql");
+
+    if (resourceStream is null)
+        throw new FileNotFoundException("File skema database tidak ditemukan di dalam aplikasi.");
+
+    using var reader = new StreamReader(resourceStream);
+    var schemaScript = reader.ReadToEnd();
+
+    // Buat file database kosong baru, lalu jalankan skrip skema di atasnya
+    using var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={AppPaths.DatabasePath}");
+    connection.Open();
+
+    using var command = connection.CreateCommand();
+    command.CommandText = schemaScript;
+    command.ExecuteNonQuery();
+}
 }

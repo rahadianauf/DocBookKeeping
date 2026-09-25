@@ -5,27 +5,29 @@ namespace DocBookKeeping;
 
 public static class AppPaths
 {
-    public static string ProjectRoot => FindProjectRoot();
+    public static string ProjectRoot => ResolveRoot();
 
     public static string DatabasePath => Path.Combine(ProjectRoot, "Data", "DocBookKeeping.db");
 
     public static string ConnectionString => $"Data Source={DatabasePath}";
 
-    private static string FindProjectRoot()
+    private static string ResolveRoot()
     {
+        // MODE DEVELOPMENT — masih jalan dari source code
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
-
-        // Naik dari bin/Debug/net10.0/ sampai ketemu folder yang berisi file .csproj
         while (dir is not null && dir.GetFiles("*.csproj").Length == 0)
-        {
             dir = dir.Parent;
-        }
 
-        if (dir is null)
-            throw new InvalidOperationException(
-                "Tidak menemukan folder project (.csproj). " +
-                "Pastikan struktur folder project tidak dipindah/rusak.");
+        if (dir is not null)
+            return dir.FullName;
 
-        return dir.FullName;
+        // MODE PUBLISHED — pakai folder data user
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var root = Path.Combine(appData, "DocBookKeeping");
+
+        Directory.CreateDirectory(Path.Combine(root, "Data"));
+        Directory.CreateDirectory(Path.Combine(root, "Config"));
+
+        return root;
     }
 }

@@ -49,9 +49,11 @@
             <views:LaporanView />
         </DataTemplate>
 
+        <!--
         <DataTemplate DataType="{x:Type vm:UserViewModel}">
             <views:UserView />
         </DataTemplate>
+        -->
 
         <DataTemplate DataType="{x:Type vm:KategoriViewModel}">
             <views:CategoryView />
@@ -217,7 +219,7 @@
                         </Button>
 
                         <StackPanel Spacing="4" IsVisible="{Binding IsMasterExpanded}">
-
+                            <!--
                             <Button Height="44" Command="{Binding ShowUsersCommand}"
                                     HorizontalContentAlignment="Left" Padding="14,0"
                                     Background="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuBackgroundConverter.Instance}, ConverterParameter=Pengguna}"
@@ -229,7 +231,7 @@
                                                 Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuTextForegroundConverter.Instance}, ConverterParameter=Pengguna}" />
                                 </StackPanel>
                             </Button>
-
+                            -->
                             <Button Height="44" Command="{Binding ShowCategoriesCommand}"
                                     HorizontalContentAlignment="Left" Padding="14,0"
                                     Background="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuBackgroundConverter.Instance}, ConverterParameter=Kategori}"

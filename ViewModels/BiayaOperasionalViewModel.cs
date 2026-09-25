@@ -19,7 +19,7 @@ public partial class BiayaOperasionalViewModel : ViewModelBase
 
     public ObservableCollection<BiayaOperasional> BiayaList { get; } = new();
     public ObservableCollection<string> KategoriOptions { get; } = new()
-        { "Gaji", "Sewa", "Listrik", "Air", "Internet", "Lainnya" };
+        { "Sewa", "Listrik", "Air", "Internet", "Lainnya" };
 
     [ObservableProperty]
     private BiayaOperasional? selectedBiaya;

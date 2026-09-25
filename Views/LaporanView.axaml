@@ -176,7 +176,7 @@
               <Style Selector="DataGridColumnHeader"><Setter Property="HorizontalContentAlignment" Value="Left" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="100" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="110" />
               <DataGridTextColumn Header="Pasien" Binding="{Binding IdPasienNavigation.NamaPasien, TargetNullValue='- Umum -'}" Width="160" />
               <DataGridTextColumn Header="Jasa" Binding="{Binding IdJasaNavigation.NamaJasa}" Width="160" />
               <DataGridTextColumn Header="Harga" Binding="{Binding Harga, StringFormat={}{0:N0}}" Width="120" />
@@ -199,7 +199,7 @@
               <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="100" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="110" />
               <DataGridTextColumn Header="Tag" Binding="{Binding Tag}" Width="80" />
               <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="150" />
               <DataGridTextColumn Header="Pemasok" Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}" Width="130" />
@@ -224,7 +224,7 @@
               <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="110" />
               <DataGridTextColumn Header="Barang" Binding="{Binding NamaBarang}" Width="150" />
               <DataGridTextColumn Header="Tujuan" Binding="{Binding TujuanKeluar}" Width="110" />
               <DataGridTextColumn Header="Jml" Binding="{Binding JumlahDiambil}" Width="50" />
@@ -249,7 +249,7 @@
               <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="110" />
               <DataGridTextColumn Header="Kategori" Binding="{Binding Kategori}" Width="150" />
               <DataGridTextColumn Header="Nominal" Binding="{Binding Nominal, StringFormat={}{0:N0}}" Width="120" />
               <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="*" />
