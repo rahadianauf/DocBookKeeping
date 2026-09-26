@@ -20,6 +20,8 @@ public partial class TransJasa
 
     public string TanggalInput { get; set; } = null!;
 
+    public string TanggalTransaksi { get; set; } = null!;
+
     public virtual MstPasien? IdPasienNavigation { get; set; }
 
     public virtual MstJasa? IdJasaNavigation { get; set; }

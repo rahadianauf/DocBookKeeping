@@ -68,6 +68,11 @@
             <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
 
               <StackPanel Spacing="4">
+                <TextBlock Text="Tanggal Transaksi" FontSize="11" Foreground="#6B7280" />
+                <DatePicker SelectedDate="{Binding FormTanggalTransaksi}" Width="160" />
+              </StackPanel>
+
+              <StackPanel Spacing="4">
                 <TextBlock Text="Barang" FontSize="11" Foreground="#6B7280" />
                 <ComboBox ItemsSource="{Binding BarangOptions}" SelectedItem="{Binding FormBarang}" Width="180">
                   <ComboBox.ItemTemplate>
@@ -190,7 +195,7 @@
             </DataGrid.Styles>
             <DataGrid.Columns>
               <DataGridTextColumn Header="No" Binding="{Binding No}" Width="65" />
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="110" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalTransaksi}" Width="110" />
               <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="160" />
               <DataGridTextColumn Header="Tujuan" Binding="{Binding TujuanKeluar}" Width="120" />
               <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="65" />

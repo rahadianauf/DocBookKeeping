@@ -13,6 +13,8 @@ public partial class TransBarang
     public int? IdPemasok { get; set; }
 
     public string TanggalInput { get; set; } = null!;
+
+    public string TanggalTransaksi { get; set; } = null!;
     
     public string? Tag { get; set; }
 

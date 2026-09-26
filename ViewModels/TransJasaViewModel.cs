@@ -54,6 +54,9 @@ public partial class TransJasaViewModel : ViewModelBase
     [ObservableProperty]
     private bool isFormVisible;
 
+    [ObservableProperty]
+    private DateTimeOffset? formTanggalTransaksi = DateTimeOffset.Now;
+
     public int JumlahTransaksi => TransList.Count;
     public decimal TotalPendapatan => TransList.Sum(t => t.Harga);
     
@@ -101,6 +104,7 @@ public partial class TransJasaViewModel : ViewModelBase
         FormHarga = value is null ? string.Empty : value.Harga.ToString("0");
         FormKeterangan = value?.Keterangan ?? string.Empty;
         FormTag = value?.Tag ?? string.Empty;
+        FormTanggalTransaksi = DateTimeOffset.TryParse(value?.TanggalTransaksi, out var d) ? d : DateTimeOffset.Now;
 
         if (value is not null)
             IsFormVisible = true;   // <-- tambahan: auto-buka form saat pilih baris
@@ -108,7 +112,8 @@ public partial class TransJasaViewModel : ViewModelBase
         UpdateTransCommand.NotifyCanExecuteChanged();
         DeleteTransCommand.NotifyCanExecuteChanged();
         OnPropertyChanged(nameof(FormModeLabel));
-        OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan
+        OnPropertyChanged(nameof(IsEditMode));  
+        
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
@@ -172,7 +177,8 @@ public partial class TransJasaViewModel : ViewModelBase
             }
 
             await _transJasaRepository.AddTransJasaAsync(
-                FormPasien?.IdPasien, FormJasa!.IdJasa, harga, FormKeterangan, FormTag);
+                FormPasien?.IdPasien, FormJasa!.IdJasa, harga, FormKeterangan, FormTag,
+                (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
 
             await LoadTrans();
             ClearForm();
@@ -203,7 +209,8 @@ public partial class TransJasaViewModel : ViewModelBase
             }
 
             await _transJasaRepository.UpdateTransJasaAsync(
-                SelectedTrans.IdTrans, FormPasien?.IdPasien, FormJasa.IdJasa, harga, FormKeterangan, FormTag);
+                SelectedTrans.IdTrans, FormPasien?.IdPasien, FormJasa.IdJasa, harga, FormKeterangan, FormTag,
+                (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
 
             await LoadTrans();
             ClearForm();
@@ -243,7 +250,9 @@ public partial class TransJasaViewModel : ViewModelBase
         FormHarga = string.Empty;
         FormKeterangan = string.Empty;
         FormTag = string.Empty;
+        FormTanggalTransaksi = DateTimeOffset.Now;
         IsFormVisible = false;   // <-- tambahan: tutup form
         OnPropertyChanged(nameof(IsEditMode));   // <-- tambahan
+        
     }
 }

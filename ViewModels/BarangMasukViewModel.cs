@@ -87,6 +87,9 @@ public partial class BarangMasukViewModel : ViewModelBase
     [ObservableProperty]
     private decimal? hargaBeliSaatIni;
 
+    [ObservableProperty]
+    private DateTimeOffset? formTanggalTransaksi = DateTimeOffset.Now;
+
     public bool IsSumberBeli => FormSumber == "BELI";
     public int JumlahTransaksi => TransList.Count;
     public decimal TotalNilai => TransList.Sum(t => t.Nilai);
@@ -177,6 +180,7 @@ public partial class BarangMasukViewModel : ViewModelBase
             FormJumlah = value?.Jumlah.ToString() ?? string.Empty;
             FormHargaSatuan = value?.HargaSatuan.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
             FormNilai = value?.Nilai.ToString("0", CultureInfo.InvariantCulture) ?? string.Empty;
+            FormTanggalTransaksi = DateTimeOffset.TryParse(value?.TanggalTransaksi, out var d) ? d : DateTimeOffset.Now;
 
             FormTanggalKadaluwarsa = DateTimeOffset.TryParse(value?.TanggalKadaluwarsa, out var parsedDate)
                 ? parsedDate
@@ -275,7 +279,9 @@ public partial class BarangMasukViewModel : ViewModelBase
                 null,
                 jumlah, harga, nilai,
                 FormTanggalKadaluwarsa?.ToString("yyyy-MM-dd"),
-                FormKeterangan);
+                FormKeterangan,
+                null,
+                (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
 
             await LoadTrans();
             ClearForm();
@@ -307,7 +313,9 @@ public partial class BarangMasukViewModel : ViewModelBase
                 FormSumber,
                 jumlah, harga, nilai,
                 FormTanggalKadaluwarsa?.ToString("yyyy-MM-dd"),
-                FormKeterangan);
+                FormKeterangan,
+                null,
+                (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
 
             await LoadTrans();
             ClearForm();
@@ -382,6 +390,7 @@ public partial class BarangMasukViewModel : ViewModelBase
         FormNilai = string.Empty;
         FormTanggalKadaluwarsa = null;
         FormKeterangan = string.Empty;
+        FormTanggalTransaksi = DateTimeOffset.Now;
         IsFormVisible = false;
         OnPropertyChanged(nameof(IsEditMode));
     }

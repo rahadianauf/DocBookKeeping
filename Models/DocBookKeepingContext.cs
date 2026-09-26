@@ -167,6 +167,7 @@ public partial class DocBookKeepingContext : DbContext
             entity.Property(e => e.TanggalInput)
                 .HasDefaultValueSql("DATE('now')")
                 .HasColumnName("tanggal_input");
+            entity.Property(e => e.TanggalTransaksi).HasColumnName("tanggal_transaksi");
             entity.Property(e => e.Tag).HasColumnName("TAG");
             entity.Property(e => e.Sumber).HasColumnName("sumber");
             entity.Property(e => e.TujuanKeluar).HasColumnName("tujuan_keluar");
@@ -207,6 +208,7 @@ public partial class DocBookKeepingContext : DbContext
             entity.Property(e => e.TanggalInput)
                 .HasDefaultValueSql("DATE('now')")
                 .HasColumnName("tanggal_input");
+            entity.Property(e => e.TanggalTransaksi).HasColumnName("tanggal_transaksi");
 
             entity.HasOne(d => d.IdPasienNavigation)
                 .WithMany()

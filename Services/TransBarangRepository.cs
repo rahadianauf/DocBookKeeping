@@ -23,7 +23,7 @@ public class TransBarangRepository
             .Include(t => t.IdBarangNavigation)
             .Include(t => t.IdPemasokNavigation)
             .AsNoTracking()
-            .OrderByDescending(t => t.TanggalInput)
+            .OrderByDescending(t => t.TanggalTransaksi)   // sebelumnya .TanggalInput
             .ToListAsync();
     }
 
@@ -49,7 +49,8 @@ public class TransBarangRepository
     public async Task<string> AddTransBarangAsync(
     string idBarang, int? idPemasok, string tag, string? sumber, string? tujuanKeluar,
     int jumlah, decimal hargaSatuan, decimal nilai,
-    string? tanggalKadaluwarsa, string? keterangan, string? idTransProduksi = null)
+    string? tanggalKadaluwarsa, string? keterangan, string? idTransProduksi,
+    string tanggalTransaksi)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -69,11 +70,11 @@ public class TransBarangRepository
             Nilai = nilai,
             TanggalKadaluwarsa = tanggalKadaluwarsa,
             Keterangan = keterangan,
-            TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")
+            TanggalTransaksi = tanggalTransaksi,
+            TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")   // tetap otomatis "hari ini", TIDAK diubah
         });
 
         await context.SaveChangesAsync();
-
         return newId;
     }
 
@@ -89,9 +90,10 @@ public class TransBarangRepository
     }
 
     public async Task UpdateTransBarangAsync(
-        string id, string idBarang, int? idPemasok, string? sumber,
-        int jumlah, decimal hargaSatuan, decimal nilai,
-        string? tanggalKadaluwarsa, string? keterangan)
+    string id, string idBarang, int? idPemasok, string? sumber,
+    int jumlah, decimal hargaSatuan, decimal nilai,
+    string? tanggalKadaluwarsa, string? tag, string? keterangan,
+    string tanggalTransaksi)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -106,6 +108,7 @@ public class TransBarangRepository
         trans.Nilai = nilai;
         trans.TanggalKadaluwarsa = tanggalKadaluwarsa;
         trans.Keterangan = keterangan;
+        trans.TanggalTransaksi = tanggalTransaksi;   // TanggalInput TIDAK diubah
 
         await context.SaveChangesAsync();
     }

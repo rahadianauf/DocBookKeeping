@@ -66,6 +66,9 @@ public partial class BarangKeluarViewModel : ViewModelBase
     [ObservableProperty]
     private decimal lastHppTotal;
 
+    [ObservableProperty]
+    private DateTimeOffset? formTanggalTransaksi = DateTimeOffset.Now;
+
     public string FormModeLabel => "Tambah Barang Keluar";
     public bool IsRowSelected => SelectedTrans is not null;
 
@@ -221,7 +224,7 @@ public partial class BarangKeluarViewModel : ViewModelBase
             var newId = await _transBarangRepository.AddTransBarangAsync(   // <-- pakai hasil return ini
                 FormBarang!.IdBarang, null, "KELUAR", null, FormTujuanKeluar,
                 jumlah, harga, nilai, null, FormKeterangan,
-                FormProduksiTrans?.IdTrans);
+                FormProduksiTrans?.IdTrans,(FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
 
             var pemakaian = await _transBarangRepository.GetPemakaianByTransAsync(newId);
             LastHppBreakdown.Clear();
@@ -284,6 +287,7 @@ public partial class BarangKeluarViewModel : ViewModelBase
         FormHargaSatuan = string.Empty;
         FormNilai = string.Empty;
         FormKeterangan = string.Empty;
+        FormTanggalTransaksi = DateTimeOffset.Now;
         IsFormVisible = false;
         LastHppBreakdown.Clear();
         LastHppTotal = 0;

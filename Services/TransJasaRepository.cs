@@ -23,7 +23,7 @@ public class TransJasaRepository
             .Include(t => t.IdPasienNavigation)
             .Include(t => t.IdJasaNavigation)
             .AsNoTracking()
-            .OrderByDescending(t => t.TanggalInput)
+            .OrderByDescending(t => t.TanggalTransaksi)
             .ToListAsync();
     }
 
@@ -46,7 +46,7 @@ public class TransJasaRepository
         return $"TJ{nextNumber:D4}";
     }
 
-    public async Task AddTransJasaAsync(string? idPasien, string idJasa, decimal harga, string? keterangan, string? tag)
+    public async Task AddTransJasaAsync(string? idPasien, string idJasa, decimal harga, string? keterangan, string? tag, string tanggalTransaksi)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -60,13 +60,14 @@ public class TransJasaRepository
             Harga = harga,
             Keterangan = keterangan,
             Tag = tag,
+            TanggalTransaksi = tanggalTransaksi,
             TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")
         });
 
         await context.SaveChangesAsync();
     }
 
-    public async Task UpdateTransJasaAsync(string id, string? idPasien, string idJasa, decimal harga, string? keterangan, string? tag)
+    public async Task UpdateTransJasaAsync(string id, string? idPasien, string idJasa, decimal harga, string? keterangan, string? tag, string tanggalTransaksi)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -78,6 +79,7 @@ public class TransJasaRepository
         trans.Harga = harga;
         trans.Keterangan = keterangan;
         trans.Tag = tag;
+        trans.TanggalTransaksi = tanggalTransaksi;
 
         await context.SaveChangesAsync();
     }
