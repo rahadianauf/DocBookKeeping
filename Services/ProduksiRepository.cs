@@ -45,7 +45,7 @@ public class ProduksiRepository
         return await context.Database.SqlQuery<ProduksiSummaryDto>($"""
             SELECT
                 mp.id_trans AS IdTransMasuk,
-                mp.tanggal_input AS Tanggal,
+                mp.tanggal_transaksi AS Tanggal,
                 mb.nama_barang AS NamaBarangJadi,
                 mp.jumlah AS JumlahDihasilkan,
                 mp.nilai AS NilaiProduksi,
@@ -74,7 +74,7 @@ public class ProduksiRepository
                 GROUP BY sb.id_trans_masuk
             ) jual ON jual.id_trans_masuk = mp.id_trans
             WHERE mp.TAG = 'MASUK' AND mp.sumber = 'PRODUKSI'
-            ORDER BY mp.tanggal_input DESC
+            ORDER BY mp.tanggal_transaksi DESC
             """).ToListAsync();
     }
 

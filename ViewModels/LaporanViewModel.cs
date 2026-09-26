@@ -169,23 +169,23 @@ public partial class LaporanViewModel : ViewModelBase
         string? endStr = EndDate?.ToString("yyyy-MM-dd");
 
         var jasaFiltered = _allTransJasa.Where(t =>
-            (startStr is null || string.CompareOrdinal(t.TanggalInput, startStr) >= 0) &&
-            (endStr is null || string.CompareOrdinal(t.TanggalInput, endStr) <= 0));
+            (startStr is null || string.CompareOrdinal(t.TanggalTransaksi, startStr) >= 0) &&
+            (endStr is null || string.CompareOrdinal(t.TanggalTransaksi, endStr) <= 0));
 
         var barangFiltered = _allTransBarang.Where(t =>
-            (startStr is null || string.CompareOrdinal(t.TanggalInput, startStr) >= 0) &&
-            (endStr is null || string.CompareOrdinal(t.TanggalInput, endStr) <= 0));
+            (startStr is null || string.CompareOrdinal(t.TanggalTransaksi, startStr) >= 0) &&
+            (endStr is null || string.CompareOrdinal(t.TanggalTransaksi, endStr) <= 0));
 
         var hppFiltered = _allHpp.Where(h =>
             (startStr is null || string.CompareOrdinal(h.Tanggal, startStr) >= 0) &&
             (endStr is null || string.CompareOrdinal(h.Tanggal, endStr) <= 0));
 
         JasaFiltered.Clear();
-        foreach (var j in jasaFiltered.OrderByDescending(t => t.TanggalInput))
+        foreach (var j in jasaFiltered.OrderByDescending(t => t.TanggalTransaksi))
             JasaFiltered.Add(j);
 
         BarangFiltered.Clear();
-        foreach (var b in barangFiltered.OrderByDescending(t => t.TanggalInput))
+        foreach (var b in barangFiltered.OrderByDescending(t => t.TanggalTransaksi))
             BarangFiltered.Add(b);
 
         HppFiltered.Clear();

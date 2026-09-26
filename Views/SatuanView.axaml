@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             x:Class="DocBookKeeping.Views.SatuanView"
+             x:DataType="vm:SatuanViewModel">
+  <ScrollViewer>
+    <StackPanel Spacing="24" Margin="0,0,0,24">
+
+      <Grid ColumnDefinitions="*,Auto,Auto">
+        <StackPanel Spacing="6">
+          <TextBlock Text="Satuan" FontSize="30" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="Kelola satuan barang (pcs, kg, botol, dll)" FontSize="14" Foreground="#6B7280" />
+        </StackPanel>
+        <Button Grid.Column="1" Content="＋  Tambah" Command="{Binding OpenAddFormCommand}"
+                Padding="18,10" Margin="0,0,10,0" Background="#16A34A" Foreground="White"
+                BorderThickness="0" CornerRadius="8" VerticalAlignment="Center" />
+        <Button Grid.Column="2" Content="⟳  Refresh" Command="{Binding LoadSatuanCommand}"
+                Padding="18,10" Background="#4F46E5" Foreground="White"
+                BorderThickness="0" CornerRadius="8" VerticalAlignment="Center" />
+      </Grid>
+
+      <Border Background="White" CornerRadius="14" Padding="20" BoxShadow="0 1 3 0 #0A000000" Width="260" HorizontalAlignment="Left">
+        <Grid ColumnDefinitions="Auto,*">
+          <Border Width="42" Height="42" CornerRadius="10" Background="#EEF2FF">
+            <TextBlock Text="◆" FontSize="16" Foreground="#4F46E5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+            <TextBlock Text="Total Satuan" FontSize="12.5" Foreground="#6B7280" />
+            <TextBlock Text="{Binding JumlahSatuan}" FontSize="21" FontWeight="Bold" Foreground="#111827" />
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <Border Background="White" CornerRadius="14" Padding="22" BoxShadow="0 1 3 0 #0A000000"
+              IsVisible="{Binding IsFormVisible}">
+        <StackPanel Spacing="14">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="{Binding FormModeLabel}" FontWeight="SemiBold" FontSize="15" Foreground="#111827" />
+            <Button Grid.Column="1" Content="✕" Command="{Binding ClearFormCommand}"
+                    Background="Transparent" Foreground="#9CA3AF" BorderThickness="0" Padding="8,4" FontSize="14" />
+          </Grid>
+          <Rectangle Height="1" Fill="#F3F4F6" />
+
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Spacing="4">
+              <TextBlock Text="Kode" FontSize="11" Foreground="#6B7280" />
+              <TextBox Text="{Binding FormKode}" Width="100" />
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="Nama Satuan" FontSize="11" Foreground="#6B7280" />
+              <TextBox Text="{Binding FormSatuan}" Width="180" />
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="Keterangan" FontSize="11" Foreground="#6B7280" />
+              <TextBox Text="{Binding FormKeterangan}" Width="260" />
+            </StackPanel>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Content="Simpan" Command="{Binding AddSatuanCommand}"
+                    Background="#16A34A" Foreground="White" BorderThickness="0" Padding="18,10" CornerRadius="8"
+                    IsVisible="{Binding !IsEditMode}" />
+            <Button Content="Simpan Perubahan" Command="{Binding UpdateSatuanCommand}"
+                    Background="#4F46E5" Foreground="White" BorderThickness="0" Padding="18,10" CornerRadius="8"
+                    IsVisible="{Binding IsEditMode}" />
+            <Button Content="Hapus" Command="{Binding DeleteSatuanCommand}"
+                    Background="#FEE2E2" Foreground="#DC2626" BorderThickness="0" Padding="18,10" CornerRadius="8"
+                    IsVisible="{Binding IsEditMode}" />
+            <Button Content="Batal" Command="{Binding ClearFormCommand}"
+                    Background="Transparent" Foreground="#6B7280" BorderThickness="1" BorderBrush="#E5E7EB"
+                    Padding="18,10" CornerRadius="8" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap"
+                 IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <Border Background="White" CornerRadius="14" Padding="22" BoxShadow="0 1 3 0 #0A000000">
+        <StackPanel Spacing="14">
+          <Grid ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Text="◆" FontSize="14" Foreground="#4F46E5" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="Daftar Satuan" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
+            <TextBox Grid.Column="2" Text="{Binding SearchText}" PlaceholderText="Cari satuan..." Width="220" />
+          </Grid>
+          <Rectangle Height="1" Fill="#F3F4F6" />
+          <DataGrid ItemsSource="{Binding SatuanList}" SelectedItem="{Binding SelectedSatuan}"
+                    AutoGenerateColumns="False" GridLinesVisibility="Horizontal" IsReadOnly="True" MinHeight="350">
+            <DataGrid.Styles>
+              <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
+              <Style Selector="DataGridColumnHeader">
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="#6B7280" />
+              </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="No" Binding="{Binding No}" Width="65" />
+              <DataGridTextColumn Header="Kode" Binding="{Binding Kode}" Width="100" />
+              <DataGridTextColumn Header="Satuan" Binding="{Binding Satuan}" Width="180" />
+              <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="*" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

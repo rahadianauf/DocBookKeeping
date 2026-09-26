@@ -75,6 +75,10 @@
             <views:BarangView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:SatuanViewModel}">
+            <views:SatuanView />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vm:ProduksiViewModel}">
             <views:ProduksiView />
         </DataTemplate>
@@ -305,6 +309,18 @@
                                                 Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuIconForegroundConverter.Instance}, ConverterParameter=Barang}" />
                                     <TextBlock Text="Barang" VerticalAlignment="Center" FontSize="14"
                                                 Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuTextForegroundConverter.Instance}, ConverterParameter=Barang}" />
+                                </StackPanel>
+                            </Button>
+
+                            <Button Height="44" Command="{Binding ShowSatuansCommand}"
+                                    HorizontalContentAlignment="Left" Padding="14,0"
+                                    Background="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuBackgroundConverter.Instance}, ConverterParameter=Satuan}"
+                                    BorderThickness="0" CornerRadius="7">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="◆" FontSize="14" VerticalAlignment="Center"
+                                                Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuIconForegroundConverter.Instance}, ConverterParameter=Satuan}" />
+                                    <TextBlock Text="Satuan" VerticalAlignment="Center" FontSize="14"
+                                                Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuTextForegroundConverter.Instance}, ConverterParameter=Satuan}" />
                                 </StackPanel>
                             </Button>
 

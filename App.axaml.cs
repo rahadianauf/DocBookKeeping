@@ -43,6 +43,7 @@ public partial class App : Application
         services.AddScoped<PasienRepository>();
         services.AddScoped<SatuanRepository>();
         services.AddScoped<BarangRepository>();
+        services.AddScoped<SatuanRepository>();
         services.AddScoped<TransJasaRepository>();
         services.AddScoped<TransBarangRepository>();
         services.AddScoped<DashboardRepository>();
@@ -59,6 +60,7 @@ public partial class App : Application
         services.AddTransient<JasaViewModel>();
         services.AddTransient<PasienViewModel>();
         services.AddTransient<BarangViewModel>();
+        services.AddTransient<SatuanViewModel>();
         services.AddTransient<TransJasaViewModel>();
         services.AddTransient<DashboardViewModel>();
         services.AddTransient<LaporanViewModel>();

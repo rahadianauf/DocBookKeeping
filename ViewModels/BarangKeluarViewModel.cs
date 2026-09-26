@@ -81,10 +81,22 @@ public partial class BarangKeluarViewModel : ViewModelBase
     private TransBarang? formProduksiTrans;
 
     public bool IsTujuanProduksi => FormTujuanKeluar == "PRODUKSI";
-    public BarangKeluarViewModel(TransBarangRepository transBarangRepository, BarangRepository barangRepository)
+
+    private readonly PasienRepository _pasienRepository;
+
+    public ObservableCollection<MstPasien> PasienOptions { get; } = new();
+
+    [ObservableProperty]
+    private MstPasien? formPasien;
+
+    public bool IsTujuanJual => FormTujuanKeluar == "JUAL";
+
+    public BarangKeluarViewModel(TransBarangRepository transBarangRepository, BarangRepository barangRepository,
+    PasienRepository pasienRepository) 
     {
         _transBarangRepository = transBarangRepository;
         _barangRepository = barangRepository;
+        _pasienRepository = pasienRepository;
 
         LoadTransCommand.Execute(null);
         LoadDropdownOptionsCommand.Execute(null);
@@ -97,9 +109,17 @@ public partial class BarangKeluarViewModel : ViewModelBase
         var barangs = await _barangRepository.GetAllBarangAsync();
         BarangOptions.Clear();
         foreach (var b in barangs) BarangOptions.Add(b);
+
+        var pasiens = await _pasienRepository.GetAllPasienAsync();
+        PasienOptions.Clear();
+        foreach (var p in pasiens) PasienOptions.Add(p);
     }
 
-    partial void OnFormTujuanKeluarChanged(string value) => OnPropertyChanged(nameof(IsTujuanProduksi));
+    partial void OnFormTujuanKeluarChanged(string value)
+    {
+        OnPropertyChanged(nameof(IsTujuanProduksi));
+        OnPropertyChanged(nameof(IsTujuanJual));   // <-- tambahan
+    }
 
     [RelayCommand]
     private async Task LoadProduksiOptions()
@@ -221,10 +241,12 @@ public partial class BarangKeluarViewModel : ViewModelBase
                 return;
             }
 
-            var newId = await _transBarangRepository.AddTransBarangAsync(   // <-- pakai hasil return ini
-                FormBarang!.IdBarang, null, "KELUAR", null, FormTujuanKeluar,
-                jumlah, harga, nilai, null, FormKeterangan,
-                FormProduksiTrans?.IdTrans,(FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
+            var newId = await _transBarangRepository.AddTransBarangAsync(
+                    FormBarang!.IdBarang, null, "KELUAR", null, FormTujuanKeluar,
+                    jumlah, harga, nilai, null, FormKeterangan,
+                    FormProduksiTrans?.IdTrans,
+                    FormPasien?.IdPasien,   // <-- tambahan
+                    (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
 
             var pemakaian = await _transBarangRepository.GetPemakaianByTransAsync(newId);
             LastHppBreakdown.Clear();
@@ -291,8 +313,9 @@ public partial class BarangKeluarViewModel : ViewModelBase
         IsFormVisible = false;
         LastHppBreakdown.Clear();
         LastHppTotal = 0;
-         OnPropertyChanged(nameof(IsRowSelected));
-         FormProduksiTrans = null;
+        OnPropertyChanged(nameof(IsRowSelected));
+        FormProduksiTrans = null;
+        FormPasien = null;
     }
 
     // Setelah simpan sukses, form ditutup tapi breakdown HPP tetap ditampilkan

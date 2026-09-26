@@ -177,6 +177,13 @@ public partial class DocBookKeepingContext : DbContext
             entity.Property(e => e.Nilai).HasColumnName("nilai");
             entity.Property(e => e.TanggalKadaluwarsa).HasColumnName("tanggal_kadaluwarsa");
             entity.Property(e => e.Keterangan).HasColumnName("keterangan");
+            entity.Property(e => e.IdPasien).HasColumnName("id_pasien");
+
+            entity.HasOne(d => d.IdPasienNavigation)
+                .WithMany()
+                .HasForeignKey(d => d.IdPasien)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
 
             entity.HasOne(d => d.IdBarangNavigation)
                 .WithMany()

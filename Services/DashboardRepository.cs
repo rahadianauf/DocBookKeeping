@@ -27,7 +27,7 @@ public class DashboardRepository
         _contextFactory = contextFactory;
     }
 
-    public async Task<DashboardSummary> GetSummaryAsync(string? startDate, string? endDate)
+   public async Task<DashboardSummary> GetSummaryAsync(string? startDate, string? endDate)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -36,13 +36,13 @@ public class DashboardRepository
 
         if (startDate is not null)
         {
-            transJasaQuery = transJasaQuery.Where(t => string.Compare(t.TanggalInput, startDate) >= 0);
-            transBarangQuery = transBarangQuery.Where(t => string.Compare(t.TanggalInput, startDate) >= 0);
+            transJasaQuery = transJasaQuery.Where(t => string.Compare(t.TanggalTransaksi, startDate) >= 0);
+            transBarangQuery = transBarangQuery.Where(t => string.Compare(t.TanggalTransaksi, startDate) >= 0);
         }
         if (endDate is not null)
         {
-            transJasaQuery = transJasaQuery.Where(t => string.Compare(t.TanggalInput, endDate) <= 0);
-            transBarangQuery = transBarangQuery.Where(t => string.Compare(t.TanggalInput, endDate) <= 0);
+            transJasaQuery = transJasaQuery.Where(t => string.Compare(t.TanggalTransaksi, endDate) <= 0);
+            transBarangQuery = transBarangQuery.Where(t => string.Compare(t.TanggalTransaksi, endDate) <= 0);
         }
 
         var transJasaFiltered = await transJasaQuery.ToListAsync();
@@ -66,7 +66,7 @@ public class DashboardRepository
             .Include(t => t.IdJasaNavigation)
             .Include(t => t.IdPasienNavigation)
             .AsNoTracking()
-            .OrderByDescending(t => t.TanggalInput)
+            .OrderByDescending(t => t.TanggalTransaksi)
             .ThenByDescending(t => t.IdTrans)
             .Take(count)
             .ToListAsync();
@@ -79,7 +79,7 @@ public class DashboardRepository
             .Include(t => t.IdBarangNavigation)
             .Include(t => t.IdPemasokNavigation)
             .AsNoTracking()
-            .OrderByDescending(t => t.TanggalInput)
+            .OrderByDescending(t => t.TanggalTransaksi)
             .ThenByDescending(t => t.IdTrans)
             .Take(count)
             .ToListAsync();

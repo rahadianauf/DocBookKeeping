@@ -125,6 +125,14 @@ public partial class MainViewModel : ViewModelBase
         ActiveMenu = "Barang";
         CurrentView = _services.GetRequiredService<BarangViewModel>();
     }
+
+    [RelayCommand]
+    private void ShowSatuans()
+    {
+        PageTitle = "Satuan";
+        ActiveMenu = "Satuan";
+        CurrentView = _services.GetRequiredService<SatuanViewModel>();
+    }
     [RelayCommand]
     private void ShowTransJasas()
     {

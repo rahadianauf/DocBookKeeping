@@ -22,6 +22,7 @@ public class TransBarangRepository
         return await context.TransBarangs
             .Include(t => t.IdBarangNavigation)
             .Include(t => t.IdPemasokNavigation)
+            .Include(t => t.IdPasienNavigation) 
             .AsNoTracking()
             .OrderByDescending(t => t.TanggalTransaksi)   // sebelumnya .TanggalInput
             .ToListAsync();
@@ -50,7 +51,7 @@ public class TransBarangRepository
     string idBarang, int? idPemasok, string tag, string? sumber, string? tujuanKeluar,
     int jumlah, decimal hargaSatuan, decimal nilai,
     string? tanggalKadaluwarsa, string? keterangan, string? idTransProduksi,
-    string tanggalTransaksi)
+    string? idPasien, string tanggalTransaksi)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -65,13 +66,14 @@ public class TransBarangRepository
             Sumber = sumber,
             TujuanKeluar = tujuanKeluar,
             IdTransProduksi = idTransProduksi,
+            IdPasien = idPasien,
             Jumlah = jumlah,
             HargaSatuan = hargaSatuan,
             Nilai = nilai,
             TanggalKadaluwarsa = tanggalKadaluwarsa,
             Keterangan = keterangan,
             TanggalTransaksi = tanggalTransaksi,
-            TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")   // tetap otomatis "hari ini", TIDAK diubah
+            TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")
         });
 
         await context.SaveChangesAsync();
@@ -93,7 +95,7 @@ public class TransBarangRepository
     string id, string idBarang, int? idPemasok, string? sumber,
     int jumlah, decimal hargaSatuan, decimal nilai,
     string? tanggalKadaluwarsa, string? tag, string? keterangan,
-    string tanggalTransaksi)
+    string? idPasien, string tanggalTransaksi)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -108,7 +110,8 @@ public class TransBarangRepository
         trans.Nilai = nilai;
         trans.TanggalKadaluwarsa = tanggalKadaluwarsa;
         trans.Keterangan = keterangan;
-        trans.TanggalTransaksi = tanggalTransaksi;   // TanggalInput TIDAK diubah
+        trans.IdPasien = idPasien;
+        trans.TanggalTransaksi = tanggalTransaksi;
 
         await context.SaveChangesAsync();
     }
@@ -142,7 +145,7 @@ public class TransBarangRepository
         await using var context = await _contextFactory.CreateDbContextAsync();
         return await context.Database.SqlQuery<HppDetailDto>($"""
             SELECT pb.id_trans_keluar AS IdTransKeluar,
-                tb.tanggal_input AS Tanggal,
+                tb.tanggal_transaksi AS Tanggal,
                 mb.nama_barang AS NamaBarang,
                 tb.tujuan_keluar AS TujuanKeluar,
                 pb.jumlah_diambil AS JumlahDiambil,
@@ -151,7 +154,7 @@ public class TransBarangRepository
             FROM pemakaian_batch pb
             JOIN trans_barang tb ON tb.id_trans = pb.id_trans_keluar
             JOIN mst_barang mb ON mb.id_barang = tb.id_barang
-            ORDER BY tb.tanggal_input DESC
+            ORDER BY tb.tanggal_transaksi DESC
             """).ToListAsync();
     }
 }

@@ -34,6 +34,10 @@ public partial class TransBarang
 
     public string? Keterangan { get; set; }
 
+    public string? IdPasien { get; set; }
+
+    public virtual MstPasien? IdPasienNavigation { get; set; }
+
     public virtual MstBarang? IdBarangNavigation { get; set; }
 
     public virtual MstPemasok? IdPemasokNavigation { get; set; }

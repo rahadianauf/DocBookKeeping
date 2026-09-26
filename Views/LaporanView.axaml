@@ -199,7 +199,7 @@
               <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalInput}" Width="110" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalTransaksi}" Width="110" />
               <DataGridTextColumn Header="Tag" Binding="{Binding Tag}" Width="80" />
               <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="150" />
               <DataGridTextColumn Header="Pemasok" Binding="{Binding IdPemasokNavigation.NamaPemasok, TargetNullValue='-'}" Width="130" />

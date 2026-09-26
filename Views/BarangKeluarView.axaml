@@ -86,6 +86,15 @@
                 <ComboBox ItemsSource="{Binding TujuanKeluarOptions}" SelectedItem="{Binding FormTujuanKeluar}" Width="150" />
               </StackPanel>
 
+              <StackPanel Spacing="4" IsVisible="{Binding IsTujuanJual}">
+                <TextBlock Text="Terjual ke Pasien (opsional)" FontSize="11" Foreground="#6B7280" />
+                <ComboBox ItemsSource="{Binding PasienOptions}" SelectedItem="{Binding FormPasien}" Width="180">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate><TextBlock Text="{Binding NamaPasien}" /></DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </StackPanel>
+
               <StackPanel Spacing="4" IsVisible="{Binding IsTujuanProduksi}">
                 <TextBlock Text="Untuk Produksi Barang" FontSize="11" Foreground="#6B7280" />
                 <ComboBox ItemsSource="{Binding ProduksiOptions}" SelectedItem="{Binding FormProduksiTrans}" Width="220">
@@ -100,26 +109,31 @@
                 </ComboBox>
               </StackPanel>
 
-              <StackPanel Spacing="4">
-                <TextBlock Text="Jumlah" FontSize="11" Foreground="#6B7280" />
-                <TextBox Text="{Binding FormJumlah}" Width="90" />
-              </StackPanel>
 
-              <StackPanel Spacing="4">
-                <TextBlock Text="Harga Satuan" FontSize="11" Foreground="#6B7280" />
-                <TextBox Text="{Binding FormHargaSatuan}" Width="130" />
-              </StackPanel>
+            </StackPanel>
+          </WrapPanel>
 
-              <StackPanel Spacing="4">
-                <TextBlock Text="Nilai (Total)" FontSize="11" Foreground="#6B7280" />
-                <TextBox Text="{Binding FormNilai}" Width="130" />
-              </StackPanel>
+          <WrapPanel>
+            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Jumlah" FontSize="11" Foreground="#6B7280" />
+                  <TextBox Text="{Binding FormJumlah}" Width="90" />
+                </StackPanel>
 
-              <StackPanel Spacing="4">
-                <TextBlock Text="Keterangan" FontSize="11" Foreground="#6B7280" />
-                <TextBox Text="{Binding FormKeterangan}" Width="200" />
-              </StackPanel>
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Harga Satuan" FontSize="11" Foreground="#6B7280" />
+                  <TextBox Text="{Binding FormHargaSatuan}" Width="130" />
+                </StackPanel>
 
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Nilai (Total)" FontSize="11" Foreground="#6B7280" />
+                  <TextBox Text="{Binding FormNilai}" Width="130" />
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Keterangan" FontSize="11" Foreground="#6B7280" />
+                  <TextBox Text="{Binding FormKeterangan}" Width="200" />
+                </StackPanel>
             </StackPanel>
           </WrapPanel>
 
@@ -198,6 +212,7 @@
               <DataGridTextColumn Header="Tanggal" Binding="{Binding TanggalTransaksi}" Width="110" />
               <DataGridTextColumn Header="Barang" Binding="{Binding IdBarangNavigation.NamaBarang}" Width="160" />
               <DataGridTextColumn Header="Tujuan" Binding="{Binding TujuanKeluar}" Width="120" />
+              <DataGridTextColumn Header="Pasien" Binding="{Binding IdPasienNavigation.NamaPasien, TargetNullValue='-'}" Width="140" />
               <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="65" />
               <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="110" />
             </DataGrid.Columns>

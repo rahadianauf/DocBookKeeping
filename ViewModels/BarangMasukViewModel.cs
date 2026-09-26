@@ -276,12 +276,13 @@ public partial class BarangMasukViewModel : ViewModelBase
                 IsSumberBeli ? FormPemasok?.IdPemasok : null,
                 "MASUK",
                 FormSumber,
-                null,
+                null,                                              // tujuanKeluar
                 jumlah, harga, nilai,
                 FormTanggalKadaluwarsa?.ToString("yyyy-MM-dd"),
                 FormKeterangan,
-                null,
-                (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
+                null,                                              // idTransProduksi
+                null,                                              // idPasien (tidak relevan untuk Barang Masuk)
+                (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));  // tanggalTransaksi
 
             await LoadTrans();
             ClearForm();
@@ -310,12 +311,9 @@ public partial class BarangMasukViewModel : ViewModelBase
             await _transBarangRepository.UpdateTransBarangAsync(
                 SelectedTrans.IdTrans, FormBarang.IdBarang,
                 IsSumberBeli ? FormPemasok?.IdPemasok : null,
-                FormSumber,
-                jumlah, harga, nilai,
-                FormTanggalKadaluwarsa?.ToString("yyyy-MM-dd"),
-                FormKeterangan,
-                null,
-                (FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
+                FormSumber, jumlah, harga, nilai,
+                FormTanggalKadaluwarsa?.ToString("yyyy-MM-dd"), null, FormKeterangan,
+                null,(FormTanggalTransaksi ?? DateTimeOffset.Now).ToString("yyyy-MM-dd"));
 
             await LoadTrans();
             ClearForm();
