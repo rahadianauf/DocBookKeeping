@@ -49,7 +49,7 @@ public class TransBarangRepository
     public async Task<string> AddTransBarangAsync(
     string idBarang, int? idPemasok, string tag, string? sumber, string? tujuanKeluar,
     int jumlah, decimal hargaSatuan, decimal nilai,
-    string? tanggalKadaluwarsa, string? keterangan)
+    string? tanggalKadaluwarsa, string? keterangan, string? idTransProduksi = null)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -63,6 +63,7 @@ public class TransBarangRepository
             Tag = tag,
             Sumber = sumber,
             TujuanKeluar = tujuanKeluar,
+            IdTransProduksi = idTransProduksi,
             Jumlah = jumlah,
             HargaSatuan = hargaSatuan,
             Nilai = nilai,
@@ -73,7 +74,18 @@ public class TransBarangRepository
 
         await context.SaveChangesAsync();
 
-        return newId;   // <-- tambahkan return ini
+        return newId;
+    }
+
+    public async Task<List<TransBarang>> GetProduksiCandidatesAsync()
+    {
+        await using var context = await _contextFactory.CreateDbContextAsync();
+        return await context.TransBarangs
+            .Include(t => t.IdBarangNavigation)
+            .Where(t => t.Tag == "MASUK" && t.Sumber == "PRODUKSI")
+            .AsNoTracking()
+            .OrderByDescending(t => t.TanggalInput)
+            .ToListAsync();
     }
 
     public async Task UpdateTransBarangAsync(

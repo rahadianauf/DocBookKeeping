@@ -49,6 +49,7 @@ public partial class App : Application
         services.AddScoped<StokRepository>();
         services.AddScoped<BiayaTambahanRepository>();
         services.AddScoped<BiayaOperasionalRepository>();
+        services.AddScoped<ProduksiRepository>();
 
         // ViewModels
         services.AddTransient<MainViewModel>();
@@ -65,6 +66,7 @@ public partial class App : Application
         services.AddTransient<BarangKeluarViewModel>();
         services.AddTransient<StokViewModel>();
         services.AddTransient<BiayaOperasionalViewModel>();
+        services.AddTransient<ProduksiViewModel>();
         // ...tambahkan ViewModel lain di sini seiring berkembang
         services.AddSingleton<ReportRepository>();
         services.AddTransient<ReportViewModel>();

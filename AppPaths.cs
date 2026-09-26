@@ -13,7 +13,8 @@ public static class AppPaths
 
     private static string ResolveRoot()
     {
-        // MODE DEVELOPMENT — masih jalan dari source code
+#if DEBUG
+        // MODE DEBUG — selalu development, cari .csproj
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir is not null && dir.GetFiles("*.csproj").Length == 0)
             dir = dir.Parent;
@@ -21,7 +22,10 @@ public static class AppPaths
         if (dir is not null)
             return dir.FullName;
 
-        // MODE PUBLISHED — pakai folder data user
+        throw new InvalidOperationException(
+            "Mode Debug tapi .csproj tidak ditemukan — struktur project mungkin rusak.");
+#else
+        // MODE RELEASE — selalu pakai folder AppData, tidak peduli lokasi .exe
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var root = Path.Combine(appData, "DocBookKeeping");
 
@@ -29,5 +33,6 @@ public static class AppPaths
         Directory.CreateDirectory(Path.Combine(root, "Config"));
 
         return root;
+#endif
     }
 }

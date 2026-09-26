@@ -71,6 +71,13 @@ public partial class BarangKeluarViewModel : ViewModelBase
 
     public int JumlahTransaksi => TransList.Count;
     public decimal TotalNilai => TransList.Sum(t => t.Nilai);
+
+    public ObservableCollection<TransBarang> ProduksiOptions { get; } = new();
+
+    [ObservableProperty]
+    private TransBarang? formProduksiTrans;
+
+    public bool IsTujuanProduksi => FormTujuanKeluar == "PRODUKSI";
     public BarangKeluarViewModel(TransBarangRepository transBarangRepository, BarangRepository barangRepository)
     {
         _transBarangRepository = transBarangRepository;
@@ -78,6 +85,7 @@ public partial class BarangKeluarViewModel : ViewModelBase
 
         LoadTransCommand.Execute(null);
         LoadDropdownOptionsCommand.Execute(null);
+        LoadProduksiOptionsCommand.Execute(null);
     }
 
     [RelayCommand]
@@ -86,6 +94,16 @@ public partial class BarangKeluarViewModel : ViewModelBase
         var barangs = await _barangRepository.GetAllBarangAsync();
         BarangOptions.Clear();
         foreach (var b in barangs) BarangOptions.Add(b);
+    }
+
+    partial void OnFormTujuanKeluarChanged(string value) => OnPropertyChanged(nameof(IsTujuanProduksi));
+
+    [RelayCommand]
+    private async Task LoadProduksiOptions()
+    {
+        var list = await _transBarangRepository.GetProduksiCandidatesAsync();
+        ProduksiOptions.Clear();
+        foreach (var p in list) ProduksiOptions.Add(p);
     }
 
     [RelayCommand]
@@ -202,7 +220,8 @@ public partial class BarangKeluarViewModel : ViewModelBase
 
             var newId = await _transBarangRepository.AddTransBarangAsync(   // <-- pakai hasil return ini
                 FormBarang!.IdBarang, null, "KELUAR", null, FormTujuanKeluar,
-                jumlah, harga, nilai, null, FormKeterangan);
+                jumlah, harga, nilai, null, FormKeterangan,
+                FormProduksiTrans?.IdTrans);
 
             var pemakaian = await _transBarangRepository.GetPemakaianByTransAsync(newId);
             LastHppBreakdown.Clear();
@@ -269,6 +288,7 @@ public partial class BarangKeluarViewModel : ViewModelBase
         LastHppBreakdown.Clear();
         LastHppTotal = 0;
          OnPropertyChanged(nameof(IsRowSelected));
+         FormProduksiTrans = null;
     }
 
     // Setelah simpan sukses, form ditutup tapi breakdown HPP tetap ditampilkan
@@ -284,4 +304,5 @@ public partial class BarangKeluarViewModel : ViewModelBase
         IsFormVisible = false;
         // LastHppBreakdown & LastHppTotal sengaja TIDAK direset di sini
     }
+
 }

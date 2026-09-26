@@ -155,4 +155,12 @@ public partial class MainViewModel : ViewModelBase
         ActiveMenu = "BiayaOperasional";
         CurrentView = _services.GetRequiredService<BiayaOperasionalViewModel>();
     }
+
+    [RelayCommand]
+    private void ShowProduksi()
+    {
+        PageTitle = "Laporan Produksi";
+        ActiveMenu = "Produksi";
+        CurrentView = _services.GetRequiredService<ProduksiViewModel>();
+    }
 }

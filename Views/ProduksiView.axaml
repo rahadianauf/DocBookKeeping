@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             x:Class="DocBookKeeping.Views.ProduksiView"
+             x:DataType="vm:ProduksiViewModel">
+  <ScrollViewer>
+    <StackPanel Spacing="24" Margin="0,0,0,24">
+
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="6">
+          <TextBlock Text="Laporan Produksi" FontSize="30" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="HPP bahan baku dan hasil penjualan barang jadi" FontSize="14" Foreground="#6B7280" />
+        </StackPanel>
+        <Button Grid.Column="1" Content="⟳  Refresh" Command="{Binding LoadProduksiCommand}"
+                Padding="18,10" Background="#4F46E5" Foreground="White"
+                BorderThickness="0" CornerRadius="8" VerticalAlignment="Center" />
+      </Grid>
+
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap"
+                 IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <!-- TABEL PRODUKSI -->
+      <Border Background="White" CornerRadius="14" Padding="22" BoxShadow="0 1 3 0 #0A000000">
+        <StackPanel Spacing="14">
+          <TextBlock Text="Daftar Barang Jadi Hasil Produksi" FontWeight="SemiBold" Foreground="#111827" />
+          <Rectangle Height="1" Fill="#F3F4F6" />
+
+          <DataGrid ItemsSource="{Binding ProduksiList}" SelectedItem="{Binding SelectedProduksi}"
+                    AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
+                    IsReadOnly="True" MinHeight="300">
+            <DataGrid.Styles>
+              <Style Selector="DataGridCell TextBlock"><Setter Property="Foreground" Value="#111827" /></Style>
+              <Style Selector="DataGridColumnHeader">
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="#6B7280" />
+              </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
+              <DataGridTextColumn Header="Barang Jadi" Binding="{Binding NamaBarangJadi}" Width="160" />
+              <DataGridTextColumn Header="Jml Hasil" Binding="{Binding JumlahDihasilkan}" Width="80" />
+              <DataGridTextColumn Header="HPP Bahan" Binding="{Binding TotalHppBahan, StringFormat={}{0:N0}}" Width="110" />
+              <DataGridTextColumn Header="HPP/Unit" Binding="{Binding HppPerUnit, StringFormat={}{0:N0}}" Width="100" />
+              <DataGridTextColumn Header="Terjual" Binding="{Binding JumlahTerjual}" Width="70" />
+              <DataGridTextColumn Header="Harga Jual Avg" Binding="{Binding HargaJualRataRata, StringFormat={}{0:N0}}" Width="120" />
+              <DataGridTextColumn Header="Margin" Binding="{Binding MarginTerealisasi, StringFormat={}{0:N0}}" Width="110" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+      </Border>
+
+      <!-- RINCIAN BAHAN (muncul saat pilih baris) -->
+      <Border Background="#EEF2FF" CornerRadius="14" Padding="22"
+              IsVisible="{Binding SelectedProduksi, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Spacing="12">
+          <TextBlock Text="{Binding SelectedProduksi.NamaBarangJadi, StringFormat='Rincian Bahan — {0}'}"
+                     FontWeight="SemiBold" Foreground="#4F46E5" FontSize="15" />
+
+          <ItemsControl ItemsSource="{Binding BahanDetail}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,4">
+                  <TextBlock Text="{Binding NamaBahan}" Foreground="#374151" FontSize="13.5" />
+                  <TextBlock Grid.Column="1" Text="{Binding Jumlah, StringFormat='{}{0} unit'}"
+                             Foreground="#6B7280" FontSize="13" Margin="0,0,16,0" />
+                  <TextBlock Grid.Column="2" Text="{Binding HppSubtotal, StringFormat={}Rp {0:N0}}"
+                             Foreground="#111827" FontWeight="SemiBold" FontSize="13.5" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <Rectangle Height="1" Fill="#C7D2FE" Margin="0,4" />
+
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="Total HPP Bahan" FontWeight="Bold" Foreground="#4F46E5" FontSize="14" />
+            <TextBlock Grid.Column="1" Text="{Binding SelectedProduksi.TotalHppBahan, StringFormat={}Rp {0:N0}}"
+                       FontWeight="Bold" Foreground="#4F46E5" FontSize="14" />
+          </Grid>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

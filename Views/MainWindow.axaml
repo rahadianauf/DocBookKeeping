@@ -75,6 +75,10 @@
             <views:BarangView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:ProduksiViewModel}">
+            <views:ProduksiView />
+        </DataTemplate>
+
     </Window.DataTemplates>
 
     <!-- ================================= -->
@@ -190,6 +194,18 @@
                                             Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuIconForegroundConverter.Instance}, ConverterParameter=BiayaOperasional}" />
                                 <TextBlock Text="Biaya Operasional" VerticalAlignment="Center" FontSize="14"
                                             Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuTextForegroundConverter.Instance}, ConverterParameter=BiayaOperasional}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Height="44" Command="{Binding ShowProduksiCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuBackgroundConverter.Instance}, ConverterParameter=Produksi}"
+                                BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="⚗" FontSize="16" VerticalAlignment="Center"
+                                            Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuIconForegroundConverter.Instance}, ConverterParameter=Produksi}" />
+                                <TextBlock Text="Laporan Produksi" VerticalAlignment="Center" FontSize="14"
+                                            Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuTextForegroundConverter.Instance}, ConverterParameter=Produksi}" />
                             </StackPanel>
                         </Button>
 

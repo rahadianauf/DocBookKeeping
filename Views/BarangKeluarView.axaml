@@ -81,6 +81,20 @@
                 <ComboBox ItemsSource="{Binding TujuanKeluarOptions}" SelectedItem="{Binding FormTujuanKeluar}" Width="150" />
               </StackPanel>
 
+              <StackPanel Spacing="4" IsVisible="{Binding IsTujuanProduksi}">
+                <TextBlock Text="Untuk Produksi Barang" FontSize="11" Foreground="#6B7280" />
+                <ComboBox ItemsSource="{Binding ProduksiOptions}" SelectedItem="{Binding FormProduksiTrans}" Width="220">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock>
+                        <Run Text="{Binding IdBarangNavigation.NamaBarang}" />
+                        <Run Text=" (" /><Run Text="{Binding TanggalInput}" /><Run Text=")" />
+                      </TextBlock>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </StackPanel>
+
               <StackPanel Spacing="4">
                 <TextBlock Text="Jumlah" FontSize="11" Foreground="#6B7280" />
                 <TextBox Text="{Binding FormJumlah}" Width="90" />
