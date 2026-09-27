@@ -24,9 +24,20 @@ public partial class ProduksiViewModel : ViewModelBase
     [ObservableProperty]
     private bool isLoading;
 
+    [ObservableProperty]
+    private DateTimeOffset? startDate;
+
+    [ObservableProperty]
+    private DateTimeOffset? endDate;
+
     public ProduksiViewModel(ProduksiRepository produksiRepository)
     {
         _produksiRepository = produksiRepository;
+
+        var now = DateTime.Now;
+        StartDate = new DateTimeOffset(new DateTime(now.Year, now.Month, 1));
+        EndDate = new DateTimeOffset(now.Date);
+
         LoadProduksiCommand.Execute(null);
     }
 
@@ -37,7 +48,11 @@ public partial class ProduksiViewModel : ViewModelBase
         {
             IsLoading = true;
             ErrorMessage = string.Empty;
-            var list = await _produksiRepository.GetAllProduksiAsync();
+
+            var startStr = StartDate?.ToString("yyyy-MM-dd");
+            var endStr = EndDate?.ToString("yyyy-MM-dd");
+
+            var list = await _produksiRepository.GetAllProduksiAsync(startStr, endStr);
             ProduksiList.Clear();
             foreach (var p in list) ProduksiList.Add(p);
         }
@@ -74,4 +89,40 @@ public partial class ProduksiViewModel : ViewModelBase
             Debug.WriteLine($"[ProduksiViewModel] LoadBahanDetail error: {ex}");
         }
     }
+
+    [RelayCommand]
+    private void SetRangeBulanIni()
+    {
+        var now = DateTime.Now;
+        StartDate = new DateTimeOffset(new DateTime(now.Year, now.Month, 1));
+        EndDate = new DateTimeOffset(now.Date);
+    }
+
+    [RelayCommand]
+    private void SetRangeBulanLalu()
+    {
+        var now = DateTime.Now;
+        var bulanLalu = now.AddMonths(-1);
+        var awal = new DateTime(bulanLalu.Year, bulanLalu.Month, 1);
+        StartDate = new DateTimeOffset(awal);
+        EndDate = new DateTimeOffset(awal.AddMonths(1).AddDays(-1));
+    }
+
+    [RelayCommand]
+    private void SetRangeTahunIni()
+    {
+        var now = DateTime.Now;
+        StartDate = new DateTimeOffset(new DateTime(now.Year, 1, 1));
+        EndDate = new DateTimeOffset(now.Date);
+    }
+
+    [RelayCommand]
+    private void SetRangeSemua()
+    {
+        StartDate = null;
+        EndDate = null;
+    }
+
+    partial void OnStartDateChanged(DateTimeOffset? value) => LoadProduksiCommand.Execute(null);
+    partial void OnEndDateChanged(DateTimeOffset? value) => LoadProduksiCommand.Execute(null);
 }

@@ -97,12 +97,15 @@
 
               <StackPanel Spacing="4" IsVisible="{Binding IsTujuanProduksi}">
                 <TextBlock Text="Untuk Produksi Barang" FontSize="11" Foreground="#6B7280" />
-                <ComboBox ItemsSource="{Binding ProduksiOptions}" SelectedItem="{Binding FormProduksiTrans}" Width="220">
+                <ComboBox ItemsSource="{Binding ProduksiOptions}" SelectedItem="{Binding FormProduksiTrans}" Width="260">
                   <ComboBox.ItemTemplate>
                     <DataTemplate>
-                      <TextBlock>
+                      <TextBlock FontSize="13">
+                        <Run Text="{Binding IdTrans}" FontWeight="SemiBold" />
+                        <Run Text=" — " />
                         <Run Text="{Binding IdBarangNavigation.NamaBarang}" />
-                        <Run Text=" (" /><Run Text="{Binding TanggalInput}" /><Run Text=")" />
+                        <Run Text=" (" /><Run Text="{Binding Jumlah}" /><Run Text=" unit, " />
+                        <Run Text="{Binding TanggalTransaksi}" /><Run Text=")" />
                       </TextBlock>
                     </DataTemplate>
                   </ComboBox.ItemTemplate>

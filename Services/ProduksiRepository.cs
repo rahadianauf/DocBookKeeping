@@ -38,7 +38,7 @@ public class ProduksiRepository
         _contextFactory = contextFactory;
     }
 
-    public async Task<List<ProduksiSummaryDto>> GetAllProduksiAsync()
+    public async Task<List<ProduksiSummaryDto>> GetAllProduksiAsync(string? startDate, string? endDate)
     {
         await using var context = await _contextFactory.CreateDbContextAsync();
 
@@ -50,6 +50,7 @@ public class ProduksiRepository
                 mp.jumlah AS JumlahDihasilkan,
                 mp.nilai AS NilaiProduksi,
                 COALESCE(bahan.total_hpp_bahan, 0) AS TotalHppBahan,
+                -- Data Penjualan di bawah ini sekarang akan pecah jika Harga Jual berbeda
                 COALESCE(jual.total_terjual, 0) AS JumlahTerjual,
                 COALESCE(jual.total_pendapatan, 0) AS TotalPendapatanJual,
                 COALESCE(jual.total_hpp_terjual, 0) AS TotalHppTerjual
@@ -57,7 +58,7 @@ public class ProduksiRepository
             JOIN mst_barang mb ON mb.id_barang = mp.id_barang
             LEFT JOIN (
                 SELECT tb.id_trans_produksi AS id_trans_produksi,
-                       SUM(pb.subtotal_nilai) AS total_hpp_bahan
+                    SUM(pb.subtotal_nilai) AS total_hpp_bahan
                 FROM trans_barang tb
                 JOIN pemakaian_batch pb ON pb.id_trans_keluar = tb.id_trans
                 WHERE tb.TAG = 'KELUAR' AND tb.id_trans_produksi IS NOT NULL
@@ -65,16 +66,21 @@ public class ProduksiRepository
             ) bahan ON bahan.id_trans_produksi = mp.id_trans
             LEFT JOIN (
                 SELECT sb.id_trans_masuk AS id_trans_masuk,
-                       SUM(pb.jumlah_diambil) AS total_terjual,
-                       SUM(pb.subtotal_nilai) AS total_hpp_terjual,
-                       SUM(tbk.nilai * (pb.jumlah_diambil * 1.0 / tbk.jumlah)) AS total_pendapatan
+                    -- Kita kelompokkan juga berdasarkan Harga Jual Satuan
+                    (tbk.nilai * 1.0 / tbk.jumlah) AS harga_jual_satuan,
+                    SUM(pb.jumlah_diambil) AS total_terjual,
+                    SUM(pb.subtotal_nilai) AS total_hpp_terjual,
+                    SUM(tbk.nilai * (pb.jumlah_diambil * 1.0 / tbk.jumlah)) AS total_pendapatan
                 FROM stok_batch sb
                 JOIN pemakaian_batch pb ON pb.id_batch = sb.id_batch
                 JOIN trans_barang tbk ON tbk.id_trans = pb.id_trans_keluar AND tbk.tujuan_keluar = 'JUAL'
-                GROUP BY sb.id_trans_masuk
+                -- GROUP BY ditambah harga_jual_satuan agar baris otomatis terpisah saat harga berbeda
+                GROUP BY sb.id_trans_masuk, (tbk.nilai * 1.0 / tbk.jumlah)
             ) jual ON jual.id_trans_masuk = mp.id_trans
             WHERE mp.TAG = 'MASUK' AND mp.sumber = 'PRODUKSI'
-            ORDER BY mp.tanggal_transaksi DESC
+            AND ({startDate} IS NULL OR mp.tanggal_transaksi >= {startDate})
+            AND ({endDate} IS NULL OR mp.tanggal_transaksi <= {endDate})
+            ORDER BY mp.tanggal_transaksi DESC, jual.harga_jual_satuan ASC
             """).ToListAsync();
     }
 
@@ -86,7 +92,7 @@ public class ProduksiRepository
             SELECT
                 tb.id_trans AS IdTransKeluar,
                 mb.nama_barang AS NamaBahan,
-                tb.jumlah AS Jumlah,
+                pb.jumlah_diambil AS Jumlah, 
                 pb.subtotal_nilai AS HppSubtotal
             FROM trans_barang tb
             JOIN pemakaian_batch pb ON pb.id_trans_keluar = tb.id_trans
