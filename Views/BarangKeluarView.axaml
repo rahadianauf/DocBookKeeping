@@ -215,6 +215,7 @@
               <DataGridTextColumn Header="Pasien" Binding="{Binding IdPasienNavigation.NamaPasien, TargetNullValue='-'}" Width="140" />
               <DataGridTextColumn Header="Jml" Binding="{Binding Jumlah}" Width="65" />
               <DataGridTextColumn Header="Nilai" Binding="{Binding Nilai, StringFormat={}{0:N0}}" Width="110" />
+              <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="*" />
             </DataGrid.Columns>
           </DataGrid>
 

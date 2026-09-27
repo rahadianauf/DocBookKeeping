@@ -36,14 +36,14 @@
               </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
-              <DataGridTextColumn Header="Barang Jadi" Binding="{Binding NamaBarangJadi}" Width="160" />
-              <DataGridTextColumn Header="Jml Hasil" Binding="{Binding JumlahDihasilkan}" Width="80" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="110" />
+              <DataGridTextColumn Header="Barang Jadi" Binding="{Binding NamaBarangJadi}" Width="200" />
+              <DataGridTextColumn Header="Jml Hasil" Binding="{Binding JumlahDihasilkan}" Width="100" />
               <DataGridTextColumn Header="HPP Bahan" Binding="{Binding TotalHppBahan, StringFormat={}{0:N0}}" Width="110" />
               <DataGridTextColumn Header="HPP/Unit" Binding="{Binding HppPerUnit, StringFormat={}{0:N0}}" Width="100" />
-              <DataGridTextColumn Header="Terjual" Binding="{Binding JumlahTerjual}" Width="70" />
-              <DataGridTextColumn Header="Harga Jual Avg" Binding="{Binding HargaJualRataRata, StringFormat={}{0:N0}}" Width="120" />
-              <DataGridTextColumn Header="Margin" Binding="{Binding MarginTerealisasi, StringFormat={}{0:N0}}" Width="110" />
+              <DataGridTextColumn Header="Terjual" Binding="{Binding JumlahTerjual}" Width="85" />
+              <DataGridTextColumn Header="Harga Jual Avg" Binding="{Binding HargaJualRataRata, StringFormat={}{0:N0}}" Width="140" />
+              <DataGridTextColumn Header="Margin" Binding="{Binding MarginTerealisasi, StringFormat={}{0:N0}}" Width="130" />
             </DataGrid.Columns>
           </DataGrid>
         </StackPanel>

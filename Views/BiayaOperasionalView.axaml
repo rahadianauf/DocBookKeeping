@@ -134,7 +134,7 @@
               </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="100" />
+              <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal}" Width="110" />
               <DataGridTextColumn Header="Kategori" Binding="{Binding Kategori}" Width="150" />
               <DataGridTextColumn Header="Nominal" Binding="{Binding Nominal, StringFormat={}{0:N0}}" Width="130" />
               <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="*" />
