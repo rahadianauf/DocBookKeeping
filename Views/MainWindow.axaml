@@ -100,14 +100,14 @@
             <Grid RowDefinitions="Auto,*">
 
                 <!-- LOGO -->
-
+                <!-- 
                 <Border Padding="24,25">
                     <StackPanel Spacing="4">
                         <TextBlock Text="DocBookKeeping" FontSize="21" FontWeight="Bold" Foreground="White" />
                         <TextBlock Text="Financial Management" FontSize="11" Foreground="#94A3B8" />
                     </StackPanel>
                 </Border>
-
+                -->
                 <!-- MENU -->
 
                 <ScrollViewer Grid.Row="1">
