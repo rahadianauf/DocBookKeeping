@@ -118,7 +118,7 @@
             <TextBlock Text="⊖" FontSize="14" Foreground="#D97706" VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Text="Daftar Biaya" FontWeight="SemiBold" Foreground="#111827"
                        Margin="8,0,0,0" VerticalAlignment="Center" />
-            <TextBox Grid.Column="2" Text="{Binding SearchText}" PlaceholderText="Cari kategori..." Width="220" />
+            <TextBox Grid.Column="2" Text="{Binding SearchText}" Watermark="Cari kategori..." Width="220" />
           </Grid>
 
           <Rectangle Height="1" Fill="#F3F4F6" />

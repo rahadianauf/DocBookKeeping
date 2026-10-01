@@ -34,7 +34,7 @@
           <Rectangle Height="1" Fill="#F3F4F6" />
 
           <StackPanel Orientation="Horizontal" Spacing="10">
-            <TextBox Text="{Binding FormNamaKategori}" Width="240" PlaceholderText="Nama kategori" />
+            <TextBox Text="{Binding FormNamaKategori}" Width="240" Watermark="Nama kategori" />
           </StackPanel>
 
           <StackPanel Orientation="Horizontal" Spacing="10">
@@ -59,7 +59,7 @@
           <Grid ColumnDefinitions="Auto,*,Auto">
             <TextBlock Text="◆" FontSize="14" Foreground="#4F46E5" VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Text="Daftar Kategori" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
-            <TextBox Grid.Column="2" Text="{Binding SearchText}" PlaceholderText="Cari kategori..." Width="220" />
+            <TextBox Grid.Column="2" Text="{Binding SearchText}" Watermark="Cari kategori..." Width="220" />
           </Grid>
           <Rectangle Height="1" Fill="#F3F4F6" />
           <DataGrid ItemsSource="{Binding Kategoris}" SelectedItem="{Binding SelectedKategori}"

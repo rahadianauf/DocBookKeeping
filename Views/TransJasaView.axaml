@@ -137,7 +137,7 @@
             <TextBlock Text="↗" FontSize="15" Foreground="#16A34A" VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Text="Daftar Transaksi" FontWeight="SemiBold" Foreground="#111827"
                        Margin="8,0,0,0" VerticalAlignment="Center" />
-            <TextBox Grid.Column="2" Text="{Binding SearchText}" PlaceholderText="Cari pasien/jasa..." Width="220" />
+            <TextBox Grid.Column="2" Text="{Binding SearchText}" Watermark="Cari pasien/jasa..." Width="220" />
           </Grid>
 
           <Rectangle Height="1" Fill="#F3F4F6" />

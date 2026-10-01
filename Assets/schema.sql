@@ -120,6 +120,7 @@ CREATE TABLE IF NOT EXISTS "trans_barang" (
 	"id_barang"	TEXT NOT NULL,
 	"id_pemasok"	INTEGER,
 	"tanggal_input"	TEXT NOT NULL DEFAULT (DATE('now')),
+	"tanggal_transaksi"	TEXT NOT NULL DEFAULT CURRENT_DATE,
 	"TAG"	TEXT,
 	"sumber"	TEXT,
 	"tujuan_keluar"	TEXT,
@@ -129,15 +130,13 @@ CREATE TABLE IF NOT EXISTS "trans_barang" (
 	"nilai"	REAL NOT NULL,
 	"tanggal_kadaluwarsa"	TEXT,
 	"keterangan"	TEXT,
+	"id_pasien"	TEXT,
 	PRIMARY KEY("id_trans"),
 	FOREIGN KEY("id_barang") REFERENCES "mst_barang"("id_barang"),
+	FOREIGN KEY("id_pasien") REFERENCES "mst_pasien"("id_pasien"),
 	FOREIGN KEY("id_pemasok") REFERENCES "mst_pemasok"("id_pemasok"),
 	FOREIGN KEY("id_trans_produksi") REFERENCES "trans_barang"("id_trans"),
-	CHECK("sumber" IS NULL OR "sumber" IN ('BELI', 'PRODUKSI')),
-	CHECK("tujuan_keluar" IS NULL OR "tujuan_keluar" IN ('JUAL', 'PRODUKSI', 'PAKAI_SENDIRI', 'RUSAK_HILANG')),
-	CHECK("jumlah" > 0),
-	CHECK("harga_satuan" >= 0),
-	CHECK("tanggal_kadaluwarsa" IS NULL OR ("tanggal_kadaluwarsa" > "tanggal_input" AND "tanggal_kadaluwarsa" = date("tanggal_kadaluwarsa")))
+	CHECK("tanggal_kadaluwarsa" IS NULL OR "tanggal_kadaluwarsa" > "tanggal_transaksi")
 );
 CREATE TABLE IF NOT EXISTS "trans_jasa" (
 	"id_trans"	TEXT NOT NULL,
@@ -147,6 +146,7 @@ CREATE TABLE IF NOT EXISTS "trans_jasa" (
 	"TAG"	TEXT,
 	"harga"	REAL NOT NULL,
 	"keterangan"	TEXT,
+	"tanggal_transaksi"	TEXT NOT NULL DEFAULT CURRENT_DATE,
 	PRIMARY KEY("id_trans"),
 	FOREIGN KEY("id_jasa") REFERENCES "mst_jasa"("id_jasa"),
 	FOREIGN KEY("id_pasien") REFERENCES "mst_pasien"("id_pasien")
@@ -159,7 +159,7 @@ AFTER INSERT ON trans_barang
 WHEN NEW.TAG = 'MASUK'
 BEGIN
     INSERT INTO stok_batch (id_barang, id_trans_masuk, tanggal_masuk, jumlah_masuk, sisa_jumlah, harga_beli, tanggal_kadaluwarsa)
-    VALUES (NEW.id_barang, NEW.id_trans, NEW.tanggal_input, NEW.jumlah, NEW.jumlah, NEW.harga_satuan, NEW.tanggal_kadaluwarsa);
+    VALUES (NEW.id_barang, NEW.id_trans, NEW.tanggal_transaksi, NEW.jumlah, NEW.jumlah, NEW.harga_satuan, NEW.tanggal_kadaluwarsa);
 END;
 CREATE TRIGGER trg_cegah_hapus_batch_terpakai
 BEFORE DELETE ON stok_batch
@@ -262,7 +262,7 @@ BEGIN
     SELECT RAISE(ABORT, 'Transaksi KELUAR tidak boleh diedit. Hapus transaksi ini lalu buat transaksi baru.');
 END;
 CREATE TRIGGER trg_sync_stok_batch_saat_masuk_diupdate
-AFTER UPDATE OF jumlah, harga_satuan, id_barang, tanggal_input, tanggal_kadaluwarsa
+AFTER UPDATE OF jumlah, harga_satuan, id_barang, tanggal_transaksi, tanggal_kadaluwarsa
 ON trans_barang
 WHEN OLD.TAG = 'MASUK' AND NEW.TAG = 'MASUK'
 BEGIN
@@ -275,7 +275,7 @@ BEGIN
 
     UPDATE stok_batch
     SET id_barang     = NEW.id_barang,
-        tanggal_masuk = NEW.tanggal_input,
+        tanggal_masuk = NEW.tanggal_transaksi,
         sisa_jumlah   = sisa_jumlah + (NEW.jumlah - jumlah_masuk),
         jumlah_masuk  = NEW.jumlah,
         tanggal_kadaluwarsa = NEW.tanggal_kadaluwarsa
@@ -293,7 +293,7 @@ AFTER DELETE ON biaya_tambahan_batch
 BEGIN
     UPDATE stok_batch
     SET harga_beli = ROUND((
-        (SELECT jumlah * harga_satuan FROM trans_barang WHERE id_trans = OLD.id_trans_masuk)
+        (SELECT jumlah * harga_satuan FROM "trans_barang" WHERE id_trans = OLD.id_trans_masuk)
         + (SELECT COALESCE(SUM(nilai), 0) FROM biaya_tambahan_batch WHERE id_trans_masuk = OLD.id_trans_masuk)
     ) * 1.0 / jumlah_masuk, 2)
     WHERE id_trans_masuk = OLD.id_trans_masuk;
@@ -303,7 +303,7 @@ AFTER INSERT ON biaya_tambahan_batch
 BEGIN
     UPDATE stok_batch
     SET harga_beli = ROUND((
-        (SELECT jumlah * harga_satuan FROM trans_barang WHERE id_trans = NEW.id_trans_masuk)
+        (SELECT jumlah * harga_satuan FROM "trans_barang" WHERE id_trans = NEW.id_trans_masuk)
         + (SELECT COALESCE(SUM(nilai), 0) FROM biaya_tambahan_batch WHERE id_trans_masuk = NEW.id_trans_masuk)
     ) * 1.0 / jumlah_masuk, 2)
     WHERE id_trans_masuk = NEW.id_trans_masuk;
@@ -313,7 +313,7 @@ AFTER UPDATE OF nilai ON biaya_tambahan_batch
 BEGIN
     UPDATE stok_batch
     SET harga_beli = ROUND((
-        (SELECT jumlah * harga_satuan FROM trans_barang WHERE id_trans = NEW.id_trans_masuk)
+        (SELECT jumlah * harga_satuan FROM "trans_barang" WHERE id_trans = NEW.id_trans_masuk)
         + (SELECT COALESCE(SUM(nilai), 0) FROM biaya_tambahan_batch WHERE id_trans_masuk = NEW.id_trans_masuk)
     ) * 1.0 / jumlah_masuk, 2)
     WHERE id_trans_masuk = NEW.id_trans_masuk;

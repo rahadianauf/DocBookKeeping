@@ -42,7 +42,7 @@
               <StackPanel Spacing="4">
                 <TextBlock Text="Password" FontSize="11" Foreground="#6B7280" />
                 <TextBox Text="{Binding FormPassword}" PasswordChar="•" Width="220"
-                          PlaceholderText="Kosongkan jika tidak diubah" />
+                          Watermark="Kosongkan jika tidak diubah" />
               </StackPanel>
             </StackPanel>
           </WrapPanel>
@@ -69,7 +69,7 @@
           <Grid ColumnDefinitions="Auto,*,Auto">
             <TextBlock Text="◆" FontSize="14" Foreground="#4F46E5" VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Text="Daftar Pengguna" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
-            <TextBox Grid.Column="2" Text="{Binding SearchText}" PlaceholderText="Cari username..." Width="220" />
+            <TextBox Grid.Column="2" Text="{Binding SearchText}" Watermark="Cari username..." Width="220" />
           </Grid>
           <Rectangle Height="1" Fill="#F3F4F6" />
           <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}"

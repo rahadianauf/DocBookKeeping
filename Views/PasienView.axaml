@@ -72,7 +72,7 @@
           <Grid ColumnDefinitions="Auto,*,Auto">
             <TextBlock Text="◆" FontSize="14" Foreground="#4F46E5" VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Text="Daftar Pasien" FontWeight="SemiBold" Foreground="#111827" Margin="8,0,0,0" VerticalAlignment="Center" />
-            <TextBox Grid.Column="2" Text="{Binding SearchText}" PlaceholderText="Cari nama pasien..." Width="220" />
+            <TextBox Grid.Column="2" Text="{Binding SearchText}" Watermark="Cari nama pasien..." Width="220" />
           </Grid>
           <Rectangle Height="1" Fill="#F3F4F6" />
           <DataGrid ItemsSource="{Binding PasienList}" SelectedItem="{Binding SelectedPasien}"
