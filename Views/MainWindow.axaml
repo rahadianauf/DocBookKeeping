@@ -37,6 +37,10 @@
             <views:BarangKeluarView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:KonversiProduksiViewModel}">
+            <views:KonversiProduksiView />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vm:StokViewModel}">
             <views:StokView />
         </DataTemplate>
@@ -166,6 +170,18 @@
                                             Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuIconForegroundConverter.Instance}, ConverterParameter=BarangKeluar}" />
                                 <TextBlock Text="Barang Keluar" VerticalAlignment="Center" FontSize="14"
                                             Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuTextForegroundConverter.Instance}, ConverterParameter=BarangKeluar}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Height="44" Command="{Binding ShowKonversiProduksiCommand}"
+                                HorizontalContentAlignment="Left" Padding="14,0"
+                                Background="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuBackgroundConverter.Instance}, ConverterParameter=KonversiProduksi}"
+                                BorderThickness="0" CornerRadius="7">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="⇄" FontSize="16" VerticalAlignment="Center"
+                                            Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuIconForegroundConverter.Instance}, ConverterParameter=KonversiProduksi}" />
+                                <TextBlock Text="Konversi Produksi" VerticalAlignment="Center" FontSize="14"
+                                            Foreground="{Binding ActiveMenu, Converter={x:Static local:ActiveMenuTextForegroundConverter.Instance}, ConverterParameter=KonversiProduksi}" />
                             </StackPanel>
                         </Button>
 

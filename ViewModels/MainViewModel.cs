@@ -79,6 +79,14 @@ public partial class MainViewModel : ViewModelBase
        ActiveMenu = "BarangKeluar";
        CurrentView = _services.GetRequiredService<BarangKeluarViewModel>();
    }
+
+   [RelayCommand]
+    private void ShowKonversiProduksi()
+{
+    PageTitle = "Konversi Produksi";
+    ActiveMenu = "KonversiProduksi";
+    CurrentView = _services.GetRequiredService<KonversiProduksiViewModel>();
+}
    
     [RelayCommand]
     private void ShowUsers()

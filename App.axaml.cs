@@ -69,6 +69,7 @@ public partial class App : Application
         services.AddTransient<StokViewModel>();
         services.AddTransient<BiayaOperasionalViewModel>();
         services.AddTransient<ProduksiViewModel>();
+        services.AddTransient<KonversiProduksiViewModel>();
         // ...tambahkan ViewModel lain di sini seiring berkembang
         services.AddSingleton<ReportRepository>();
         services.AddTransient<ReportViewModel>();

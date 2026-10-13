@@ -11,10 +11,15 @@ public class TransBarangRepository
 {
     private readonly IDbContextFactory<DocBookKeepingContext> _contextFactory;
 
+    private class TotalHppRow
+    {
+        public decimal Total { get; set; }
+    }
     public TransBarangRepository(IDbContextFactory<DocBookKeepingContext> contextFactory)
     {
         _contextFactory = contextFactory;
     }
+
 
     public async Task<List<TransBarang>> GetAllTransBarangAsync()
     {
@@ -157,6 +162,99 @@ public class TransBarangRepository
             ORDER BY tb.tanggal_transaksi DESC
             """).ToListAsync();
     }
+
+    // Helper internal — generate ID pakai context yang SAMA (penting untuk transaksi atomik)
+    private async Task<string> GenerateNextIdAsync(DocBookKeepingContext context)
+    {
+        var lastId = await context.TransBarangs
+            .OrderByDescending(t => t.IdTrans)
+            .Select(t => t.IdTrans)
+            .FirstOrDefaultAsync();
+
+        int nextNumber = 1;
+        if (lastId is not null && lastId.Length > 2 && int.TryParse(lastId.Substring(2), out var lastNumber))
+            nextNumber = lastNumber + 1;
+
+        return $"TB{nextNumber:D4}";
+    }
+
+    public async Task<string> ProsesKonversiProduksiAsync(
+        string idBarangJadi, int jumlahJadi, string tanggalTransaksi, string? keterangan,
+        List<(string IdBahan, int Jumlah)> bahanList)
+    {
+        await using var context = await _contextFactory.CreateDbContextAsync();
+        await using var transaction = await context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // 1. Catat Barang Masuk untuk barang jadi — harga sementara 0
+            var idMasuk = await GenerateNextIdAsync(context);
+
+            context.TransBarangs.Add(new TransBarang
+            {
+                IdTrans = idMasuk,
+                IdBarang = idBarangJadi,
+                Tag = "MASUK",
+                Sumber = "PRODUKSI",
+                Jumlah = jumlahJadi,
+                HargaSatuan = 0,
+                Nilai = 0,
+                Keterangan = keterangan,
+                TanggalTransaksi = tanggalTransaksi,
+                TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")
+            });
+            await context.SaveChangesAsync();
+
+            // 2. Catat Barang Keluar untuk tiap bahan — otomatis tertaut via IdTransProduksi
+            //    Kalau stok kurang, trigger FIFO akan RAISE(ABORT) di sini, exception
+            //    ditangkap di catch, seluruh transaksi di-rollback otomatis.
+            foreach (var (idBahan, jumlah) in bahanList)
+            {
+                var idKeluar = await GenerateNextIdAsync(context);
+
+                context.TransBarangs.Add(new TransBarang
+                {
+                    IdTrans = idKeluar,
+                    IdBarang = idBahan,
+                    Tag = "KELUAR",
+                    TujuanKeluar = "PRODUKSI",
+                    IdTransProduksi = idMasuk,
+                    Jumlah = jumlah,
+                    HargaSatuan = 0,
+                    Nilai = 0,
+                    TanggalTransaksi = tanggalTransaksi,
+                    TanggalInput = DateTime.Now.ToString("yyyy-MM-dd")
+                });
+                await context.SaveChangesAsync();
+            }
+
+            // 3. Hitung total HPP seluruh bahan yang baru dicatat
+            var totalRow = await context.Database.SqlQuery<TotalHppRow>($"""
+                SELECT COALESCE(SUM(pb.subtotal_nilai), 0) AS Total
+                FROM pemakaian_batch pb
+                JOIN trans_barang tb ON tb.id_trans = pb.id_trans_keluar
+                WHERE tb.id_trans_produksi = {idMasuk}
+                """).FirstOrDefaultAsync();
+
+            var totalHpp = totalRow?.Total ?? 0;
+
+            // 4. Update harga barang jadi berdasarkan total HPP bahan
+            //    (trigger yang sudah ada otomatis hitung ulang Nilai & harga_beli di stok_batch)
+            var hargaSatuanBaru = jumlahJadi > 0 ? Math.Round(totalHpp / jumlahJadi, 2) : 0;
+
+            var masukEntity = await context.TransBarangs.FindAsync(idMasuk);
+            masukEntity!.HargaSatuan = hargaSatuanBaru;
+            await context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+            return idMasuk;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 }
 
 public class PemakaianBatchDto
@@ -176,3 +274,4 @@ public class HppDetailDto
     public decimal HargaPokokSatuan { get; set; }
     public decimal SubtotalNilai { get; set; }
 }
+

@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DocBookKeeping.ViewModels"
+             x:Class="DocBookKeeping.Views.KonversiProduksiView"
+             x:DataType="vm:KonversiProduksiViewModel">
+  <ScrollViewer>
+    <StackPanel Spacing="24" Margin="0,0,0,24">
+
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="6">
+          <TextBlock Text="Konversi Produksi" FontSize="30" FontWeight="Bold" Foreground="#111827" />
+          <TextBlock Text="Catat barang jadi beserta bahan yang dipakai dalam satu langkah" FontSize="14" Foreground="#6B7280" />
+        </StackPanel>
+      </Grid>
+
+      <!-- FORM -->
+      <Border Background="White" CornerRadius="14" Padding="22" BoxShadow="0 1 3 0 #0A000000">
+        <StackPanel Spacing="16">
+
+          <StackPanel Spacing="8">
+            <TextBlock Text="Barang Jadi yang Dihasilkan" FontWeight="SemiBold" FontSize="14" Foreground="#111827" />
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <StackPanel Spacing="4">
+                <TextBlock Text="Barang" FontSize="11" Foreground="#6B7280" />
+                <ComboBox ItemsSource="{Binding BarangOptions}" SelectedItem="{Binding FormBarangJadi}" Width="200">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate><TextBlock Text="{Binding NamaBarang}" /></DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </StackPanel>
+              <StackPanel Spacing="4">
+                <TextBlock Text="Jumlah Dihasilkan" FontSize="11" Foreground="#6B7280" />
+                <TextBox Text="{Binding FormJumlahJadi}" Width="120" />
+              </StackPanel>
+              <StackPanel Spacing="4">
+                <TextBlock Text="Tanggal Transaksi" FontSize="11" Foreground="#6B7280" />
+                <DatePicker SelectedDate="{Binding FormTanggalTransaksi}" Width="160" />
+              </StackPanel>
+              <StackPanel Spacing="4">
+                <TextBlock Text="Keterangan" FontSize="11" Foreground="#6B7280" />
+                <TextBox Text="{Binding FormKeterangan}" Width="200" />
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+
+          <Rectangle Height="1" Fill="#F3F4F6" />
+
+          <StackPanel Spacing="8">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="Bahan yang Dipakai" FontWeight="SemiBold" FontSize="14" Foreground="#111827" />
+              <Button Grid.Column="1" Content="+ Tambah Bahan" Command="{Binding TambahBahanRowCommand}"
+                      Background="#EEF2FF" Foreground="#4F46E5" BorderThickness="0" Padding="12,6" CornerRadius="6" />
+            </Grid>
+
+            <ItemsControl ItemsSource="{Binding BahanRows}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:BahanRow">
+                  <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,4">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                      <ComboBox ItemsSource="{Binding $parent[ItemsControl].((vm:KonversiProduksiViewModel)DataContext).BarangOptions}"
+                                SelectedItem="{Binding SelectedBarang}" Width="200" PlaceholderText="Pilih bahan">
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate><TextBlock Text="{Binding NamaBarang}" /></DataTemplate>
+                        </ComboBox.ItemTemplate>
+                      </ComboBox>
+                      <TextBox Text="{Binding Jumlah}" Width="100" Watermark="Jumlah" />
+                    </StackPanel>
+                    <Button Grid.Column="2"
+                            Command="{Binding $parent[ItemsControl].((vm:KonversiProduksiViewModel)DataContext).HapusBahanRowCommand}"
+                            CommandParameter="{Binding}"
+                            Content="✕" Background="#FEE2E2" Foreground="#DC2626" BorderThickness="0"
+                            Padding="10,6" CornerRadius="6" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+
+          <Button Content="Proses Konversi" Command="{Binding ProsesKonversiCommand}"
+                  Background="#16A34A" Foreground="White" BorderThickness="0"
+                  Padding="20,12" CornerRadius="8" HorizontalAlignment="Left" FontWeight="SemiBold" />
+
+        </StackPanel>
+      </Border>
+
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap"
+                 IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <!-- HASIL -->
+      <Border Background="#ECFDF5" CornerRadius="14" Padding="22"
+              IsVisible="{Binding LastResultId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+        <StackPanel Spacing="10">
+          <TextBlock Text="{Binding LastResultId, StringFormat='Berhasil — Transaksi {0}'}"
+                     FontWeight="SemiBold" Foreground="#059669" FontSize="15" />
+
+          <ItemsControl ItemsSource="{Binding LastResult}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <TextBlock FontSize="13" Foreground="#374151" Margin="0,3">
+                  <Run Text="{Binding NamaBahan}" />
+                  <Run Text=" — " /><Run Text="{Binding Jumlah}" /><Run Text=" unit, HPP Rp " />
+                  <Run Text="{Binding HppSubtotal, StringFormat={}{0:N0}}" />
+                </TextBlock>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <Rectangle Height="1" Fill="#A7F3D0" Margin="0,4" />
+
+          <TextBlock Text="{Binding LastHppPerUnit, StringFormat='HPP per unit barang jadi: Rp {0:N0}'}"
+                     FontWeight="Bold" Foreground="#059669" FontSize="14" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
